@@ -12,12 +12,13 @@ Template.ticketsList.helpers({
 });
 
 Template.ticket.events({
-	'click .btn-test.fail': function(e) {
+	'click .btn-test': function(e) {
 		e.preventDefault();
-		Meteor.call('updateTestResult', this._id, false);
-	},
-	'click .btn-test.pass': function(e) {
-		e.preventDefault();
-		Meteor.call('updateTestResult', this._id, true);
+		var pass = $(e.target).find(".pass").length > 0;
+		Meteor.call('updateTestResult', this._id, pass, function(error) {
+			if (error) {
+				throwError(error.reason);
+			}
+		});
 	}
 });
