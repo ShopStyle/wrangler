@@ -14,7 +14,6 @@ Template.error.rendered = function() {
 Template.errors.events({
 	'click .close': function(e) {
 		e.preventDefault();
-		console.log($(e.target).parents().first());
 		$(e.target).parents().first().hide();
 	}
 })

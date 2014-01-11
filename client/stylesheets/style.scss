@@ -5,7 +5,7 @@ $red: #F6300A;
 $pink: #D11B7E;
 $yellow: #F6EF2A;
 $nav-green: #70AB8F;
-$grey: #E4E4E4;
+$grey: #EEEEEE;
 
 html {
 	background-color: white;
@@ -79,7 +79,7 @@ body {
 	border-radius: 5px;
 	height: 60px;
 	background-color: white;
-	border: 1px solid;
+	border: 2px solid;
 	
 	.text {
 		float: left;
@@ -93,7 +93,6 @@ body {
 }
 
 .ticket.pass {
-	border: 3px solid;
 	border-color: $green;
 }
 
