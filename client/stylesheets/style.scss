@@ -117,3 +117,47 @@ body {
 .btn-test.fail {
 	background-color: $red;
 }
+
+#login-buttons {
+	a {
+		text-decoration: none;
+		padding: 0;
+		text-decoration: none;
+		border: none;
+	}
+	
+	#login-dropdown-list {
+		color:  black;
+		background-color: white;
+		border-radius: none;
+		font-weight: normal;
+		text-shadow: none;
+		a {
+			color: black;
+		}
+		a:hover {
+			text-decoration: underline;
+		}
+		.login-button {
+			cursor: pointer;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+			user-select: none;
+			padding: 4px 8px;
+			font-size: 80%;
+			font-family: 'Open Sans', Helvetica, Arial, default;
+			line-height: 1.5;
+			text-align: center;
+			color: white;
+			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.5);
+			background-color: $green;
+			background-image: none;
+			border-radius: 5px;
+			border: none;
+			box-shadow: none;
+			-webkit-box-shadow: none;
+		}
+	}
+}
