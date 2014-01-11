@@ -1,0 +1,105 @@
+/*
+background brown #F2E9CE
+orange #DC5B21
+green #70AB8F
+black #383127
+red #FB0A32
+*/
+
+html {
+	background-color: #F2E9CE;
+	font-family: 'Open Sans', sans-serif;
+	color: black;
+}
+
+a {
+	text-decoration: none;
+	color: #383127;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+body {
+	max-width: 1280px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 15px;
+	padding-top: 10px;
+}
+
+.navbar {
+	height: 40px;
+	background-color: #70AB8F;
+	border: solid;
+	border-radius: 5px;
+	border-width: 2px;
+	border-color: #69AE8E;
+	font-size: 1.4em;
+	text-decoration: none;
+	font-weight: bold;
+	text-shadow: -1px 0 #383127, 0 1px #383127, 1px 0 #383127, 0 -1px #383127;
+}
+
+.navbar a {
+	padding: 0 5px;
+	text-decoration: none;
+	color:  #F2E9CE;
+	border: solid;
+	border-color: #70AB8F;
+	border-radius: 5px;
+}
+
+.home {
+	margin-right: 20px;
+}
+
+.navbar a:hover {
+	border: dotted;
+	border-color: #DC5B21;
+}
+
+.navbar-left {
+	float: left;
+	margin-top: 9px;
+	margin-left: 10px;
+}
+
+.navbar-right {
+	float: right;
+	margin-top: 9px;
+	margin-right: 10px;
+}
+
+.navbar li {
+	display: inline;
+}
+
+.ticket {
+	margin: 10px 0;
+	border-radius: 5px;
+	height: 60px;
+	background-color: white;
+	border: 3px solid #DC5B21;
+}
+
+.ticket h3 {
+	float: left;
+}
+
+.btn-test {
+	float: right;
+	color: white;
+	margin: 10px;
+	padding: 12px;
+	border-radius: 5px;
+}
+
+.btn-test.pass {
+	background-color: #49FF00;
+}
+
+.btn-test.fail {
+	background-color: #FF0000;
+}

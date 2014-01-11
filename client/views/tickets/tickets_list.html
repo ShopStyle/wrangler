@@ -1,0 +1,17 @@
+<template name="ticketsList">
+	<div>
+		{{#each tickets}}
+			{{> ticket}}
+		{{/each}}
+	</div>
+</template>
+
+<template name="ticket">
+	<div>
+		<div class="ticket">
+			<h3><a href="{{url}}">{{title}}</a></h3>
+			<div class="btn-test pass">PASS</div>
+			<div class="btn-test fail">FAIL</div>
+		</div>
+	</div>
+</template>

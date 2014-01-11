@@ -1,0 +1,15 @@
+<template name="testsscriptList">
+	<div class="testscripts-list">
+		{{#each testscripts}}
+			{{> testcript}}
+		{{/each}}
+	</div>
+</template>
+
+<template name="testscript">
+	<div>
+		<div class="testscript">
+			<h3>{{title}}</h3>
+		</div>
+	</div>
+</template>
