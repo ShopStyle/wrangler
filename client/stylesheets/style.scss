@@ -1,20 +1,21 @@
-/*
-background brown #F2E9CE
-orange #DC5B21
-green #70AB8F
-black #383127
-red #FB0A32
-*/
+$background-brown: #F2E9CE;
+$green: #00C000;
+$blue: #0A62DA;
+$red: #F6300A;
+$pink: #D11B7E;
+$yellow: #F6EF2A;
+$nav-green: #70AB8F;
+$grey: #F8F8F8;
 
 html {
-	background-color: #F2E9CE;
+	background-color: white;
 	font-family: 'Open Sans', sans-serif;
 	color: black;
 }
 
 a {
 	text-decoration: none;
-	color: #383127;
+	color: black;
 }
 
 a:hover {
@@ -31,11 +32,8 @@ body {
 
 .navbar {
 	height: 40px;
-	background-color: #70AB8F;
-	border: solid;
+	background-color: $nav-green;
 	border-radius: 5px;
-	border-width: 2px;
-	border-color: #69AE8E;
 	font-size: 1.4em;
 	text-decoration: none;
 	font-weight: bold;
@@ -45,9 +43,9 @@ body {
 .navbar a {
 	padding: 0 5px;
 	text-decoration: none;
-	color:  #F2E9CE;
+	color:  white;
 	border: solid;
-	border-color: #70AB8F;
+	border-color: $nav-green;
 	border-radius: 5px;
 }
 
@@ -57,7 +55,7 @@ body {
 
 .navbar a:hover {
 	border: dotted;
-	border-color: #DC5B21;
+	border-color: $blue;
 }
 
 .navbar-left {
@@ -81,11 +79,26 @@ body {
 	border-radius: 5px;
 	height: 60px;
 	background-color: white;
-	border: 3px solid #DC5B21;
+	border: 1px solid;
+	
+	.text {
+		float: left;
+		margin: 7px;
+		
+		h3 {
+			font-size: 1.2em;
+			margin-bottom: 5px;
+		}
+	}
 }
 
-.ticket h3 {
-	float: left;
+.ticket.pass {
+	border: 3px solid;
+	border-color: $green;
+}
+
+.ticket.fail {
+	border-color: black;
 }
 
 .btn-test {
@@ -94,12 +107,13 @@ body {
 	margin: 10px;
 	padding: 12px;
 	border-radius: 5px;
+	cursor: pointer;
 }
 
 .btn-test.pass {
-	background-color: #49FF00;
+	background-color: $green;
 }
 
 .btn-test.fail {
-	background-color: #FF0000;
+	background-color: $red;
 }
