@@ -5,7 +5,7 @@ $red: #F6300A;
 $pink: #D11B7E;
 $yellow: #F6EF2A;
 $nav-green: #70AB8F;
-$grey: #F8F8F8;
+$grey: #E4E4E4;
 
 html {
 	background-color: white;
@@ -98,7 +98,8 @@ body {
 }
 
 .ticket.fail {
-	border-color: black;
+	border-radius: 0;
+	border-color: $grey;
 }
 
 .btn-test {
@@ -151,7 +152,7 @@ body {
 			line-height: 1.5;
 			text-align: center;
 			color: white;
-			text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.5);
+			text-shadow: none;
 			background-color: $green;
 			background-image: none;
 			border-radius: 5px;
