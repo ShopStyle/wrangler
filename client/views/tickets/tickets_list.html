@@ -1,5 +1,14 @@
 <template name="ticketsList">
 	<div>
+		{{#if allPassed}}
+			<div class="corgi-success">
+				<span>
+					Congratulations! All tests have passed.
+					<img src="http://data3.whicdn.com/images/1410283/2350510452_6852c3428e_original.jpg">
+				</span>
+				
+			</div>
+		{{/if}}
 		{{#each tickets}}
 			{{> ticket}}
 		{{/each}}

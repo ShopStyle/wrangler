@@ -182,3 +182,16 @@ body {
 #spinner { 
 	height: 300px 
 }
+
+.corgi-success {
+	margin: 20px;
+	text-align: center;
+	span {
+		margin: 10px;
+		font-size: 2em;
+	}
+	img {
+		margin: 10px;
+		border-radius: 5px;
+	}
+}
