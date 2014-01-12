@@ -5,6 +5,8 @@ $red: #F6300A;
 $pink: #D11B7E;
 $yellow: #F6EF2A;
 $nav-green: #70AB8F;
+$dark-blue: #0360F3;
+$light-blue: #80B1FF;
 $grey: #EEEEEE;
 
 html {
@@ -32,7 +34,7 @@ body {
 
 .navbar {
 	height: 40px;
-	background-color: $nav-green;
+	background-color: $dark-blue;
 	border-radius: 5px;
 	font-size: 1.4em;
 	text-decoration: none;
@@ -45,7 +47,7 @@ body {
 	text-decoration: none;
 	color:  white;
 	border: solid;
-	border-color: $nav-green;
+	border-color: $dark-blue;
 	border-radius: 5px;
 }
 
@@ -55,7 +57,11 @@ body {
 
 .navbar a:hover {
 	border: dotted;
-	border-color: $blue;
+	border-color: $light-blue;
+}
+
+.navbar a.active {
+	color: $yellow;
 }
 
 .navbar-left {

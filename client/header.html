@@ -1,20 +1,31 @@
 <template name="header">
 <header class="navbar">
 	<ul class="navbar-left">
-		<li>
+		<li class="{{activeRouteClass 'ticketsList'}}">
 			<a class="home" href="{{pathFor 'ticketsList'}}">TESTY</a>
 		</li>
 		<li>
-			<a href="{{pathFor 'passed'}}">Passed</a>
+			<a class="{{activeRouteClass 'passed'}}" href="{{pathFor 'passed'}}">
+				Passed
+			</a>
 		</li>
 		<li>
-			<a href="{{pathFor 'failed'}}">Failed</a>
+			<a class="{{activeRouteClass 'failed'}}" href="{{pathFor 'failed'}}">
+				Failed
+			</a>
 		</li>
 		<li>
-			<a href="{{pathFor 'incomplete'}}">Incomplete</a>
+			<a class="{{activeRouteClass 'incomplete'}}" href="{{pathFor 'incomplete'}}">
+				Incomplete
+			</a>
 		</li>
 	</ul>
 	<ul class="navbar-right">
+		{{#if currentUser}}
+		<li>
+			<a class="{{activeRouteClass 'toDo'}}" href="{{pathFor 'toDo'}}">To-do</a>
+		</li>
+		{{/if}}
 		{{loginButtons align="right"}}
 	</ul>
 </header>

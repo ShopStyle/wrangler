@@ -15,6 +15,7 @@ if (Tickets.find().count() === 0) {
 		title: "Get some stuff breh",
 		userId: korey._id,
 		dev: korey.profile.name,
+		devEmail: "kkassir@popsugar.com",
 		url: "http://google.com",
 		pass: false,
 		incomplete: true
@@ -24,6 +25,7 @@ if (Tickets.find().count() === 0) {
 		title: "I dunno some more ticket",
 		userId: korey._id,
 		dev: korey.profile.name,
+		devEmail: "kkassir@popsugar.com",
 		url: "http://google.com",
 		pass: true,
 		incomplete: false
@@ -33,6 +35,7 @@ if (Tickets.find().count() === 0) {
 		title: "i hate dis :)",
 		userId: frank._id,
 		dev: frank.profile.name,
+		devEmail: "frank@popsugar.com",
 		url: "http://google.com",
 		pass: false,
 		incomplete: true
