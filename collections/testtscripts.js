@@ -20,7 +20,7 @@ Meteor.methods({
 				'ticketId', 'steps', 'result', 'expectedOutcome'), 
 			{
 				userId: user._id,
-				author: user.username,
+				authorEmail: user.emails[0].address,
 				submitted: new Date().getTime()
 			}
 		);

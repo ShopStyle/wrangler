@@ -8,6 +8,8 @@ $nav-green: #70AB8F;
 $dark-blue: #0360F3;
 $light-blue: #80B1FF;
 $grey: #EEEEEE;
+$dark-grey: #939393;
+
 
 html {
 	background-color: white;
@@ -96,8 +98,6 @@ body {
 			margin-bottom: 5px;
 		}
 	}
-	
-	
 }
 
 .ticket.pass {
@@ -110,6 +110,7 @@ body {
 }
 
 .btn-test {
+	background-color: $dark-grey;
 	float: right;
 	color: white;
 	margin: 10px;
