@@ -1,5 +1,11 @@
 Tickets = new Meteor.Collection('tickets');
 
+Tickets.allow({
+	update: function() {
+		return Meteor.user();
+	}
+})
+
 Meteor.methods({
 	updateTestResult: function(ticketId, passTest) {
 		var user = Meteor.user();

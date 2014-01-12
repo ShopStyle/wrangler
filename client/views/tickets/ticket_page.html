@@ -1,3 +1,19 @@
 <template name="ticketPage">
-	{{> ticket}}
+	<div class="ticket {{passed this}}">
+		<div class="text">
+			<h1>{{title}}</h1>
+			<ul>
+				<li><strong>Assigned to: </strong>{{dev}}</li>
+				<li><strong>Component: </strong>{{component}}</li>
+				<li><strong>What changed: </strong>{{whatChanged}}</li>
+				<li><strong>Reference pages: </strong>{{referencePages}}</li>
+				<li><strong>Type of testing: </strong>{{typeTesting}}</li>
+				<li><strong>Prerequisite/comments: </strong>{{comments}}</li>
+			</ul>
+		</div>
+		{{#if currentUser}}
+			<a href="{{pathFor 'ticketEdit'}}" class="btn-edit">&#43; Edit this ticket</a>
+		{{/if}}
+	</div>
 </template>
+

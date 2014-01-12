@@ -18,7 +18,8 @@ if (Tickets.find().count() === 0) {
 		devEmail: "kkassir@popsugar.com",
 		url: "http://google.com",
 		pass: false,
-		incomplete: true
+		incomplete: true,
+		component: "mobile"
 	});
 	
 	var ticket2 = Tickets.insert({

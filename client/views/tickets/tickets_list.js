@@ -1,10 +1,3 @@
-Template.ticket.helpers({
-	passed: function(ticket) {
-		var status = ticket.pass === true ? "pass" : "fail";
-		return status;
-	}
-});
-
 Template.ticketsList.helpers({
 	allPassed: function() {
 		var allPassed = Tickets.find({pass: false}).count() === 0;

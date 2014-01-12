@@ -1,0 +1,20 @@
+<template name="ticketEdit">
+	<div class="ticket {{passed this}}">
+		<form>
+			<label for="title">Title</label>
+			<input name="title" type="text" value="{{title}}" placeholder="Title">
+			<label for="assigned">Assigned to</label>
+			<input name="assigned" type="text" value="{{dev}}" placeholder="Dev that is assigned to complete the ticket">
+			<label for="what-changed">What changed</label>
+			<input name="what-changed" type="text" value="{{whatChanged}}" placeholder="What changed?">
+			<label for="reference-pages">Reference page(s)</label>
+			<input name="reference-pages" type="text" value="{{referencePages}}" placeholder="Page(s) changed">
+			<label for="test-req">Type of testing</label>
+			<input name="test-req" type="text" value="{{typeTesting}}" placeholder="Type of testing required">
+			<label for="comments">Prerequisite/Comments</label>
+			<textarea name="comments" type="text" value="{{comments}}" placeholder="additional info"></textarea>
+			<input type="submit" value="Submit Changes" class="btn-edit submit"/>
+		</form>
+	</div>
+</template>
+

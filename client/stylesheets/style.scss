@@ -1,20 +1,22 @@
 $background-brown: #F2E9CE;
-$green: #00C000;
-$blue: #0A62DA;
-$red: #F6300A;
+$green: #62BD19;
+$blue: #0F8BCA;
+$red: #FF3737;
 $pink: #D11B7E;
 $yellow: #F6EF2A;
 $nav-green: #70AB8F;
-$dark-blue: #0360F3;
-$light-blue: #80B1FF;
+$light-blue: #D3E5FB;
 $grey: #EEEEEE;
 $dark-grey: #939393;
-
 
 html {
 	background-color: white;
 	font-family: 'Open Sans', sans-serif;
 	color: black;
+}
+
+strong {
+	font-weight: bold;
 }
 
 a {
@@ -34,13 +36,15 @@ body {
 	padding-top: 10px;
 }
 
+.container {
+	min-height: 700px;
+}
 .navbar {
 	height: 40px;
-	background-color: $dark-blue;
+	background-color: $blue;
 	border-radius: 5px;
 	font-size: 1.4em;
 	text-decoration: none;
-	font-weight: bold;
 	text-shadow: -1px 0 #383127, 0 1px #383127, 1px 0 #383127, 0 -1px #383127;
 }
 
@@ -49,7 +53,7 @@ body {
 	text-decoration: none;
 	color:  white;
 	border: solid;
-	border-color: $dark-blue;
+	border-color: $blue;
 	border-radius: 5px;
 }
 
@@ -63,7 +67,7 @@ body {
 }
 
 .navbar a.active {
-	color: $yellow;
+	color: $light-blue;
 }
 
 .navbar-left {
@@ -83,20 +87,75 @@ body {
 }
 
 .ticket {
+	position: relative;
 	margin: 10px 0;
 	border-radius: 5px;
-	height: 60px;
+	min-height: 60px;
 	background-color: white;
 	border: 2px solid;
 	
 	.text {
-		float: left;
 		margin: 7px;
+		
+		h1 {
+			font-size: 1.6em;
+		}
 		
 		h3 {
 			font-size: 1.2em;
 			margin-bottom: 5px;
 		}
+		
+		li {
+			max-width: 800px;
+			margin: 10px 0;
+		}
+	}
+	
+	.btn-holder {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+	
+	.btn-edit {
+		z-index: 1;
+		position: absolute;
+		top: 7px;
+		right: 7px;
+		padding: 5px;
+		background-color: $blue;
+		color: white;
+		border-radius: 5px;
+		text-shadow: -1px 0 #383127, 0 1px #383127, 1px 0 #383127, 0 -1px #383127;
+		cursor: pointer;
+		text-decoration: none;
+	}
+	
+	input {
+		display: block;
+		min-width: 400px;
+		margin: 7px;
+		padding: 5px;
+		border-radius: 5px;
+	}
+
+	form {
+		margin: 10px;
+	
+		.btn-edit.submit {
+			position: static;
+			display: block;
+			margin: 15px;
+			border: none;
+			font-size: 1.2em;
+		}
+	}
+
+	textarea {
+		margin: 7px;
+		display: block;
+		border-radius: 5px;
 	}
 }
 
@@ -110,8 +169,8 @@ body {
 }
 
 .btn-test {
+	display: inline-block;
 	background-color: $dark-grey;
-	float: right;
 	color: white;
 	margin: 10px;
 	padding: 12px;
@@ -202,3 +261,6 @@ body {
 		border-radius: 5px;
 	}
 }
+
+
+
