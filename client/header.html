@@ -1,0 +1,21 @@
+<template name="header">
+<header class="navbar">
+	<ul class="navbar-left">
+		<li>
+			<a class="home" href="{{pathFor 'ticketsList'}}">TESTY</a>
+		</li>
+		<li>
+			<a href="{{pathFor 'passed'}}">Passed</a>
+		</li>
+		<li>
+			<a href="{{pathFor 'failed'}}">Failed</a>
+		</li>
+		<li>
+			<a href="{{pathFor 'incomplete'}}">Incomplete</a>
+		</li>
+	</ul>
+	<ul class="navbar-right">
+		{{loginButtons align="right"}}
+	</ul>
+</header>
+</template>

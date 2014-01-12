@@ -5,11 +5,11 @@ Template.ticket.helpers({
 	}
 });
 
-Template.ticketsList.helpers({
-	tickets: function() {
-		return Tickets.find();
-	}
-});
+// Template.ticketsList.helpers({
+// 	tickets: function() {
+// 		return Tickets.find();
+// 	}
+// });
 
 Template.ticket.events({
 	'click .btn-test': function(e) {

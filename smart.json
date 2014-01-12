@@ -1,5 +1,7 @@
 {
   "packages": {
-    "scss": {}
+    "scss": {},
+    "iron-router": {},
+    "spin": {}
   }
 }

@@ -16,7 +16,8 @@ if (Tickets.find().count() === 0) {
 		userId: korey._id,
 		dev: korey.profile.name,
 		url: "http://google.com",
-		pass: false
+		pass: false,
+		incomplete: true
 	});
 	
 	var ticket2 = Tickets.insert({
@@ -24,7 +25,8 @@ if (Tickets.find().count() === 0) {
 		userId: korey._id,
 		dev: korey.profile.name,
 		url: "http://google.com",
-		pass: true
+		pass: true,
+		incomplete: false
 	});
 	
 	var ticket1 = Tickets.insert({
@@ -32,6 +34,7 @@ if (Tickets.find().count() === 0) {
 		userId: frank._id,
 		dev: frank.profile.name,
 		url: "http://google.com",
-		pass: false
+		pass: false,
+		incomplete: true
 	})
 }

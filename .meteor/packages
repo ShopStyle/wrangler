@@ -9,3 +9,5 @@ preserve-inputs
 scss
 accounts-ui
 accounts-password
+iron-router
+spin
