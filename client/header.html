@@ -19,6 +19,13 @@
 				Incomplete
 			</a>
 		</li>
+		{{#if currentUser}}
+			<li>
+				<a class="{{activeRouteClass 'ticketNew'}}" href="{{pathFor 'ticketNew'}}">
+					New
+				</a>
+			</li>
+		{{/if}}
 	</ul>
 	<ul class="navbar-right">
 		{{#if currentUser}}

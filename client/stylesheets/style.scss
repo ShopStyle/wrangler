@@ -33,7 +33,7 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	padding: 15px;
-	padding-top: 10px;
+	padding-top: 0;
 }
 
 .container {
@@ -42,7 +42,7 @@ body {
 .navbar {
 	height: 40px;
 	background-color: $blue;
-	border-radius: 5px;
+	border-radius: 0 0 5px 5px;
 	font-size: 1.4em;
 	text-decoration: none;
 	text-shadow: -1px 0 #383127, 0 1px #383127, 1px 0 #383127, 0 -1px #383127;
@@ -124,12 +124,12 @@ body {
 		top: 7px;
 		right: 7px;
 		padding: 5px;
-		background-color: $blue;
-		color: white;
-		border-radius: 5px;
-		text-shadow: -1px 0 #383127, 0 1px #383127, 1px 0 #383127, 0 -1px #383127;
 		cursor: pointer;
 		text-decoration: none;
+	}
+	
+	.btn-edit:hover {
+		text-decoration: underline;
 	}
 	
 	input {
@@ -149,6 +149,14 @@ body {
 			margin: 15px;
 			border: none;
 			font-size: 1.2em;
+			background-color: $blue;
+			color: white;
+			border-radius: 5px;
+			text-shadow: -1px 0 #383127, 0 1px #383127, 1px 0 #383127, 0 -1px #383127;
+		}
+		
+		.btn-edit.submit:hover {
+			text-decoration: none;
 		}
 	}
 

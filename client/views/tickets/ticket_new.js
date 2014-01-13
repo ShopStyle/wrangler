@@ -1,10 +1,7 @@
-Template.ticketEdit.events({
+Template.ticketNew.events({
 	'submit form': function(e) {
-		debugger;
 		e.preventDefault();
-		
-		var currentTicketId = this._id;
-		
+
 		var ticketProperties = {
 			dev: $(e.target).find('[name=assigned]').val(),
 			title: $(e.target).find('[name=title]').val(),
@@ -14,15 +11,13 @@ Template.ticketEdit.events({
 			comments: $(e.target).find('[name=comments]').val()
 		};
 
-		
-		Tickets.update(currentTicketId, {$set: ticketProperties}, function(error) {
+		Meteor.call('newTicket', ticketProperties, function(error, id) {
 			if (error) {
 				//display the error to the user
 				throwError(error.reason);
 			}
-			else {
-				Router.go('ticketPage', {_id: currentTicketId});
-			}
+			
+			Router.go('ticketPage', { _id: id });
 		});
 	}
 });
