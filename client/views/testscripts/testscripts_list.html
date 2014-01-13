@@ -1,15 +1,20 @@
-<template name="testsscriptList">
+<template name="testscriptList">
 	<div class="testscripts-list">
 		{{#each testscripts}}
-			{{> testcript}}
+			{{> testscript}}
 		{{/each}}
 	</div>
 </template>
 
 <template name="testscript">
-	<div>
-		<div class="testscript">
+	<div class="ticket {{passed this}}">
+		<div class="text">
 			<h3>{{title}}</h3>
+			<div>{{breakLines steps}}</div>
+		</div>
+		<div class="btn-holder">
+			<div class="btn-test pass">PASS</div>
+			<div class="btn-test fail">FAIL</div>
 		</div>
 	</div>
 </template>

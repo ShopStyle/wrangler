@@ -9,6 +9,8 @@ $light-blue: #D3E5FB;
 $grey: #EEEEEE;
 $dark-grey: #939393;
 
+//this needs to be cleaned up!
+
 html {
 	background-color: white;
 	font-family: 'Open Sans', sans-serif;
@@ -130,6 +132,21 @@ body {
 	
 	.btn-edit:hover {
 		text-decoration: underline;
+	}
+	
+	.btn-testscript {
+		padding: 5px;
+		position: absolute;
+		bottom: 7px;
+		right: 7px;
+		padding: 5px;
+		cursor: pointer;
+		text-decoration: none;
+		background-color: $green;
+		border-radius: 5px;
+		color: white;
+		font-size: 1.2em;
+		text-shadow: -1px 0 #383127, 0 1px #383127, 1px 0 #383127, 0 -1px #383127;
 	}
 	
 	input {

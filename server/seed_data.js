@@ -11,7 +11,7 @@ if (Tickets.find().count() === 0) {
 	});
 	var frank = Meteor.users.findOne(frankId);
 	
-	var ticket1 = Tickets.insert({
+	var ticket1Id = Tickets.insert({
 		title: "Get some stuff breh",
 		userId: korey._id,
 		dev: korey.profile.name,
@@ -22,7 +22,7 @@ if (Tickets.find().count() === 0) {
 		component: "mobile"
 	});
 	
-	var ticket2 = Tickets.insert({
+	var ticket2Id = Tickets.insert({
 		title: "I dunno some more ticket",
 		userId: korey._id,
 		dev: korey.profile.name,
@@ -32,13 +32,41 @@ if (Tickets.find().count() === 0) {
 		incomplete: false
 	});
 	
-	var ticket1 = Tickets.insert({
-		title: "i hate dis :)",
+	var ticket3Id = Tickets.insert({
+		title: "i am a kitty :)",
 		userId: frank._id,
 		dev: frank.profile.name,
 		devEmail: "frank@popsugar.com",
 		url: "http://google.com",
 		pass: false,
 		incomplete: true
-	})
+	});
+	
+	Testscripts.insert({
+		title: "Do the things",
+		steps: "1. take a drive 2. something else 3. voila!",
+		ticketId: ticket1Id,
+		pass: false
+	});
+	
+	Testscripts.insert({
+		title: "Do the things",
+		steps: "1. take a drive \n 2. something else \n 3. voila!",
+		ticketId: ticket1Id,
+		pass: true
+	});
+	
+	Testscripts.insert({
+		title: "Do the other things",
+		steps: "1. take a drive \n 2. something else \n 3. voila!",
+		ticketId: ticket2Id,
+		pass: false
+	});
+	
+	Testscripts.insert({
+		title: "Do the even other things",
+		steps: "1. take a drive \n 2. something else \n 3. voila!",
+		ticketId: ticket3Id,
+		pass: false
+	});
 }
