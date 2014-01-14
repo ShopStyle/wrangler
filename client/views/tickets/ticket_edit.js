@@ -1,6 +1,5 @@
 Template.ticketEdit.events({
 	'submit form': function(e) {
-		debugger;
 		e.preventDefault();
 		
 		var currentTicketId = this._id;

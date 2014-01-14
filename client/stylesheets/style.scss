@@ -185,6 +185,12 @@ body {
 		margin: 7px;
 		display: block;
 		border-radius: 5px;
+		min-width: 150px;
+		min-height: 75px;
+		
+		&.invisible {
+			display: none;
+		}
 	}
 }
 
@@ -293,7 +299,6 @@ body {
 
 #new-testscript {
 	margin: 7px;
-	display: none;
 
 	textarea {
 		display: block;
@@ -304,17 +309,6 @@ body {
 		border-radius: 5px;
 		min-width: 300px;
 		min-height: 100px;
-	}
-	
-	.btn-new-testscript {
-		min-width: 100px;
-		background-color: #62bd19;
-		border: none;
-		color: white;
-		font-size: 1em;
-		display: inline;
-		margin-left: 0;
-		cursor: pointer;
 	}
 }
 
@@ -330,6 +324,43 @@ body {
 	&:hover {
 		text-decoration: none;
 	}
+}
+
+.testscript-steps {
+	cursor: pointer;
+}
+
+.invisible {
+	display: none;
+}
+
+.btn-new-testscript {
+	border-radius: 5px;
+	min-width: 100px;
+	background-color: #62bd19;
+	border: none;
+	color: white;
+	font-size: 1em;
+	display: inline;
+	margin-left: 0;
+	cursor: pointer;
+	padding: 5px;
+	
+	&.delete.edit {
+		background-color: red;
+		
+	}
+	
+	&.edit {
+		padding: 0 5px;
+		margin-top: 20px;
+		margin-left: 5px;
+	}
+	
+	&:hover {
+		text-decoration: none;
+	}
+
 }
 
 
