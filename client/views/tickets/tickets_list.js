@@ -15,9 +15,4 @@ Template.ticket.events({
 			}
 		});
 	}
-	
-	// 'click .btn-testscripts': function(e) {
-// 		e.preventDefault();
-// 		
-// 	}
 });

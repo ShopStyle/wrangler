@@ -1,5 +1,14 @@
 Testscripts = new Meteor.Collection('testscripts');
 
+Testscripts.allow({
+	update: function() {
+		return Meteor.user();
+	},
+	remove: function() {
+		return Meteor.user();
+	}
+});
+
 Meteor.methods({
 	createNewTestscript: function(attributes) {
 		var user = Meteor.user();

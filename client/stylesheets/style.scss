@@ -293,6 +293,7 @@ body {
 
 #new-testscript {
 	margin: 7px;
+	display: none;
 
 	textarea {
 		display: block;
@@ -313,6 +314,21 @@ body {
 		font-size: 1em;
 		display: inline;
 		margin-left: 0;
+		cursor: pointer;
+	}
+}
+
+.btn-delete {
+	background-color: $red;
+	color: white;
+	padding: 5px;
+	border-radius: 5px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	
+	&:hover {
+		text-decoration: none;
 	}
 }
 

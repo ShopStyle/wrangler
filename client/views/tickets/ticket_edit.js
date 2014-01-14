@@ -24,5 +24,19 @@ Template.ticketEdit.events({
 				Router.go('ticketPage', {_id: currentTicketId});
 			}
 		});
+	},
+	'click .btn-delete': function(e) {
+		e.preventDefault();
+		
+		if (confirm('Delete this ticket?')) {
+			var currentTicketId = this._id;
+			Meteor.call('removeTicket', currentTicketId, function(error) {
+				Router.go('ticketsList');
+				if (error) {
+					throwError(error.reason);
+				}
+			});
+			
+		}
 	}
 });
