@@ -13,9 +13,10 @@
 		</div>
 		{{#if currentUser}}
 			<a href="{{pathFor 'ticketEdit'}}" class="btn-edit">edit</a>
-			<a href="#" class="btn-testscript">&#43; Add Testscript</a>
+			<a href="#add-testscript" class="btn-testscript">&#43; Add Testscript</a>
 		{{/if}}
 	</div>
+	{{> testscriptSubmit}}
 	<div class="testscripts">
 		{{> testscriptList}}
 	</div>

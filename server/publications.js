@@ -4,4 +4,5 @@ Meteor.publish('tickets', function() {
 
 Meteor.publish('testscripts', function(ticketId) {
 	return Testscripts.find({ ticketId: ticketId });
-})
+});
+

@@ -9,18 +9,17 @@ Meteor.methods({
 			throw new Meteor.Error(401, "You need to login to make a testscript");
 		}
 			
-		// if (!commentAttributes.body)
-// 			throw new Meteor.Error(422, "Please write some content");
+		if (!attributes.steps)
+ 			throw new Meteor.Error(422, "Please write some steps");
 		
 		if (!ticket) {
 			throw new Meteor.Error(422, "You must create a testscript for a ticket");
 		}
 			
 		var testscript = _.extend(_.pick(attributes, 
-				'ticketId', 'steps', 'result', 'expectedOutcome'), 
+				'ticketId', 'steps'), 
 			{
 				userId: user._id,
-				authorEmail: user.emails[0].address,
 				submitted: new Date().getTime()
 			}
 		);

@@ -43,28 +43,24 @@ if (Tickets.find().count() === 0) {
 	});
 	
 	Testscripts.insert({
-		title: "Do the things",
 		steps: "1. take a drive 2. something else 3. voila!",
 		ticketId: ticket1Id,
 		pass: false
 	});
 	
 	Testscripts.insert({
-		title: "Do the things",
 		steps: "1. take a drive \n 2. something else \n 3. voila!",
 		ticketId: ticket1Id,
 		pass: true
 	});
 	
 	Testscripts.insert({
-		title: "Do the other things",
 		steps: "1. take a drive \n 2. something else \n 3. voila!",
 		ticketId: ticket2Id,
 		pass: false
 	});
 	
 	Testscripts.insert({
-		title: "Do the even other things",
 		steps: "1. take a drive \n 2. something else \n 3. voila!",
 		ticketId: ticket3Id,
 		pass: false

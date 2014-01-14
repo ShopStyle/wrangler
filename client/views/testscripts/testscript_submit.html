@@ -1,7 +1,7 @@
 <template name="testscriptSubmit"> 
-	<form>
-		<label for="title">Title</label>
-		<input type="text" name="title" value="{{title}}" placeholer="Title">
-		<label for="steps">
+	<form id="new-testscript">
+		<label for="steps">Steps</label>
+		<textarea name="steps" value="{{steps}}" placeholder="1. do something..."/>
+		<input type="submit" value="Submit" class="btn-new-testscript">
 	</form>
 </template>
