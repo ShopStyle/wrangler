@@ -34,5 +34,34 @@ Meteor.methods({
 		);
 		testscript._id = Testscripts.insert(testscript);
 		return testscript._id;
-	}
+	},
+	updateTestscriptResult: function(id, passTest) {
+		var user = Meteor.user();
+		if (!user) {
+			throw new Meteor.Error(401, "You need to login to post test results");
+		}
+		var testscript = Testscripts.findOne(id);
+		if (passTest === '') {
+			//there has to be a better way to do this...
+			Testscripts.update(testscript._id, {
+				$pull: { failers: user._id }
+			});
+			Testscripts.update(testscript._id, {
+				$pull: { passers: user._id }
+			});
+		}
+		else if (passTest) {
+			Testscripts.update(testscript._id, {
+				$pull: { failers: user._id },
+				$addToSet: { passers: user._id }
+			});
+		}
+		else {
+			Testscripts.update(testscript._id, {
+				$pull: { passers: user._id },
+				$addToSet: { failers: user._id }
+			});
+		}
+		
+	},
 })

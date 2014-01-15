@@ -92,10 +92,12 @@ body {
 .ticket {
 	position: relative;
 	margin: 10px 0;
-	border-radius: 5px;
+	border: 2px solid;
+	border-radius: 0;
+	border-color: $grey;
 	min-height: 60px;
 	background-color: white;
-	border: 2px solid;
+	
 	
 	.text {
 		margin: 7px;
@@ -192,11 +194,12 @@ body {
 
 .ticket.pass {
 	border-color: $green;
+	border-radius: 5px;
 }
 
 .ticket.fail {
-	border-radius: 0;
-	border-color: $grey;
+	border-color: $red;
+	border-radius: 5px;
 }
 
 .btn-test {
@@ -363,4 +366,9 @@ footer span {
 	float: right;
 }
 
+.undo {
+	background-color: $grey;
+//	text-shadow: -1px 0 $dark-grey, 0 1px $dark-grey, 1px 0 $dark-grey, 0 -1px $dark-grey;
+	color: $dark-grey;
+}
 

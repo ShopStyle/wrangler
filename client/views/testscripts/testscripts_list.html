@@ -7,7 +7,7 @@
 </template>
 
 <template name="testscript">
-	<div class="ticket {{passed this}}">
+	<div class="ticket {{testscriptStatus this}}">
 		<div class="text">
 			<div class="testscript-steps">{{breakLines steps}}</div>
 			<div class="invisible">
@@ -17,6 +17,9 @@
 			</div>
 		</div>
 		<div class="btn-holder">
+			{{#if showUndo this}}
+				<div class="btn-test undo">undo</div>
+			{{/if}}
 			<div class="btn-test pass">PASS</div>
 			<div class="btn-test fail">FAIL</div>
 		</div>

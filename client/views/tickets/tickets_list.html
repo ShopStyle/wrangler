@@ -15,14 +15,10 @@
 </template>
 
 <template name="ticket">
-	<div class="ticket {{passed this}}">
+	<div class="ticket {{ticketStatus this}}">
 		<div class="text">
 			<h3><a href="{{pathFor 'ticketPage'}}">{{title}}</a></h3>
 			<span>Dev: {{dev}}</span>
-		</div>
-		<div class="btn-holder">
-			<div class="btn-test pass">PASS</div>
-			<div class="btn-test fail">FAIL</div>
 		</div>
 	</div>
 </template>
