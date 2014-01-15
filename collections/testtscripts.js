@@ -42,12 +42,11 @@ Meteor.methods({
 		}
 		var testscript = Testscripts.findOne(id);
 		if (passTest === '') {
-			//there has to be a better way to do this...
 			Testscripts.update(testscript._id, {
-				$pull: { failers: user._id }
-			});
-			Testscripts.update(testscript._id, {
-				$pull: { passers: user._id }
+				$pull: { 
+					failers: user._id,
+					passers: user._id 
+				}
 			});
 		}
 		else if (passTest) {
