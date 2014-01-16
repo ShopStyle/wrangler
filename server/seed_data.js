@@ -17,8 +17,7 @@ if (Tickets.find().count() === 0) {
 		dev: korey.profile.name,
 		devEmail: "kkassir@popsugar.com",
 		url: "http://google.com",
-		pass: false,
-		incomplete: true,
+		status: '',
 		component: "mobile"
 	});
 	
@@ -28,8 +27,7 @@ if (Tickets.find().count() === 0) {
 		dev: korey.profile.name,
 		devEmail: "kkassir@popsugar.com",
 		url: "http://google.com",
-		pass: true,
-		incomplete: false
+		status: '',
 	});
 	
 	var ticket3Id = Tickets.insert({
@@ -38,31 +36,26 @@ if (Tickets.find().count() === 0) {
 		dev: frank.profile.name,
 		devEmail: "frank@popsugar.com",
 		url: "http://google.com",
-		pass: false,
-		incomplete: true
+		status: '',
 	});
 	
 	Testscripts.insert({
 		steps: "1. take a drive 2. something else 3. voila!",
 		ticketId: ticket1Id,
-		pass: false
 	});
 	
 	Testscripts.insert({
 		steps: "1. take a drive \n 2. something else \n 3. voila!",
 		ticketId: ticket1Id,
-		pass: true
 	});
 	
 	Testscripts.insert({
 		steps: "1. take a drive \n 2. something else \n 3. voila!",
 		ticketId: ticket2Id,
-		pass: false
 	});
 	
 	Testscripts.insert({
 		steps: "1. take a drive \n 2. something else \n 3. voila!",
 		ticketId: ticket3Id,
-		pass: false
 	});
 }

@@ -1,13 +1,12 @@
-Handlebars.registerHelper('ticketStatus', function(ticket) {
-	var status = ticket.pass === true ? "pass" : "";
-	status = ticket.fail === true ? "fail" : "";
-	return status;
-});
-
 Handlebars.registerHelper('testscriptStatus', function(testscript) {
-	var userId = Meteor.user()._id;
-	var pass = _.contains(testscript.passers, userId);
-	var fail = _.contains(testscript.failers, userId);
+	var userId = Meteor.user();
+	var user = Meteor.user();
+	if (user === null) {
+		return;
+	}
+	
+	var pass = _.contains(testscript.passers, user.username);
+	var fail = _.contains(testscript.failers, user.username);
 	if (fail) {
 		return 'fail';
 	}
@@ -20,9 +19,13 @@ Handlebars.registerHelper('testscriptStatus', function(testscript) {
 });
 
 Handlebars.registerHelper('showUndo', function(testscript) {
-	var userId = Meteor.user()._id;
-	var pass = _.contains(testscript.passers, userId);
-	var fail = _.contains(testscript.failers, userId);
+	var user = Meteor.user();
+	if (user === null) {
+		return;
+	}
+	
+	var pass = _.contains(testscript.passers, user.username);
+	var fail = _.contains(testscript.failers, user.username);
 	if (fail || pass) {
 		return true;
 	}

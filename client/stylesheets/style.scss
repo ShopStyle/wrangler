@@ -161,6 +161,10 @@ body {
 
 	form {
 		margin: 10px;
+		
+		input {
+			display: block;
+		}
 	
 		.btn-edit.submit {
 			position: static;
@@ -368,7 +372,6 @@ footer span {
 
 .undo {
 	background-color: $grey;
-//	text-shadow: -1px 0 $dark-grey, 0 1px $dark-grey, 1px 0 $dark-grey, 0 -1px $dark-grey;
 	color: $dark-grey;
 }
 
