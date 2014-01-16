@@ -41,19 +41,36 @@ Meteor.methods({
 		var testscripts = Testscripts.find({ ticketId: ticket._id });
 		var numTestersReq = ticket.testersReq || 3;
 		var numTestScripts = testscripts.count();
-
+		
 		testscripts.forEach(function(testscript) {
 			failers = failers.concat(testscript.failers);
 			passers = passers.concat(testscript.passers);
 		});
-		var totalPasses = passers.length;
+		
+		var numPassers = 0;
+		var passersCounts = {};
+		passers.forEach(function(elem) {
+			if (passersCounts[elem] == null) {
+				passersCounts[elem] = 1;
+			}
+			else {
+				passersCounts[elem] += 1;
+			}
+		});
+
+		for (var key in passersCounts) {
+			if (passersCounts[key] >= numTestScripts) {
+				numPassers += 1;
+			}
+		}
+		
 		passers = _.uniq(passers);
 		failers = _.uniq(failers);
 		
 		if (failers.length > 0) {
 			status = 'fail';
 		}
-		if (passers.length >= numTestersReq && totalPasses >= numTestScripts * numTestersReq) {
+		if (numPassers >= numTestersReq) {
 			status = 'pass';
 		}
 
