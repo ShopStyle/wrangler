@@ -40,21 +40,24 @@ Meteor.methods({
 		var failers = [];
 		var testscripts = Testscripts.find({ ticketId: ticket._id });
 		var numTestersReq = ticket.testersReq || 3;
-		
-		for (var i = 0; i < testscripts.length; i++) {
-			failers.concat(testscript[i].failers);
-			passers.concat(testscript[i].passers);
-		}
+		var numTestScripts = testscripts.count();
+
+		testscripts.forEach(function(testscript) {
+			debugger;
+			failers = failers.concat(testscript.failers);
+			passers = passers.concat(testscript.passers);
+		});
+		var totalPasses = passers.length;
 		passers = _.uniq(passers);
 		failers = _.uniq(failers);
 		
 		if (failers.length > 0) {
 			status = 'fail';
 		}
-		if (passers.length >= numTestersReq) {
+		if (passers.length >= numTestersReq && totalPasses >= numTestScripts * numTestersReq) {
 			status = 'pass';
 		}
-		
+
 		Tickets.update(ticket._id, {
 			$set: {
 				passers: passers,
