@@ -43,7 +43,6 @@ Meteor.methods({
 		var numTestScripts = testscripts.count();
 
 		testscripts.forEach(function(testscript) {
-			debugger;
 			failers = failers.concat(testscript.failers);
 			passers = passers.concat(testscript.passers);
 		});
