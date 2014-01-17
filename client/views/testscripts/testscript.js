@@ -37,5 +37,15 @@ Template.testscript.events({
 				throwError(error.reason);
 			}
 		});
+	},
+	'mouseenter .testscript-results': function(e) {
+		e.preventDefault();
+		$(e.currentTarget).find('.results').hide();
+		$(e.currentTarget).find('.results-inner').show();
+	},
+	'mouseleave .testscript-results': function(e) {
+		e.preventDefault();
+		$(e.currentTarget).find('.results').css('display', 'inline-block');
+		$(e.currentTarget).find('.results-inner').hide();
 	}
 })

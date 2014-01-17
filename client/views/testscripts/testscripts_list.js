@@ -11,6 +11,12 @@ Template.testscript.helpers({
 	},
 	numPassers: function() {
 		return this.passers.length;
+	},
+	passersConcat: function() {
+		return this.passers.join(', ')
+	},
+	failersConcat: function() {
+		return this.failers.join(', ')
 	}
 });
 

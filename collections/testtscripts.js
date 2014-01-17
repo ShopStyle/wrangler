@@ -63,8 +63,7 @@ Meteor.methods({
 				numPassers += 1;
 			}
 		}
-		
-		passers = _.uniq(passers);
+
 		failers = _.uniq(failers);
 		
 		if (failers.length > 0) {
@@ -76,8 +75,6 @@ Meteor.methods({
 
 		Tickets.update(ticket._id, {
 			$set: {
-				passers: passers,
-				failers: failers,
 				status: status
 			}
 		});

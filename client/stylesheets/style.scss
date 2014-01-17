@@ -99,6 +99,7 @@ body {
 	
 	
 	.text {
+		display: inline-block;
 		margin: 7px;
 		
 		h1 {
@@ -117,9 +118,7 @@ body {
 	}
 	
 	.btn-holder {
-		position: absolute;
-		top: 0;
-		right: 0;
+		float: right;
 	}
 	
 	.btn-edit {
@@ -130,6 +129,7 @@ body {
 		padding: 5px;
 		cursor: pointer;
 		text-decoration: none;
+		color: $dark-grey;
 	}
 	
 	.btn-edit:hover {
@@ -146,7 +146,6 @@ body {
 		background-color: $green;
 		border-radius: 5px;
 		color: white;
-		font-size: 1.2em;
 	}
 	
 	input {
@@ -331,6 +330,7 @@ body {
 
 .testscript-steps {
 	cursor: pointer;
+	max-width: 500px;
 }
 
 .invisible {
@@ -401,6 +401,28 @@ footer span {
 	.red {
 		color: $red;
 		font-weight: bold;
+	}
+}
+
+.testscript-results {
+	margin-right: 20px;
+	color: $dark-grey;
+	cursor: pointer;
+	float: right;
+	
+	.results {
+		position: relative;
+		top: 22px;
+	}
+	
+	.results-inner {
+		background-color: white;
+		z-index: 1;
+		display: none;
+		color: black;
+		max-width: 400px;
+		position: relative;
+		top: 5px;
 	}
 }
 
