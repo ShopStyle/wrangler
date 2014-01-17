@@ -8,7 +8,8 @@ Template.ticketNew.events({
 			whatChanged: $(e.target).find('[name=what-changed]').val(),
 			referencePages: $(e.target).find('[name=reference-pages]').val(),
 			typeTesting: $(e.target).find('[name=test-req]').val(),
-			comments: $(e.target).find('[name=comments]').val()
+			comments: $(e.target).find('[name=comments]').val(),
+			status: ''
 		};
 
 		Meteor.call('newTicket', ticketProperties, function(error, id) {

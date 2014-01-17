@@ -211,7 +211,7 @@ body {
 	background-color: $dark-grey;
 	color: white;
 	margin: 10px;
-	padding: 12px;
+	padding: 7px;
 	border-radius: 5px;
 	cursor: pointer;
 }
@@ -373,5 +373,34 @@ footer span {
 .undo {
 	background-color: $grey;
 	color: $dark-grey;
+}
+
+.testing-results {
+	display: inline-block;
+	margin-right: 10px;
+	font-size: 1.2em;
+	
+	
+}
+
+.circle {
+	display: inline-block;
+	background-color: rgba(255, 255, 255, .7);
+	margin-left: 2px;
+	padding: 5px;
+	border-radius: 25px;
+	height: 15px;
+	width: 15px;
+	text-align: center;
+	
+	.green {
+		color: $green;
+		font-weight: bold;
+	}
+	
+	.red {
+		color: $red;
+		font-weight: bold;
+	}
 }
 

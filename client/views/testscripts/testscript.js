@@ -27,8 +27,8 @@ Template.testscript.events({
 	},
 	'click .btn-test': function(e) {
 		e.preventDefault();
-		var pass = $(e.target).filter(".pass").length > 0;
-		var fail = $(e.target).filter(".fail").length > 0;
+		var pass = $(e.currentTarget).filter(".pass").length > 0;
+		var fail = $(e.currentTarget).filter(".fail").length > 0;
 		if (pass === false && fail === false) {
 			pass = '';
 		}
