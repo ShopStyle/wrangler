@@ -20,14 +20,14 @@
 			{{#if showUndo this}}
 				<div class="btn-test undo">undo</div>
 			{{/if}}
-			<div class="btn-test pass">PASS <span class="circle"><span class="green">{{numPassers}}</span></span></div>
-			<div class="btn-test fail">FAIL <span class="circle"><span class="red">{{numFailers}}</span></span></div>
+			<div class="btn-test pass">PASS <span class="circle"><span class="green">{{numPassers this}}</span></span></div>
+			<div class="btn-test fail">FAIL <span class="circle"><span class="red">{{numFailers this}}</span></span></div>
 		</div>
 		<div class="testscript-results">
 			<div class="results">Results</div>
 			<div class="results-inner">
-				<div class="green">Passers: {{passersConcat}}</div>
-				<div class="red">Failers: {{failersConcat}}</div>
+				<div class="green">Pass: {{passersConcat this}}</div>
+				<div class="red">Fail: {{failersConcat this}}</div>
 			</div>
 		</div>
 	</div>

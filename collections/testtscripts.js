@@ -49,6 +49,7 @@ Meteor.methods({
 		
 		var numPassers = 0;
 		var passersCounts = {};
+		var allTestscriptPassers = [];
 		passers.forEach(function(elem) {
 			if (passersCounts[elem] == null) {
 				passersCounts[elem] = 1;
@@ -61,6 +62,7 @@ Meteor.methods({
 		for (var key in passersCounts) {
 			if (passersCounts[key] >= numTestScripts) {
 				numPassers += 1;
+				allTestscriptPassers.push(key);
 			}
 		}
 
@@ -69,13 +71,15 @@ Meteor.methods({
 		if (failers.length > 0) {
 			status = 'fail';
 		}
-		if (numPassers >= numTestersReq) {
+		else if (numPassers >= numTestersReq) {
 			status = 'pass';
 		}
 
 		Tickets.update(ticket._id, {
 			$set: {
-				status: status
+				status: status,
+				failers: failers,
+				passers: allTestscriptPassers
 			}
 		});
 	},

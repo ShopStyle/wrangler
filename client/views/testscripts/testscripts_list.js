@@ -5,18 +5,5 @@ Template.testscriptList.helpers({
 	}
 });
 
-Template.testscript.helpers({
-	numFailers: function() {
-		return this.failers.length;
-	},
-	numPassers: function() {
-		return this.passers.length;
-	},
-	passersConcat: function() {
-		return this.passers.join(', ')
-	},
-	failersConcat: function() {
-		return this.failers.join(', ')
-	}
-});
+
 

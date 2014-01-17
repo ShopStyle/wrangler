@@ -1,3 +1,23 @@
+Handlebars.registerHelper('numFailers',function(ticket) {
+	var length = ticket.failers ? ticket.failers.length : 0;
+	return length;
+});
+
+Handlebars.registerHelper('numPassers', function(ticket) {
+	var length = ticket.passers ? ticket.passers.length : 0;
+	return length;
+});
+
+Handlebars.registerHelper('failersConcat', function(ticket) {
+	var names = ticket.failers ? ticket.failers.join(', ') : '';
+	return names;
+});
+
+Handlebars.registerHelper('passersConcat', function(ticket) {
+	var names = ticket.passers ? ticket.passers.join(', ') : '';
+	return names;
+});
+
 Handlebars.registerHelper('testscriptStatus', function(testscript) {
 	var userId = Meteor.user();
 	var user = Meteor.user();

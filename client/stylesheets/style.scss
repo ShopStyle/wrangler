@@ -213,14 +213,18 @@ body {
 	padding: 7px;
 	border-radius: 5px;
 	cursor: pointer;
-}
-
-.btn-test.pass {
-	background-color: $green;
-}
-
-.btn-test.fail {
-	background-color: $red;
+	
+	&.default {
+		cursor: default;
+	}
+	
+	&.pass {
+		background-color: $green;
+	}
+	
+	&.fail {
+		background-color: $red;
+	}
 }
 
 #login-buttons {
@@ -363,7 +367,6 @@ body {
 	&:hover {
 		text-decoration: none;
 	}
-
 }
 
 footer span {
@@ -379,8 +382,6 @@ footer span {
 	display: inline-block;
 	margin-right: 10px;
 	font-size: 1.2em;
-	
-	
 }
 
 .circle {
@@ -436,7 +437,9 @@ footer span {
 			border-radius: 0 0px 5px 5px;
 		}
 	}
-	
 }
+
+
+
 
 

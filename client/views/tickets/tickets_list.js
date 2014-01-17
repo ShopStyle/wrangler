@@ -5,3 +5,17 @@ Template.ticketsList.helpers({
 	}
 });
 
+Template.ticket.events({
+	'click .testscript-results': function(e) {
+		e.preventDefault();
+		$(e.currentTarget).find('.results-inner').show();
+		$(e.currentTarget).find('.results').hide();
+	},
+	'click .results-inner': function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		$(e.currentTarget).hide();
+		$(e.currentTarget).siblings('.results').show();
+	}
+});
+
