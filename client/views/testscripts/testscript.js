@@ -38,14 +38,15 @@ Template.testscript.events({
 			}
 		});
 	},
-	'mouseenter .testscript-results': function(e) {
+	'click .testscript-results': function(e) {
 		e.preventDefault();
-		$(e.currentTarget).find('.results').hide();
 		$(e.currentTarget).find('.results-inner').show();
+		$(e.currentTarget).find('.results').hide();
 	},
-	'mouseleave .testscript-results': function(e) {
+	'click .results-inner': function(e) {
 		e.preventDefault();
-		$(e.currentTarget).find('.results').css('display', 'inline-block');
-		$(e.currentTarget).find('.results-inner').hide();
+		e.stopPropagation();
+		$(e.currentTarget).hide();
+		$(e.currentTarget).siblings('.results').show();
 	}
 })

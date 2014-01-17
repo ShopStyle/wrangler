@@ -94,7 +94,7 @@ body {
 	border: 2px solid;
 	border-radius: 0;
 	border-color: $grey;
-	min-height: 60px;
+	min-height: 130px;
 	background-color: white;
 	
 	
@@ -405,24 +405,38 @@ footer span {
 }
 
 .testscript-results {
-	margin-right: 20px;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
 	color: $dark-grey;
 	cursor: pointer;
 	float: right;
 	
-	.results {
-		position: relative;
-		top: 22px;
-	}
-	
 	.results-inner {
-		background-color: white;
 		z-index: 1;
 		display: none;
-		color: black;
+		color: white;
 		max-width: 400px;
 		position: relative;
 		top: 5px;
+		
+		div {
+			opacity: 0.8;
+			padding: 10px;
+		}
+		
+		.green {
+			background-color: $green;
+			border-radius: 5px 5px 0 0;
+			border-bottom: 1px solid white;
+		}
+		
+		.red {
+			background-color: $red;
+			border-radius: 0 0px 5px 5px;
+		}
 	}
+	
 }
+
 
