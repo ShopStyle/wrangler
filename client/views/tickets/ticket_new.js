@@ -22,3 +22,14 @@ Template.ticketNew.events({
 		});
 	}
 });
+
+Template.ticketNew.helpers({
+	defaultDev: function() {
+		if (this.dev) {
+			return this.dev;
+		}
+		if (Meteor.user()) {
+			return Meteor.user().username;
+		}
+	}
+})

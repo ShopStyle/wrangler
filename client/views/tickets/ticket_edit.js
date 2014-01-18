@@ -1,6 +1,8 @@
 Template.ticketEdit.events({
 	'submit form': function(e) {
 		e.preventDefault();
+		$('.edit-ticket').hide();
+		$('.main.ticket').show();
 		
 		var currentTicketId = this._id;
 		
@@ -18,9 +20,6 @@ Template.ticketEdit.events({
 			if (error) {
 				//display the error to the user
 				throwError(error.reason);
-			}
-			else {
-				Router.go('ticketPage', {_id: currentTicketId});
 			}
 		});
 	},

@@ -30,7 +30,10 @@
 	<ul class="navbar-right">
 		{{#if currentUser}}
 			<li>
-				<a class="{{activeRouteClass 'toDo'}}" href="{{pathFor 'toDo'}}">To-do</a>
+				{{> notifications}}
+			</li>
+			<li>
+				<a class="{{activeRouteClass 'yours'}}" href="{{pathFor 'yours'}}">Own</a>
 			</li>
 		{{/if}}
 		{{loginButtons align="right"}}

@@ -106,6 +106,7 @@ Meteor.methods({
 			});
 		}
 		else {
+			createFailNotification(ticket._id, user.username);
 			Testscripts.update(testscript._id, {
 				$pull: { passers: user.username },
 				$addToSet: { failers: user.username }

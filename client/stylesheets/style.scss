@@ -9,8 +9,6 @@ $light-blue: #D3E5FB;
 $grey: #EEEEEE;
 $dark-grey: #939393;
 
-//this needs to be cleaned up!
-
 html {
 	background-color: white;
 	font-family: 'Open Sans', sans-serif;
@@ -31,7 +29,8 @@ a:hover {
 }
 
 body {
-	max-width: 1100px;
+	min-width: 800px;
+	max-width: 1200px;
 	margin-left: auto;
 	margin-right: auto;
 	padding: 15px;
@@ -80,7 +79,7 @@ body {
 
 .navbar-right {
 	float: right;
-	margin-top: 9px;
+	margin-top: 5px;
 	margin-right: 10px;
 }
 
@@ -333,8 +332,7 @@ body {
 }
 
 .testscript-steps {
-	cursor: pointer;
-	max-width: 500px;
+	max-width: 600px;
 }
 
 .invisible {
@@ -390,18 +388,21 @@ footer span {
 	margin-left: 2px;
 	padding: 5px;
 	border-radius: 25px;
-	height: 15px;
 	width: 15px;
 	text-align: center;
+	font-weight: bold;
 	
 	.green {
 		color: $green;
-		font-weight: bold;
 	}
 	
 	.red {
 		color: $red;
-		font-weight: bold;
+	}
+	
+	&.notification {
+		color: $blue;
+		width: 22px;
 	}
 }
 
@@ -417,7 +418,6 @@ footer span {
 		z-index: 1;
 		display: none;
 		color: white;
-		max-width: 400px;
 		position: relative;
 		top: 5px;
 		
@@ -436,6 +436,38 @@ footer span {
 			background-color: $red;
 			border-radius: 0 0px 5px 5px;
 		}
+	}
+}
+
+.notification.dropdown-menu {
+	padding: 5px;
+	display: none;
+	position: absolute;
+	top: 40px;
+	right: 250px;
+	border-radius: 5px;
+	background-color: white;
+	z-index: 1;
+	font-size: 0.9em;
+	border: 1px solid black;
+	
+	a {
+		padding: 0;
+		text-decoration: none;
+		color: black;
+		border: none;
+		margin: 5px 0;
+		border-radius: 0;
+		
+		&:hover {
+			color: white;
+			background-color: $red;
+		}
+	}
+	
+	li {
+		display: block;
+		margin: 7px 0;
 	}
 }
 

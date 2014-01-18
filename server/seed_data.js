@@ -40,7 +40,7 @@ if (Tickets.find().count() === 0) {
 	});
 	
 	Testscripts.insert({
-		steps: "1. take a drive 2. something else 3. voila!",
+		steps: "1. take a drive \n 2. something else \n 3. voila!",
 		ticketId: ticket1Id,
 	});
 	
