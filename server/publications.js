@@ -9,3 +9,7 @@ Meteor.publish('testscripts', function(ticketId) {
 Meteor.publish('notifications', function() {
 	return Notifications.find();
 });
+
+Meteor.publish('milestones', function() {
+	return Milestones.find();
+})

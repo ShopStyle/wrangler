@@ -1,0 +1,16 @@
+<template name="milestones">
+	<div class="milestones">
+		<div class="title">Please select a milestone</div>
+		<ul>
+			{{#each milestones}}
+				{{> milestone}}
+			{{/each}}
+		</ul>
+	</div>
+</template>
+
+<template name="milestone">
+	<li>
+		<a href="#">{{title}}</a>
+	</li>
+</template>

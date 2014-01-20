@@ -33,6 +33,7 @@ Meteor.methods({
 		);
 		testscript._id = Testscripts.insert(testscript);
 		return testscript._id;
+		Meteor.call('updateTicketStatus', ticket);
 	},
 	updateTicketStatus: function(ticket) {
 		var status = '';
@@ -114,4 +115,5 @@ Meteor.methods({
 		}
 		Meteor.call('updateTicketStatus', ticket);
 	}
-})
+});
+
