@@ -3,7 +3,9 @@ Meteor.subscribe('milestones');
 Template.milestone.events({
 	'click a': function(e) {
 		e.preventDefault();
-		Session.set('sessionMilestoneSpaceId', this.space_id);
+		$('#spinner').show();
+		$('.milestones').hide();
+		Meteor.call('populateTicketCollection', this.space_id);
 	}
 });
 
