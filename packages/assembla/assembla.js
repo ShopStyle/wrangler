@@ -44,8 +44,8 @@ Assembla.populateTicketCollection = function() {
 	
 	
 	// var currentSpaceId = Milestones.findOne({ current: true }).space_id;
-	var currentSpaceId = "cbm-TcMkOr4OkpacwqjQYw"; // stand in for development, 1/28/2014
-	var ticketsUrl = 'spaces/' + currentSpaceId + '/tickets';
+	var currentMilestoneId = "4853043"; // stand in for development, 1/28/2014
+	var ticketsUrl = 'spaces/shopstyle/tickets/milestone/' + currentMilestoneId;
 	var url = 'https://api.assembla.com/v1/' + ticketsUrl + '.json';
 	var ticketResponse = Meteor.http.get(url, {
 		params: {
@@ -62,11 +62,11 @@ Assembla.populateTicketCollection = function() {
 				$set: {
 					assignedToId: ticket.assigned_to_id,
 					assemblaId: ticket.id,
-					spaceId: ticket.space_id,
+					milestoneId: ticket.milestone_id,
 					customFields: ticket.custom_fields,
 					updatedAt: ticket.updated_at,
 					summary: ticket.summary,
-					statusName: ticket.status_name
+					statusName: ticket.status
 				}
 				}, 
 				{ upsert: true }
