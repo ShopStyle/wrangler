@@ -35,34 +35,50 @@ Assembla.updateMilestoneCollection = function() {
 	}});
 }
 
-// Assembla.populateTicketCollection = function() {
-// 	if (!Meteor.settings.API_KEY || !Meteor.settings.API_SECRET) {
-// 		throw new Meteor.Error(500, 'Please provide secret/key in Meteor.settings');
-// 	}
-// 	
-// 	TICKETS = 'spaces/shopstyle/tickets';
-// 	var url = 'https://api.assembla.com/v1/' + TICKETS + '.json';
-// 	var ticketResponse = Meteor.http.get(url, {
-// 		params: {
-// 			report: 3
-// 		},
-// 		headers: {
-//            'X-Api-Key': Meteor.settings.API_KEY,
-//            'X-Api-Secret': Meteor.settings.API_SECRET
-// 		}
-// 	});
-// 	if (ticketResponse.statusCode == 200) {
-// 		Tickets.remove({})
-// 		_.each(ticketResponse.data, function(ticket) {
-// 			Milestones.insert(ticket);	
-// 		})
-// 	}
-// 	else {
-// 		throw new Meteor.Error(500, 'Assembla call failed');
-// 	}
-// }
+Assembla.populateTicketCollection = function() {
+	if (!Meteor.settings.API_KEY || !Meteor.settings.API_SECRET) {
+		throw new Meteor.Error(500, 'Please provide secret/key in Meteor.settings');
+	}
+	//make an api call to only the "current" milestone, set by admin, get new tickets from 
+	//current milestone on interval, update test scripts manually, update milestones automatically
+	
+	
+	// var currentSpaceId = Milestones.findOne({ current: true }).space_id;
+	var currentSpaceId = "cbm-TcMkOr4OkpacwqjQYw"; // stand in for development, 1/28/2014
+	var ticketsUrl = 'spaces/' + currentSpaceId + '/tickets';
+	var url = 'https://api.assembla.com/v1/' + ticketsUrl + '.json';
+	var ticketResponse = Meteor.http.get(url, {
+		params: {
+			report: 3
+		},
+		headers: {
+           'X-Api-Key': Meteor.settings.API_KEY,
+           'X-Api-Secret': Meteor.settings.API_SECRET
+		}
+	});
+	if (ticketResponse.statusCode == 200) {
+		_.each(ticketResponse.data, function(ticket) {
+			Tickets.update({ assemblaId: ticket.id }, {
+				$set: {
+					assignedToId: ticket.assigned_to_id,
+					assemblaId: ticket.id,
+					spaceId: ticket.space_id,
+					customFields: ticket.custom_fields,
+					updatedAt: ticket.updated_at,
+					summary: ticket.summary,
+					statusName: ticket.status_name
+				}
+				}, 
+				{ upsert: true }
+			);	
+		})
+	}
+	else {
+		throw new Meteor.Error(500, 'Assembla call failed');
+	}
+}
 
 if (Meteor.isServer) {
 	Meteor.startup(Assembla.updateMilestoneCollection);
-	// Meteor.startup(Assembla.populateTicketCollection);
+	Meteor.startup(Assembla.populateTicketCollection);
 }

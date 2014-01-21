@@ -58,9 +58,9 @@ body {
 	border-radius: 5px;
 }
 
-.home {
-	margin-right: 20px;
-}
+//.home {
+//	margin-right: 20px;
+//}
 
 .navbar a:hover {
 	border: dotted;
@@ -443,13 +443,14 @@ footer span {
 	padding: 5px;
 	display: none;
 	position: absolute;
-	top: 40px;
-	right: 250px;
+	top: 30px;
+	right: 0;
 	border-radius: 5px;
 	background-color: white;
 	z-index: 1;
 	font-size: 0.9em;
-	border: 1px solid black;
+	border: 2px solid $grey;
+	width: 350px;
 	
 	a {
 		padding: 0;
@@ -469,6 +470,10 @@ footer span {
 		display: block;
 		margin: 7px 0;
 	}
+}
+
+li.relative-container {
+	position: relative;
 }
 
 
