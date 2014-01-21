@@ -7,8 +7,7 @@ Template.ticketsList.helpers({
 
 Template.ticket.helpers({
 	assignedTo: function() {
-		//temprary
-		return "some cool guy";
+		return AssemblaUsers.findOne({ id: this.assignedToId }).login;
 	}
 })
 

@@ -6,6 +6,10 @@ Meteor.publish('tickets', function() {
 
 });
 
+Meteor.publish('users', function() {
+	return AssemblaUsers.find({}, { fields: { login: 1, id: 1 }});
+});
+
 Meteor.publish('testscripts', function(ticketId) {
 	return Testscripts.find({ ticketId: ticketId });
 });

@@ -48,15 +48,13 @@ Assembla.populateTicketCollection = function() {
 	var ticketsUrl = 'spaces/shopstyle/tickets/milestone/' + currentMilestoneId;
 	var url = 'https://api.assembla.com/v1/' + ticketsUrl + '.json';
 	var ticketResponse = Meteor.http.get(url, {
-		params: {
-			report: 3
-		},
 		headers: {
            'X-Api-Key': Meteor.settings.API_KEY,
            'X-Api-Secret': Meteor.settings.API_SECRET
 		}
 	});
 	if (ticketResponse.statusCode == 200) {
+		//I really don't like how I am qerying the database and setting things in a loop...
 		_.each(ticketResponse.data, function(ticket) {
 			var assemblaUrl = 'https://www.assembla.com/spaces/shopstyle/tickets/' + ticket.number;
 			Tickets.update({ assemblaId: ticket.number }, {
@@ -93,7 +91,30 @@ Assembla.populateTicketCollection = function() {
 	}
 }
 
+Assembla.populateAssemblaUsers = function() {
+	var assemblaUrl = 'https://api.assembla.com/v1/spaces/shopstyle/users.json';
+	var userResponse = Meteor.http.get(assemblaUrl, {
+		headers: {
+           'X-Api-Key': Meteor.settings.API_KEY,
+           'X-Api-Secret': Meteor.settings.API_SECRET
+		}
+	});
+	if (userResponse.statusCode == 200) {
+		AssemblaUsers.remove({});
+		_.each(userResponse.data, function(user) {
+			AssemblaUsers.insert(user);
+		});
+		
+	}
+	else {
+		throw new Meteor.Error(500, 'Assembla call failed');
+	}
+}
+
 if (Meteor.isServer) {
-	Meteor.startup(Assembla.updateMilestoneCollection);
-	Meteor.startup(Assembla.populateTicketCollection);
+	Meteor.startup(function() {
+		Assembla.populateAssemblaUsers();
+		Assembla.updateMilestoneCollection();
+		Assembla.populateTicketCollection();
+	});
 }
