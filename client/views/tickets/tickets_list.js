@@ -5,6 +5,13 @@ Template.ticketsList.helpers({
 	}
 });
 
+Template.ticket.helpers({
+	assignedTo: function() {
+		//temprary
+		return "some cool guy";
+	}
+})
+
 Template.ticket.events({
 	'click .testscript-results': function(e) {
 		e.preventDefault();

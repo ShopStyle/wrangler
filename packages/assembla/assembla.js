@@ -58,20 +58,35 @@ Assembla.populateTicketCollection = function() {
 	});
 	if (ticketResponse.statusCode == 200) {
 		_.each(ticketResponse.data, function(ticket) {
-			Tickets.update({ assemblaId: ticket.id }, {
+			var assemblaUrl = 'https://www.assembla.com/spaces/shopstyle/tickets/' + ticket.number;
+			Tickets.update({ assemblaId: ticket.number }, {
 				$set: {
 					assignedToId: ticket.assigned_to_id,
-					assemblaId: ticket.id,
+					assemblaId: ticket.number,
 					milestoneId: ticket.milestone_id,
-					customFields: ticket.custom_fields,
 					updatedAt: ticket.updated_at,
 					summary: ticket.summary,
-					statusName: ticket.status
+					statusName: ticket.status,
+					component: ticket.custom_fields.Component,
+					browser: ticket.custom_fields.Browser,
+					os: ticket.custom_fields.OS,
+					assemblaUrl: assemblaUrl
 				}
 				}, 
 				{ upsert: true }
 			);	
-		})
+		});
+		Tickets.update({ 
+			passers: { $exists: false }, 
+			failers: { $exists: false }, 
+			status: { $exists: false }
+		}, {
+			$set: {
+				passers: [],
+				failers: [],
+				status: ''
+			}
+		}, { multi: true });
 	}
 	else {
 		throw new Meteor.Error(500, 'Assembla call failed');
