@@ -5,21 +5,27 @@
 // // MILESTONES = 'spaces/%s/milestones'
 // // COMPONENTS = 'spaces/%s/ticket_components'
 
-Assembla = {};
+Assembla = {
+	milestonesUrl: 'https://api.assembla.com/v1/spaces/shopstyle/milestones.json',
+	ticketsUrl: 'https://api.assembla.com/v1/spaces/shopstyle/tickets/milestone/',
+	usersUrl: 'https://api.assembla.com/v1/spaces/shopstyle/users.json'
+};
+
+Assembla.makeApiRequest = function(url) {
+	return Meteor.http.get(url, {
+		headers: {
+	       'X-Api-Key': Meteor.settings.API_KEY,
+	       'X-Api-Secret': Meteor.settings.API_SECRET
+		}
+	});
+}
 
 Assembla.updateMilestoneCollection = function() {
 	if (!Meteor.settings.API_KEY || !Meteor.settings.API_SECRET) {
 		throw new Meteor.Error(500, 'Please provide secret/key in Meteor.settings');
 	}
 	
-	var MILESTONES = 'spaces/shopstyle/milestones';
-	var url = 'https://api.assembla.com/v1/' + MILESTONES + '.json';
-	var milestoneResponse = Meteor.http.get(url, {
-		headers: {
-           'X-Api-Key': Meteor.settings.API_KEY,
-           'X-Api-Secret': Meteor.settings.API_SECRET
-		}
-	});
+	var milestoneResponse = Assembla.makeApiRequest(Assembla.milestonesUrl);
 	if (milestoneResponse.statusCode == 200) {
 		Milestones.remove({})
 		_.each(milestoneResponse.data, function(milestone) {
@@ -43,16 +49,11 @@ Assembla.populateTicketCollection = function() {
 	//current milestone on interval, update test scripts manually, update milestones automatically
 	
 	
-	// var currentSpaceId = Milestones.findOne({ current: true }).space_id;
+	// var currentMilestoneId = Milestones.findOne({ current: true }).id;
 	var currentMilestoneId = "4853043"; // stand in for development, 1/28/2014
-	var ticketsUrl = 'spaces/shopstyle/tickets/milestone/' + currentMilestoneId;
-	var url = 'https://api.assembla.com/v1/' + ticketsUrl + '.json';
-	var ticketResponse = Meteor.http.get(url, {
-		headers: {
-           'X-Api-Key': Meteor.settings.API_KEY,
-           'X-Api-Secret': Meteor.settings.API_SECRET
-		}
-	});
+	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
+	var ticketResponse = Assembla.makeApiRequest(url);
+	
 	if (ticketResponse.statusCode == 200) {
 		//I really don't like how I am qerying the database and setting things in a loop...
 		_.each(ticketResponse.data, function(ticket) {
@@ -92,19 +93,12 @@ Assembla.populateTicketCollection = function() {
 }
 
 Assembla.populateAssemblaUsers = function() {
-	var assemblaUrl = 'https://api.assembla.com/v1/spaces/shopstyle/users.json';
-	var userResponse = Meteor.http.get(assemblaUrl, {
-		headers: {
-           'X-Api-Key': Meteor.settings.API_KEY,
-           'X-Api-Secret': Meteor.settings.API_SECRET
-		}
-	});
+	var userResponse = Assembla.makeApiRequest(Assembla.usersUrl);
 	if (userResponse.statusCode == 200) {
 		AssemblaUsers.remove({});
 		_.each(userResponse.data, function(user) {
 			AssemblaUsers.insert(user);
 		});
-		
 	}
 	else {
 		throw new Meteor.Error(500, 'Assembla call failed');

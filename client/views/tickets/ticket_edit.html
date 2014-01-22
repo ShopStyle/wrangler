@@ -1,10 +1,11 @@
 <template name="ticketEdit">
 	<div class="ticket {{passed this}}">
 		<form>
-			<label for="title">Title</label>
-			<input name="title" type="text" value="{{title}}" placeholder="Title">
-			<label for="assigned">Assigned to</label>
-			<input name="assigned" type="text" value="{{dev}}" placeholder="Dev that is assigned to complete the ticket">
+			<div><strong>Title: </strong>{{summary}}</div>
+			<div><strong>Assigned to: </strong>{{assignedTo}}</div>
+			<div><strong>Component: </strong>{{component}}</div>
+			<div><strong>Browser: </strong>{{browser}}</div>
+			<div><strong>OS: </strong>{{os}}</div>
 			<label for="what-changed">What changed</label>
 			<input name="what-changed" type="text" value="{{whatChanged}}" placeholder="What changed?">
 			<label for="reference-pages">Reference page(s)</label>
@@ -19,3 +20,12 @@
 	</div>
 </template>
 
+<!-- <div><strong>Ticket: </strong>{{assemblaId}}</div>
+<div><strong>Assigned to: </strong>{{assignedTo}}</div>
+<div><strong>Component: </strong>{{component}}</div>
+<div><strong>Browser: </strong>{{browser}}</div>
+<div><strong>OS: </strong>{{os}}</div>
+<div><strong>What changed: </strong>{{whatChanged}}</div>
+<div><strong>Reference pages: </strong>{{referencePages}}</div>
+<div><strong>Type of testing: </strong>{{typeTesting}}</div>
+<div><strong>Prerequisite/comments: </strong>{{comments}}</div> -->

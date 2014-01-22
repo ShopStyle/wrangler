@@ -9,7 +9,7 @@ Template.ticket.helpers({
 	assignedTo: function() {
 		return AssemblaUsers.findOne({ id: this.assignedToId }).login;
 	}
-})
+});
 
 Template.ticket.events({
 	'click .testscript-results': function(e) {

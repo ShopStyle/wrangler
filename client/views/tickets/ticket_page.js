@@ -2,11 +2,21 @@ Template.ticketPage.events({
 	'click #add-testscript': function(e) {
 		e.preventDefault();
 		e.stopPropagation;
-		$('#new-testscript').show();
+		if (Meteor.user()) {
+			$('#new-testscript').show();
+		}
 	},
 	'dblclick .main.ticket': function(e) {
 		e.preventDefault();
-		$(e.currentTarget).hide();
-		$('.edit-ticket').show();
+		if (Meteor.user()) {
+			$(e.currentTarget).hide();
+			$('.edit-ticket').show();
+		}
 	}
 });
+
+Template.ticketPage.helpers({
+	assignedTo: function() {
+		return AssemblaUsers.findOne({ id: this.assignedToId }).login;
+	}
+})
