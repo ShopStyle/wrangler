@@ -17,6 +17,9 @@ Template.ticketPage.events({
 
 Template.ticketPage.helpers({
 	assignedTo: function() {
-		return AssemblaUsers.findOne({ id: this.assignedToId }).login;
+		if (AssemblaUsers.findOne({ id: this.assignedToId })) {
+			return AssemblaUsers.findOne({ id: this.assignedToId }).login;
+		}
+		return '';
 	}
 })

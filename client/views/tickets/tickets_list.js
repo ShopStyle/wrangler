@@ -7,7 +7,10 @@ Template.ticketsList.helpers({
 
 Template.ticket.helpers({
 	assignedTo: function() {
-		return AssemblaUsers.findOne({ id: this.assignedToId }).login;
+		var user = AssemblaUsers.findOne({ id: this.assignedToId });
+		if (user) {
+			return user.login;
+		}
 	}
 });
 
