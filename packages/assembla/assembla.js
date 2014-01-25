@@ -12,10 +12,10 @@ Assembla = {
 	assemblaUrl: 'https://www.assembla.com/spaces/shopstyle/tickets/'
 };
 
-Assembla.testscriptsAndcommentRegex = /##TESTING\n*([\s\S]*)##END$/i;
-Assembla.commentRegex = /#COMMENTS\n*([\s\S]*)#TESTSCRIPTS/i;
-Assembla.testscriptsRegex = /#TESTSCRIPTS\n*([\s\S]*)/i;
-Assembla.singleTestscriptRegex = /#(\d+)([\s\S]*)/i
+Assembla.testscriptsAndcommentRegex = /\*\*TESTING\n*([\s\S]*)\*\*END$/i;
+Assembla.commentRegex = /\*\*COMMENTS\n*([\s\S]*)\*\*TESTSCRIPTS/i;
+Assembla.testscriptsRegex = /\*\*TESTSCRIPTS\n*([\s\S]*)/i;
+Assembla.singleTestscriptRegex = /\*\*(\d+)([\s\S]*)/i;
 
 Assembla.makeApiRequest = function(url) {
 	return Meteor.http.get(url, {
@@ -54,7 +54,7 @@ Assembla.extractTicketInfoFromDescription = function(description, ticketNumber) 
 	if (description) {
 		var innerDescription = description.match(Assembla.testscriptsAndcommentRegex);
 		if (innerDescription) {
-			Assembla._extractTestscriptsFromInnerDescription(innerDescription[1]);
+			Assembla._extractTestscriptsFromInnerDescription(innerDescription[1], ticketNumber);
 			return Assembla._extractCommentFromInnerDescription(innerDescription[1]);
 		}
 	}
@@ -62,8 +62,36 @@ Assembla.extractTicketInfoFromDescription = function(description, ticketNumber) 
 }
 
 Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ticketNumber) {
-	//split testscripts on #ENDSCRIPT
-	return '';
+	var testscripts = innerDescription.split("**ENDSCRIPT");
+	_.each(testscripts, function(testscript) {
+		matches = testscript.match(Assembla.singleTestscriptRegex)
+		if (!matches) {
+			return;
+		}
+		var testscriptNum = parseInt(matches[1]);
+		var steps = matches[2];
+		Testscripts.update({ ticketAssemblaId: ticketNumber, testscriptNum: testscriptNum }, 
+			{ $set: 
+				{ 
+					steps: steps,
+					ticketAssemblaId: ticketNumber,
+					testscriptNum: testscriptNum 
+				}
+			},
+			{ upsert: true }
+		);
+	});
+	Testscripts.update({ 
+		passers: { $exists: false }, 
+		failers: { $exists: false }, 
+		status: { $exists: false }
+	}, {
+		$set: {
+			passers: [],
+			failers: [],
+			status: ''
+		}
+	}, { multi: true });
 }	
 	
 Assembla._extractCommentFromInnerDescription = function(innerDescription) {
@@ -73,23 +101,25 @@ Assembla._extractCommentFromInnerDescription = function(innerDescription) {
 
 Assembla.updateSingleTicket = function(ticket) {
 	var assemblaUrl = Assembla.assemblaUrl + ticket.number;
-	var description = Assembla.extractTicketInfoFromDescription(ticket.description);
-	Tickets.update({ assemblaId: ticket.number }, {
-		$set: {
-			assignedToId: ticket.assigned_to_id,
-			assemblaId: ticket.number,
-			milestoneId: ticket.milestone_id,
-			updatedAt: ticket.updated_at,
-			summary: ticket.summary,
-			statusName: ticket.status,
-			component: ticket.custom_fields.Component,
-			browser: ticket.custom_fields.Browser,
-			os: ticket.custom_fields.OS,
-			assemblaUrl: assemblaUrl,
-			comments: description
-		}
-		}, 
-		{ upsert: true }
+	var extractedComments = Assembla.extractTicketInfoFromDescription(ticket.description, ticket.number);
+	Tickets.update({ assemblaId: ticket.number }, 
+		{
+			$set: 
+			{
+				assignedToId: ticket.assigned_to_id,
+				assemblaId: ticket.number,
+				milestoneId: ticket.milestone_id,
+				updatedAt: ticket.updated_at,
+				summary: ticket.summary,
+				statusName: ticket.status,
+				component: ticket.custom_fields.Component,
+				browser: ticket.custom_fields.Browser,
+				os: ticket.custom_fields.OS,
+				assemblaUrl: assemblaUrl,
+				description: ticket.description,
+				comments: extractedComments
+			}
+		}, { upsert: true }
 	);	
 }
 
@@ -113,7 +143,8 @@ Assembla.populateTicketCollection = function() {
 			failers: { $exists: false }, 
 			status: { $exists: false }
 		}, {
-			$set: {
+			$set: 
+			{
 				passers: [],
 				failers: [],
 				status: ''
