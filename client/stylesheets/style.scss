@@ -276,12 +276,16 @@ body {
 
 .alert-error {
 	display: inline-block;
+	position: fixed;
+	top: 10px;
+	left: 10px;
 	background-color: $red;
 	color: white;
-	margin: 5px;
 	border-radius: 5px;
-	padding: 5px;
+	padding: 10px;
 	cursor: default;
+	opacity: 0.9;
+	z-index: 1;
 	
 	.close {
 		cursor: pointer;

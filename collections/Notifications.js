@@ -8,9 +8,10 @@ Notifications.allow({
 
 createFailNotification = function(ticketId, username) {
 	var ticket = Tickets.findOne(ticketId);
-	if (username !== ticket.dev) {
+	var dev = AssemblaUsers.findOne({ id: ticket.assignedToId });
+	if (dev && username !== dev.login) {
 		Notifications.insert({
-			dev: ticket.dev,
+			dev: dev.login,
 			ticketId: ticketId,
 			failerName: username,
 			read: false

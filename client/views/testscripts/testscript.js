@@ -30,8 +30,13 @@ Template.testscript.events({
 		var pass = $(e.currentTarget).filter(".pass").length > 0;
 		var fail = $(e.currentTarget).filter(".fail").length > 0;
 		if (fail === true) {
-			$(e.currentTarget).parents('.btn-holder').hide();
-			$(e.currentTarget).parents('.btn-holder').siblings('.failure-reason').show();
+			if (Meteor.user()) {
+				$(e.currentTarget).parents('.btn-holder').hide();
+				$(e.currentTarget).parents('.btn-holder').siblings('.failure-reason').show();	
+			} 
+			else {
+				throwError("You need to login to post test results");
+			}
 			return;
 		}
 		if (pass === false && fail === false) {
