@@ -43,8 +43,12 @@ Template.testscript.events({
 			}
 		});
 	},
-	'click .btn-test.fail.interior': function(e) {
-		var failReason = $(e.currentTarget).siblings('input').val();
+	'keydown, click .btn-test.fail.interior': function(e) {
+		if (e.type === 'keydown' && e.which !== 13) {
+			return;
+		}
+		e.preventDefault();
+		var failReason = $(e.currentTarget).parents().find('input').val();
 		Meteor.call('updateTestscriptResult', this._id, false, failReason, function(error) {
 			if (error) {
 				throwError(error.reason);
