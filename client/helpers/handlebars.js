@@ -9,8 +9,15 @@ Handlebars.registerHelper('numPassers', function(ticket) {
 });
 
 Handlebars.registerHelper('failersConcat', function(ticket) {
-	var names = ticket.failers ? ticket.failers.join(', ') : '';
-	return names;
+	if (ticket.failReasons) {
+		return ticket.failReasons.join(', ');
+	}
+	else if (ticket.failers) {
+		return ticket.failers.join(', ');
+	}
+	else {
+		return '';
+	}
 });
 
 Handlebars.registerHelper('passersConcat', function(ticket) {

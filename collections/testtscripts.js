@@ -39,7 +39,7 @@ Meteor.methods({
 		var status = '';
 		var passers = [];
 		var failers = [];
-		var testscripts = Testscripts.find({ ticketId: ticket._id });
+		var testscripts = Testscripts.find({ ticketAssemblaId: ticket.assemblaId });
 		var numTestersReq = ticket.testersReq || 3;
 		var numTestScripts = testscripts.count();
 		
@@ -84,14 +84,14 @@ Meteor.methods({
 			}
 		});
 	},
-	updateTestscriptResult: function(id, passTest) {
+	updateTestscriptResult: function(id, passTest, failReason) {
 		var user = Meteor.user();
 		if (!user) {
 			throw new Meteor.Error(401, "You need to login to post test results");
 		}
 
 		var testscript = Testscripts.findOne(id);
-		var ticket = Tickets.findOne(testscript.ticketId);
+		var ticket = Tickets.findOne({ assemblaId: testscript.ticketAssemblaId });
 		if (passTest === '') {
 			Testscripts.update(testscript._id, {
 				$pull: { 
@@ -110,7 +110,10 @@ Meteor.methods({
 			createFailNotification(ticket._id, user.username);
 			Testscripts.update(testscript._id, {
 				$pull: { passers: user.username },
-				$addToSet: { failers: user.username }
+				$addToSet: { 
+					failers: user.username,
+					failReasons: user.username + failReason 
+				}
 			});
 		}
 		Meteor.call('updateTicketStatus', ticket);

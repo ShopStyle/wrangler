@@ -480,6 +480,22 @@ li.relative-container {
 	position: relative;
 }
 
+.failure-reason {
+	display: none;
+	z-index: 1;
+	position: absolute;
+	top: -8px;
+	right: -8px;
+	form {
+		input {
+			display: inline-block;
+		}
+		.div {
+			display: inline-block;
+		}
+	}
+}
+
 
 
 

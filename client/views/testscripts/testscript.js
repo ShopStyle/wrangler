@@ -29,10 +29,23 @@ Template.testscript.events({
 		e.preventDefault();
 		var pass = $(e.currentTarget).filter(".pass").length > 0;
 		var fail = $(e.currentTarget).filter(".fail").length > 0;
+		if (fail === true) {
+			$(e.currentTarget).parents('.btn-holder').hide();
+			$(e.currentTarget).parents('.btn-holder').siblings('.failure-reason').show();
+			return;
+		}
 		if (pass === false && fail === false) {
 			pass = '';
 		}
 		Meteor.call('updateTestscriptResult', this._id, pass, function(error) {
+			if (error) {
+				throwError(error.reason);
+			}
+		});
+	},
+	'click .btn-test.fail.interior': function(e) {
+		var failReason = " (" + $(e.currentTarget).siblings('input').val() + ")";
+		Meteor.call('updateTestscriptResult', this._id, false, failReason, function(error) {
 			if (error) {
 				throwError(error.reason);
 			}

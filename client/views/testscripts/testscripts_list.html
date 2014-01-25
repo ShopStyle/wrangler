@@ -23,6 +23,12 @@
 			<div class="btn-test pass">PASS <span class="circle"><span class="green">{{numPassers this}}</span></span></div>
 			<div class="btn-test fail">FAIL <span class="circle"><span class="red">{{numFailers this}}</span></span></div>
 		</div>
+		<div class="failure-reason">
+			<form>
+				<input type="text" placeholder="Why did it fail?"></input>
+				<div class="btn-test fail interior">FAIL <span class="circle"><span class="red">{{numFailers this}}</span></span></div>
+			</form>
+		</div>
 		<div class="testscript-results">
 			<div class="results">Results</div>
 			<div class="results-inner">

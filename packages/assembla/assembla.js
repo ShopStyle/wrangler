@@ -9,13 +9,12 @@ Assembla = {
 	milestonesUrl: 'https://api.assembla.com/v1/spaces/shopstyle/milestones.json',
 	ticketsUrl: 'https://api.assembla.com/v1/spaces/shopstyle/tickets/milestone/',
 	usersUrl: 'https://api.assembla.com/v1/spaces/shopstyle/users.json',
-	assemblaUrl: 'https://www.assembla.com/spaces/shopstyle/tickets/'
+	assemblaUrl: 'https://www.assembla.com/spaces/shopstyle/tickets/',
+	testscriptsAndcommentRegex: /\*\*TESTING\n*([\s\S]*)\*\*END$/i,
+	commentRegex: /\*\*COMMENTS\n*([\s\S]*)\*\*TESTSCRIPTS/i,
+	testscriptsRegex: /\*\*TESTSCRIPTS\n*([\s\S]*)/i,
+	singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i,
 };
-
-Assembla.testscriptsAndcommentRegex = /\*\*TESTING\n*([\s\S]*)\*\*END$/i;
-Assembla.commentRegex = /\*\*COMMENTS\n*([\s\S]*)\*\*TESTSCRIPTS/i;
-Assembla.testscriptsRegex = /\*\*TESTSCRIPTS\n*([\s\S]*)/i;
-Assembla.singleTestscriptRegex = /\*\*(\d+)([\s\S]*)/i;
 
 Assembla.makeApiRequest = function(url) {
 	return Meteor.http.get(url, {
