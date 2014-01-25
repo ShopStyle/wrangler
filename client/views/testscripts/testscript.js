@@ -44,7 +44,7 @@ Template.testscript.events({
 		});
 	},
 	'click .btn-test.fail.interior': function(e) {
-		var failReason = " (" + $(e.currentTarget).siblings('input').val() + ")";
+		var failReason = $(e.currentTarget).siblings('input').val();
 		Meteor.call('updateTestscriptResult', this._id, false, failReason, function(error) {
 			if (error) {
 				throwError(error.reason);

@@ -95,14 +95,14 @@ Meteor.methods({
 		if (passTest === '') {
 			Testscripts.update(testscript._id, {
 				$pull: { 
-					failers: user.username,
+					failers: { username: user.username },
 					passers: user.username 
 				}
 			});
 		}
 		else if (passTest) {
 			Testscripts.update(testscript._id, {
-				$pull: { failers: user.username },
+				$pull: { failers: { username: user.username }},
 				$addToSet: { passers: user.username }
 			});
 		}
@@ -111,8 +111,10 @@ Meteor.methods({
 			Testscripts.update(testscript._id, {
 				$pull: { passers: user.username },
 				$addToSet: { 
-					failers: user.username,
-					failReasons: user.username + failReason 
+					failers:  {
+						username: user.username,
+						failReason: failReason
+					}
 				}
 			});
 		}
