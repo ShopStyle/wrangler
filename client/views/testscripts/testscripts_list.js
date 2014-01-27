@@ -1,7 +1,6 @@
 Template.testscriptList.helpers({
 	testscripts: function() {
-		var ticketId = Router.current().params._id;
-		var assemblaId = Tickets.findOne('' + ticketId).assemblaId;
+		var assemblaId = parseInt(Router.current().params._assemblaId);
 		return Testscripts.find({ ticketAssemblaId: assemblaId });
 	}
 });

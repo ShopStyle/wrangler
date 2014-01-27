@@ -4,15 +4,13 @@ Meteor.publish('tickets', function() {
 	var currentMilestoneId = 4853043; // stand in for development, 1/28/2014
 	// return Tickets.find({ milestoneId: currentMilestoneId, statusName: "In Progress" });
 	return Tickets.find({ assemblaId: 3633 });
-
 });
 
 Meteor.publish('users', function() {
 	return AssemblaUsers.find({}, { fields: { login: 1, id: 1 }});
 });
 
-Meteor.publish('testscripts', function(ticketId) {
-	var assemblaId = Tickets.findOne('' + ticketId).assemblaId;
+Meteor.publish('testscripts', function(assemblaId) {
 	return Testscripts.find({ ticketAssemblaId: assemblaId });
 });
 
