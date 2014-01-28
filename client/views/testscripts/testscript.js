@@ -12,6 +12,8 @@ Template.testscript.events({
 			var steps = $(e.currentTarget).siblings('textarea').val();
 			var id = this._id;
 			Testscripts.update(id, { $set: { steps: steps }});
+			
+			Meteor.call('editTestscriptTicketDescription', id);
 		}
 	},
 	'click .btn-new-testscript.edit.delete': function(e) {
@@ -48,7 +50,7 @@ Template.testscript.events({
 			}
 		});
 	},
-	'keydown, click .btn-test.fail.interior': function(e) {
+	'keydown .failure-reason, click .btn-test.fail.interior': function(e) {
 		if (e.type === 'keydown' && e.which !== 13) {
 			return;
 		}

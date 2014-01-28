@@ -132,6 +132,11 @@ Meteor.methods({
 			});
 		}
 		Meteor.call('updateTicketStatus', ticket);
+	},
+	editTestscriptTicketDescription: function(id) {
+		if (Meteor.isServer) {
+			Assembla.editTestscriptTicketDescription(id)
+		}
 	}
 });
 
