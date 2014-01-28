@@ -74,28 +74,34 @@ Assembla.addTestscriptTicketDescription = function(testscript, ticket) {
 	}
 }
 
-Assembla.editTestscriptTicketDescription = function(id) {
+Assembla.editTestscriptTicketDescription = function(id, remove) {
 	var testscript = Testscripts.findOne(id);
 	var ticket = Tickets.findOne({assemblaId: testscript.ticketAssemblaId});
 	var oldTestDesc = ticket.description.match(Assembla.testscriptsAndcommentRegex);
-	
-	if (oldTestDesc) {
-		debugger;
-		var addNewLine = '';
-		if (testscript.steps[testscript.steps.length - 1] != "\n") {
-			addNewLine = "\n";
-		}
-		var testscriptRegex = new RegExp("\\*\\*(" 
-			+ testscript.testscriptNum + "[\\s\\S]*?)\\*\\*ENDSCRIPT", "i");
-		var oldSteps = oldTestDesc[1].match(testscriptRegex);
-		var newTestDesc = oldTestDesc[1].replace(oldSteps[1], 
-			testscript.testscriptNum + "\n" + testscript.steps + addNewLine);
-		
-		var newDescription = ticket.description.replace(oldTestDesc[1], newTestDesc);
-		Tickets.update({assemblaId: ticket.assemblaId}, {$set: {description: newDescription}});
-		var url = Assembla.ticketUrl + ticket.assemblaId + '.json';
-		var resp = Assembla.makePutRequest(url, {"ticket": {"description": newDescription}});
+
+	if (remove) {
+		Assembla._updateAssemblaTicketDescription(testscript, ticket, oldTestDesc, '');
 	}
+	else if (oldTestDesc) {
+		Assembla._updateAssemblaTicketDescription(testscript, ticket, oldTestDesc);
+	}
+}
+
+Assembla._updateAssemblaTicketDescription = function(testscript, ticket, oldTestDesc, newSteps) {
+	var testscriptRegex = new RegExp("(\\*\\*" 
+		+ testscript.testscriptNum + "[\\s\\S]*?\\*\\*ENDSCRIPT\\n*)", "i");
+	var oldSteps = oldTestDesc[1].match(testscriptRegex);
+	
+	if(newSteps === undefined) {
+		var newSteps = "\*\*" + testscript.testscriptNum 
+			+ "\n" + testscript.steps + "\n\*\*ENDSCRIPT\n";
+	}
+	var newTestDesc = oldTestDesc[1].replace(oldSteps[1], newSteps);
+	
+	var newDescription = ticket.description.replace(oldTestDesc[1], newTestDesc);
+	Tickets.update({assemblaId: ticket.assemblaId}, {$set: {description: newDescription}});
+	var url = Assembla.ticketUrl + ticket.assemblaId + '.json';
+	Assembla.makePutRequest(url, {"ticket": {"description": newDescription}});
 }
 
 Assembla.createTestscript = function(testscript, ticket) {

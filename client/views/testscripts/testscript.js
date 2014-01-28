@@ -11,7 +11,7 @@ Template.testscript.events({
 			$(e.currentTarget).find('.testscript-steps').show()
 			var steps = $(e.currentTarget).siblings('textarea').val();
 			var id = this._id;
-			Testscripts.update(id, { $set: { steps: steps }});
+			Testscripts.update(id, { $set: { steps: $.trim(steps) }});
 			
 			Meteor.call('editTestscriptTicketDescription', id);
 		}
@@ -23,7 +23,7 @@ Template.testscript.events({
 
 			if (confirm("Delete this testscript?")) {
 				var id = this._id;
-				Testscripts.remove(id);
+				Meteor.call('editTestscriptTicketDescription', id, true);
 			}
 		}
 	},

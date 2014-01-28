@@ -3,9 +3,6 @@ Testscripts = new Meteor.Collection('testscripts');
 Testscripts.allow({
 	update: function() {
 		return Meteor.user();
-	},
-	remove: function() {
-		return Meteor.user();
 	}
 });
 
@@ -133,9 +130,12 @@ Meteor.methods({
 		}
 		Meteor.call('updateTicketStatus', ticket);
 	},
-	editTestscriptTicketDescription: function(id) {
+	editTestscriptTicketDescription: function(id, remove) {
 		if (Meteor.isServer) {
-			Assembla.editTestscriptTicketDescription(id)
+			Assembla.editTestscriptTicketDescription(id, remove)
+		}
+		if (remove) {
+			Testscripts.remove(id);
 		}
 	}
 });

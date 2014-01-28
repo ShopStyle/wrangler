@@ -4,7 +4,7 @@ Template.testscriptSubmit.events({
 		
 		$('#new-testscript').hide();
 		var attributes = {
-			steps: $(e.target).find('[name=steps]').val(),
+			steps: $.trim($(e.target).find('[name=steps]').val()),
 			ticketAssemblaId: parseInt(Router.current().params.assemblaId)
 		};
 		
