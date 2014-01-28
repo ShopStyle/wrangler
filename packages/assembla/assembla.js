@@ -14,7 +14,7 @@ Assembla = {
 	testscriptsAndcommentRegex: /\*\*TESTING\n*([\s\S]*)\*\*END$/i,
 	commentRegex: /\*\*COMMENTS\n*([\s\S]*)\*\*TESTSCRIPTS/i,
 	testscriptsRegex: /\*\*TESTSCRIPTS\n*([\s\S]*)/i,
-	singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i,
+	singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i
 };
 
 Assembla.makeGetRequest = function(url) {
@@ -63,8 +63,9 @@ Assembla.updateMilestoneCollection = function() {
 Assembla.updateTicketDescription = function(testscript, ticket) {
 	var currentDescription = ticket.description;
 	var innerDescription = currentDescription.match(Assembla.testscriptsAndcommentRegex)[1];
+	var noTestDescription = currentDescription.replace(Assembla.testscriptsAndcommentRegex, '');
 	innerDescription += '**' + testscript.testscriptNum + '\n' + testscript.steps;
-	var newDescription = '**TESTING\n' + innerDescription + '\n**ENDSCRIPT\n**END';
+	var newDescription = noTestDescription + '**TESTING\n' + innerDescription + '\n**ENDSCRIPT\n**END';
 	Tickets.update({assemblaId: ticket.assemblaId}, {$set: {description: newDescription}});
 	return newDescription;
 }
@@ -154,15 +155,16 @@ Assembla.populateTicketCollection = function() {
 	}
 	
 	// var currentMilestoneId = Milestones.findOne({ current: true }).id;
-	var currentMilestoneId = "4853043"; // stand in for development, 1/28/2014
-	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
+	// var currentMilestoneId = "4853043"; // stand in for development, 1/28/2014
+// 	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
+	var url = Assembla.ticketUrl + "3633.json";
 	var ticketResponse = Assembla.makeGetRequest(url);
 	
 	if (ticketResponse.statusCode == 200) {
 		//I really don't like how I am qerying the database and setting things in a loop...
-		_.each(ticketResponse.data, function(ticket) {
-			Assembla.updateSingleTicket(ticket);
-		});
+		// _.each(ticketResponse.data, function(ticket) {
+			Assembla.updateSingleTicket(ticketResponse.data);
+		// });
 		Tickets.update({ 
 			passers: { $exists: false }, 
 			failers: { $exists: false }, 

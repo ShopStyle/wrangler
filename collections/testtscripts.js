@@ -37,7 +37,9 @@ Meteor.methods({
 			{
 				userId: user._id,
 				submitted: new Date().getTime(),
-				testscriptNum: testscriptNum
+				testscriptNum: testscriptNum,
+				failers: [],
+				passers: []
 			}
 		);
 		Testscripts.insert(testscript);
