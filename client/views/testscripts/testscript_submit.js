@@ -5,9 +5,8 @@ Template.testscriptSubmit.events({
 		$('#new-testscript').hide();
 		var attributes = {
 			steps: $(e.target).find('[name=steps]').val(),
-			ticketId: Router.current().params._id
+			ticketAssemblaId: parseInt(Router.current().params.assemblaId)
 		};
-		// $(e.target).find('[name=steps]').val('');
 		
 		Meteor.call('createNewTestscript', attributes, function(error, id) {
 			if (error) {

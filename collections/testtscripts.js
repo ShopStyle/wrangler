@@ -12,7 +12,7 @@ Testscripts.allow({
 Meteor.methods({
 	createNewTestscript: function(attributes) {
 		var user = Meteor.user();
-		var ticket = Tickets.findOne(attributes.ticketId);
+		var ticket = Tickets.findOne({ assemblaId: attributes.ticketAssemblaId });
 
 		if (!user) {
 			throw new Meteor.Error(401, "You need to login to make a testscript");
@@ -24,16 +24,27 @@ Meteor.methods({
 		if (!ticket) {
 			throw new Meteor.Error(422, "You must create a testscript for a ticket");
 		}
+		var testscriptNum =  1;
+		var allTestscriptsForTicket = Testscripts.find(
+			{ticketAssemblaId: attributes.ticketAssemblaId},
+			{sort: {testscriptNum: -1}}
+		);
+		if (allTestscriptsForTicket.count() > 0) {
+			testscriptNum = allTestscriptsForTicket.fetch()[0].testscriptNum + 1;
+		} 
 		var testscript = _.extend(_.pick(attributes, 
-				'ticketId', 'steps'), 
+				'ticketAssemblaId', 'steps'), 
 			{
 				userId: user._id,
-				submitted: new Date().getTime()
+				submitted: new Date().getTime(),
+				testscriptNum: testscriptNum
 			}
 		);
-		testscript._id = Testscripts.insert(testscript);
-		return testscript._id;
+		Testscripts.insert(testscript);
 		Meteor.call('updateTicketStatus', ticket);
+		if (Meteor.isServer) {
+			Assembla.createTestscript(testscript, ticket);
+		}
 	},
 	updateTicketStatus: function(ticket) {
 		var status = '';
@@ -121,4 +132,6 @@ Meteor.methods({
 		Meteor.call('updateTicketStatus', ticket);
 	}
 });
+
+
 

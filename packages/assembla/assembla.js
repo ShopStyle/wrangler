@@ -10,13 +10,14 @@ Assembla = {
 	ticketsUrl: 'https://api.assembla.com/v1/spaces/shopstyle/tickets/milestone/',
 	usersUrl: 'https://api.assembla.com/v1/spaces/shopstyle/users.json',
 	assemblaUrl: 'https://www.assembla.com/spaces/shopstyle/tickets/',
+	ticketUrl: 'https://api.assembla.com/v1/spaces/shopstyle/tickets/',
 	testscriptsAndcommentRegex: /\*\*TESTING\n*([\s\S]*)\*\*END$/i,
 	commentRegex: /\*\*COMMENTS\n*([\s\S]*)\*\*TESTSCRIPTS/i,
 	testscriptsRegex: /\*\*TESTSCRIPTS\n*([\s\S]*)/i,
 	singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i,
 };
 
-Assembla.makeApiRequest = function(url) {
+Assembla.makeGetRequest = function(url) {
 	return Meteor.http.get(url, {
 		headers: {
 	       'X-Api-Key': Meteor.settings.API_KEY,
@@ -28,12 +29,22 @@ Assembla.makeApiRequest = function(url) {
 	});
 }
 
+Assembla.makePutRequest = function(url, data) {
+	return Meteor.http.put(url, {
+		headers: {
+	       'X-Api-Key': Meteor.settings.API_KEY,
+	       'X-Api-Secret': Meteor.settings.API_SECRET
+		},
+		data: data
+	});
+}
+
 Assembla.updateMilestoneCollection = function() {
 	if (!Meteor.settings.API_KEY || !Meteor.settings.API_SECRET) {
 		throw new Meteor.Error(500, 'Please provide secret/key in Meteor.settings');
 	}
 	
-	var milestoneResponse = Assembla.makeApiRequest(Assembla.milestonesUrl);
+	var milestoneResponse = Assembla.makeGetRequest(Assembla.milestonesUrl);
 	if (milestoneResponse.statusCode == 200) {
 		Milestones.remove({})
 		_.each(milestoneResponse.data, function(milestone) {
@@ -47,6 +58,21 @@ Assembla.updateMilestoneCollection = function() {
 		["Bug Backlog", "Enhancement Backlog", "Bug Hit List", "Pending Prioritization",
 		 "Reports ", "Ongoing Tasks", "Monday Meeting Discussion", "Android Fixes for Mobile Web"] 
 	}});
+}
+
+Assembla.updateTicketDescription = function(testscript, ticket) {
+	var currentDescription = ticket.description;
+	var innerDescription = currentDescription.match(Assembla.testscriptsAndcommentRegex)[1];
+	innerDescription += '**' + testscript.testscriptNum + '\n' + testscript.steps;
+	var newDescription = '**TESTING\n' + innerDescription + '\n**ENDSCRIPT\n**END';
+	Tickets.update({assemblaId: ticket.assemblaId}, {$set: {description: newDescription}});
+	return newDescription;
+}
+
+Assembla.createTestscript = function(testscript, ticket) {
+	var url = Assembla.ticketUrl + ticket.assemblaId + '.json';
+	var description = Assembla.updateTicketDescription(testscript, ticket);
+	Assembla.makePutRequest(url, {"ticket": {"description": description}});
 }
 
 Assembla.extractTicketInfoFromDescription = function(description, ticketNumber) {
@@ -130,7 +156,7 @@ Assembla.populateTicketCollection = function() {
 	// var currentMilestoneId = Milestones.findOne({ current: true }).id;
 	var currentMilestoneId = "4853043"; // stand in for development, 1/28/2014
 	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
-	var ticketResponse = Assembla.makeApiRequest(url);
+	var ticketResponse = Assembla.makeGetRequest(url);
 	
 	if (ticketResponse.statusCode == 200) {
 		//I really don't like how I am qerying the database and setting things in a loop...
@@ -156,7 +182,7 @@ Assembla.populateTicketCollection = function() {
 }
 
 Assembla.populateAssemblaUsers = function() {
-	var userResponse = Assembla.makeApiRequest(Assembla.usersUrl);
+	var userResponse = Assembla.makeGetRequest(Assembla.usersUrl);
 	if (userResponse.statusCode == 200) {
 		AssemblaUsers.remove({});
 		_.each(userResponse.data, function(user) {

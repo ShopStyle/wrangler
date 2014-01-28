@@ -9,7 +9,7 @@ Handlebars.registerHelper('numPassers', function(ticket) {
 });
 
 Handlebars.registerHelper('failersConcat', function(ticket) {
-	if (ticket.failers[0] && ticket.failers[0].username) {
+	if (ticket.failers && ticket.failers[0] && ticket.failers[0].username) {
 		var failersReason = [];
 		_.each(ticket.failers, function(failerObj) {
 			failersReason.push(failerObj.username + ' (' + failerObj.failReason + ')');
