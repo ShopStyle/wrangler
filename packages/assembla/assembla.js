@@ -14,27 +14,23 @@ Assembla = {
 	testscriptsAndcommentRegex: /\*\*TESTING\n*([\s\S]*)\*\*END$/i,
 	commentRegex: /\*\*COMMENTS\n*([\s\S]*)\*\*TESTSCRIPTS/i,
 	testscriptsRegex: /\*\*TESTSCRIPTS\n*([\s\S]*)/i,
-	singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i
+	singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i, 
+	_headers: {
+		'X-Api-Key': Meteor.settings.API_KEY,
+	    'X-Api-Secret': Meteor.settings.API_SECRET
+	}
 };
 
-Assembla.makeGetRequest = function(url) {
+Assembla.makeGetRequest = function(url, params) {
 	return Meteor.http.get(url, {
-		headers: {
-	       'X-Api-Key': Meteor.settings.API_KEY,
-	       'X-Api-Secret': Meteor.settings.API_SECRET
-		},
-		params: {
-			per_page: 500
-		}
+		headers: Assembla._headers,
+		params: params
 	});
 }
 
 Assembla.makePutRequest = function(url, data) {
 	return Meteor.http.put(url, {
-		headers: {
-	       'X-Api-Key': Meteor.settings.API_KEY,
-	       'X-Api-Secret': Meteor.settings.API_SECRET
-		},
+		headers: Assembla._headers,
 		data: data
 	});
 }
@@ -44,7 +40,7 @@ Assembla.updateMilestoneCollection = function() {
 		throw new Meteor.Error(500, 'Please provide secret/key in Meteor.settings');
 	}
 	
-	var milestoneResponse = Assembla.makeGetRequest(Assembla.milestonesUrl);
+	var milestoneResponse = Assembla.makeGetRequest(Assembla.milestonesUrl, {});
 	if (milestoneResponse.statusCode == 200) {
 		Milestones.remove({})
 		_.each(milestoneResponse.data, function(milestone) {
@@ -87,6 +83,19 @@ Assembla.editTestscriptTicketDescription = function(id, remove) {
 	}
 }
 
+Assembla.updateTicketCommentDescription = function(oldComments, newComments, ticketId) {
+	var ticket = Tickets.findOne(ticketId);
+	var oldDesc = ticket.description;
+	var newDescription = oldDesc.replace(oldComments, newComments);
+	Assembla._setNewDescription(newDescription, ticket.assemblaId);
+}
+
+Assembla._setNewDescription = function(newDescription, assemblaId) {
+	Tickets.update({ assemblaId: assemblaId}, {$set: {description: newDescription}});
+	var url = Assembla.ticketUrl + assemblaId + '.json';
+	Assembla.makePutRequest(url, {"ticket": {"description": newDescription}});
+}
+
 Assembla._updateAssemblaTicketDescription = function(testscript, ticket, oldTestDesc, newSteps) {
 	var testscriptRegex = new RegExp("(\\*\\*" 
 		+ testscript.testscriptNum + "[\\s\\S]*?\\*\\*ENDSCRIPT\\n*)", "i");
@@ -99,15 +108,12 @@ Assembla._updateAssemblaTicketDescription = function(testscript, ticket, oldTest
 	var newTestDesc = oldTestDesc[1].replace(oldSteps[1], newSteps);
 	
 	var newDescription = ticket.description.replace(oldTestDesc[1], newTestDesc);
-	Tickets.update({assemblaId: ticket.assemblaId}, {$set: {description: newDescription}});
-	var url = Assembla.ticketUrl + ticket.assemblaId + '.json';
-	Assembla.makePutRequest(url, {"ticket": {"description": newDescription}});
+	Assembla._setNewDescription(newDescription, ticket.assemblaId);
 }
 
 Assembla.createTestscript = function(testscript, ticket) {
-	var url = Assembla.ticketUrl + ticket.assemblaId + '.json';
 	var description = Assembla.addTestscriptTicketDescription(testscript, ticket);
-	Assembla.makePutRequest(url, {"ticket": {"description": description}});
+	Assembla._setNewDescription(description, ticket.assemblaId);
 }
 
 Assembla.extractTicketInfoFromDescription = function(description, ticketNumber) {
@@ -192,7 +198,7 @@ Assembla.populateTicketCollection = function() {
 	// var currentMilestoneId = "4853043"; // stand in for development, 1/28/2014
 // 	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
 	var url = Assembla.ticketUrl + "3633.json";
-	var ticketResponse = Assembla.makeGetRequest(url);
+	var ticketResponse = Assembla.makeGetRequest(url, {per_page: 500});
 	
 	if (ticketResponse.statusCode == 200) {
 		//I really don't like how I am qerying the database and setting things in a loop...
@@ -218,7 +224,7 @@ Assembla.populateTicketCollection = function() {
 }
 
 Assembla.populateAssemblaUsers = function() {
-	var userResponse = Assembla.makeGetRequest(Assembla.usersUrl);
+	var userResponse = Assembla.makeGetRequest(Assembla.usersUrl, {per_page: 500});
 	if (userResponse.statusCode == 200) {
 		AssemblaUsers.remove({});
 		_.each(userResponse.data, function(user) {

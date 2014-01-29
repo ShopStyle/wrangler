@@ -11,7 +11,8 @@ Meteor.publish('users', function() {
 });
 
 Meteor.publish('testscripts', function(assemblaId) {
-	return Testscripts.find({ ticketAssemblaId: assemblaId });
+	return Testscripts.find({ ticketAssemblaId: assemblaId }, 
+		{sort: {testscriptNum: 1}});
 });
 
 Meteor.publish('notifications', function() {

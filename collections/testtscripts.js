@@ -137,6 +137,11 @@ Meteor.methods({
 		if (remove) {
 			Testscripts.remove(id);
 		}
+	}, 
+	updateTicketCommentDescription: function(oldComments, newComments, ticketId) {
+		if (Meteor.isServer) {
+			Assembla.updateTicketCommentDescription(oldComments, newComments, ticketId);
+		}
 	}
 });
 
