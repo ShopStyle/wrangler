@@ -3,7 +3,7 @@ Meteor.subscribe('milestones');
 Template.milestone.events({
 	'click a': function(e) {
 		e.preventDefault();
-		Session.set('sessionMilestoneId', this.assemblaId);
+		Session.set('sessionMilestoneSpaceId', this.space_id);
 	}
 });
 

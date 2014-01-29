@@ -9,8 +9,19 @@ Handlebars.registerHelper('numPassers', function(ticket) {
 });
 
 Handlebars.registerHelper('failersConcat', function(ticket) {
-	var names = ticket.failers ? ticket.failers.join(', ') : '';
-	return names;
+	if (ticket.failers && ticket.failers[0] && ticket.failers[0].username) {
+		var failersReason = [];
+		_.each(ticket.failers, function(failerObj) {
+			failersReason.push(failerObj.username + ' (' + failerObj.failReason + ')');
+		})
+		return failersReason.join(', ');
+	}
+	else if (ticket.failers) {
+		return ticket.failers.join(', ');
+	}
+	else {
+		return '';
+	}
 });
 
 Handlebars.registerHelper('passersConcat', function(ticket) {
@@ -19,14 +30,16 @@ Handlebars.registerHelper('passersConcat', function(ticket) {
 });
 
 Handlebars.registerHelper('testscriptStatus', function(testscript) {
-	var userId = Meteor.user();
 	var user = Meteor.user();
 	if (user === null) {
 		return;
 	}
 	
 	var pass = _.contains(testscript.passers, user.username);
-	var fail = _.contains(testscript.failers, user.username);
+	var fail = _.filter(testscript.failers, function(failer) {
+		return failer.username === user.username;
+	});
+	fail = fail.length > 0;
 	if (fail) {
 		return 'fail';
 	}
@@ -43,10 +56,8 @@ Handlebars.registerHelper('showUndo', function(testscript) {
 	if (user === null) {
 		return;
 	}
-	
-	var pass = _.contains(testscript.passers, user.username);
-	var fail = _.contains(testscript.failers, user.username);
-	if (fail || pass) {
+	var status = Handlebars._default_helpers.testscriptStatus(testscript);
+	if (status === 'fail' || status === 'pass') {
 		return true;
 	}
 	return false;

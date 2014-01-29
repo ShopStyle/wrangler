@@ -58,9 +58,9 @@ body {
 	border-radius: 5px;
 }
 
-.home {
-	margin-right: 20px;
-}
+//.home {
+//	margin-right: 20px;
+//}
 
 .navbar a:hover {
 	border: dotted;
@@ -100,6 +100,7 @@ body {
 	.text {
 		display: inline-block;
 		margin: 7px;
+		max-width: 800px;
 		
 		h1 {
 			font-size: 1.6em;
@@ -111,7 +112,6 @@ body {
 		}
 		
 		li {
-			max-width: 800px;
 			margin: 10px 0;
 		}
 	}
@@ -176,6 +176,10 @@ body {
 		
 		.btn-edit.submit:hover {
 			text-decoration: none;
+		}
+		
+		div {
+			margin: 8px;
 		}
 	}
 
@@ -272,12 +276,16 @@ body {
 
 .alert-error {
 	display: inline-block;
+	position: fixed;
+	top: 10px;
+	left: 10px;
 	background-color: $red;
 	color: white;
-	margin: 5px;
 	border-radius: 5px;
-	padding: 5px;
+	padding: 10px;
 	cursor: default;
+	opacity: 0.9;
+	z-index: 1;
 	
 	.close {
 		cursor: pointer;
@@ -443,13 +451,14 @@ footer span {
 	padding: 5px;
 	display: none;
 	position: absolute;
-	top: 40px;
-	right: 250px;
+	top: 30px;
+	right: 0;
 	border-radius: 5px;
 	background-color: white;
 	z-index: 1;
 	font-size: 0.9em;
-	border: 1px solid black;
+	border: 2px solid $grey;
+	width: 350px;
 	
 	a {
 		padding: 0;
@@ -468,6 +477,26 @@ footer span {
 	li {
 		display: block;
 		margin: 7px 0;
+	}
+}
+
+li.relative-container {
+	position: relative;
+}
+
+.failure-reason {
+	display: none;
+	z-index: 1;
+	position: absolute;
+	top: -8px;
+	right: -8px;
+	form {
+		input {
+			display: inline-block;
+		}
+		.div {
+			display: inline-block;
+		}
 	}
 }
 

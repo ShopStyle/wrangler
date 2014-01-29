@@ -38,3 +38,12 @@ Template.ticketEdit.events({
 		}
 	}
 });
+
+Template.ticketEdit.helpers({
+	assignedTo: function() {
+		if (AssemblaUsers.findOne({ id: this.assignedToId })) {
+			return AssemblaUsers.findOne({ id: this.assignedToId }).login;
+		}
+		return '';
+	}
+})

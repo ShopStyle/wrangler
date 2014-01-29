@@ -2,7 +2,7 @@
 <header class="navbar">
 	<ul class="navbar-left">
 		<li class="{{activeRouteClass 'ticketsList'}}">
-			<a class="home" href="{{pathFor 'ticketsList'}}">TESTY</a>
+			<a class="home" href="{{pathFor 'ticketsList'}}">All</a>
 		</li>
 		<li>
 			<a class="{{activeRouteClass 'passed'}}" href="{{pathFor 'passed'}}">
@@ -19,17 +19,10 @@
 				Incomplete
 			</a>
 		</li>
-		{{#if currentUser}}
-			<li>
-				<a class="{{activeRouteClass 'ticketNew'}}" href="{{pathFor 'ticketNew'}}">
-					New
-				</a>
-			</li>
-		{{/if}}
 	</ul>
 	<ul class="navbar-right">
 		{{#if currentUser}}
-			<li>
+			<li class="relative-container">
 				{{> notifications}}
 			</li>
 			<li>

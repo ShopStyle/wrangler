@@ -60,13 +60,13 @@
 // 	});
 // }
 
-if (Milestones.find().count() === 0) {
-	Milestones.insert({
-		title: "1/21/2014 Release",
-		assemblaId: 1234
-	});
-	Milestones.insert({
-		title: "1/28/2014 Release",
-		assemblaId: 12345678
-	});
-}
+// if (Milestones.find().count() === 0) {
+// 	Milestones.insert({
+// 		title: "1/21/2014 Release",
+// 		assemblaId: 1234
+// 	});
+// 	Milestones.insert({
+// 		title: "1/28/2014 Release",
+// 		assemblaId: 12345678
+// 	});
+// }

@@ -5,6 +5,15 @@ Template.ticketsList.helpers({
 	}
 });
 
+Template.ticket.helpers({
+	assignedTo: function() {
+		var user = AssemblaUsers.findOne({ id: this.assignedToId });
+		if (user) {
+			return user.login;
+		}
+	}
+});
+
 Template.ticket.events({
 	'click .testscript-results': function(e) {
 		e.preventDefault();

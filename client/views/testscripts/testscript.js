@@ -11,7 +11,9 @@ Template.testscript.events({
 			$(e.currentTarget).find('.testscript-steps').show()
 			var steps = $(e.currentTarget).siblings('textarea').val();
 			var id = this._id;
-			Testscripts.update(id, { $set: { steps: steps }});
+			Testscripts.update(id, { $set: { steps: $.trim(steps) }});
+			
+			Meteor.call('editTestscriptTicketDescription', id);
 		}
 	},
 	'click .btn-new-testscript.edit.delete': function(e) {
@@ -21,7 +23,7 @@ Template.testscript.events({
 
 			if (confirm("Delete this testscript?")) {
 				var id = this._id;
-				Testscripts.remove(id);
+				Meteor.call('editTestscriptTicketDescription', id, true);
 			}
 		}
 	},
@@ -29,10 +31,32 @@ Template.testscript.events({
 		e.preventDefault();
 		var pass = $(e.currentTarget).filter(".pass").length > 0;
 		var fail = $(e.currentTarget).filter(".fail").length > 0;
+		if (fail === true) {
+			if (Meteor.user()) {
+				$(e.currentTarget).parents('.btn-holder').hide();
+				$(e.currentTarget).parents('.btn-holder').siblings('.failure-reason').show();	
+			} 
+			else {
+				throwError("You need to login to post test results");
+			}
+			return;
+		}
 		if (pass === false && fail === false) {
 			pass = '';
 		}
 		Meteor.call('updateTestscriptResult', this._id, pass, function(error) {
+			if (error) {
+				throwError(error.reason);
+			}
+		});
+	},
+	'keydown .failure-reason, click .btn-test.fail.interior': function(e) {
+		if (e.type === 'keydown' && e.which !== 13) {
+			return;
+		}
+		e.preventDefault();
+		var failReason = $(e.currentTarget).parents().find('input').val();
+		Meteor.call('updateTestscriptResult', this._id, false, failReason, function(error) {
 			if (error) {
 				throwError(error.reason);
 			}

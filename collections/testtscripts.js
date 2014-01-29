@@ -3,16 +3,13 @@ Testscripts = new Meteor.Collection('testscripts');
 Testscripts.allow({
 	update: function() {
 		return Meteor.user();
-	},
-	remove: function() {
-		return Meteor.user();
 	}
 });
 
 Meteor.methods({
 	createNewTestscript: function(attributes) {
 		var user = Meteor.user();
-		var ticket = Tickets.findOne(attributes.ticketId);
+		var ticket = Tickets.findOne({ assemblaId: attributes.ticketAssemblaId });
 
 		if (!user) {
 			throw new Meteor.Error(401, "You need to login to make a testscript");
@@ -24,22 +21,35 @@ Meteor.methods({
 		if (!ticket) {
 			throw new Meteor.Error(422, "You must create a testscript for a ticket");
 		}
+		var testscriptNum =  1;
+		var allTestscriptsForTicket = Testscripts.find(
+			{ticketAssemblaId: attributes.ticketAssemblaId},
+			{sort: {testscriptNum: -1}}
+		);
+		if (allTestscriptsForTicket.count() > 0) {
+			testscriptNum = allTestscriptsForTicket.fetch()[0].testscriptNum + 1;
+		} 
 		var testscript = _.extend(_.pick(attributes, 
-				'ticketId', 'steps'), 
+				'ticketAssemblaId', 'steps'), 
 			{
 				userId: user._id,
-				submitted: new Date().getTime()
+				submitted: new Date().getTime(),
+				testscriptNum: testscriptNum,
+				failers: [],
+				passers: []
 			}
 		);
-		testscript._id = Testscripts.insert(testscript);
-		return testscript._id;
+		Testscripts.insert(testscript);
 		Meteor.call('updateTicketStatus', ticket);
+		if (Meteor.isServer) {
+			Assembla.createTestscript(testscript, ticket);
+		}
 	},
 	updateTicketStatus: function(ticket) {
 		var status = '';
 		var passers = [];
 		var failers = [];
-		var testscripts = Testscripts.find({ ticketId: ticket._id });
+		var testscripts = Testscripts.find({ ticketAssemblaId: ticket.assemblaId });
 		var numTestersReq = ticket.testersReq || 3;
 		var numTestScripts = testscripts.count();
 		
@@ -84,25 +94,25 @@ Meteor.methods({
 			}
 		});
 	},
-	updateTestscriptResult: function(id, passTest) {
+	updateTestscriptResult: function(id, passTest, failReason) {
 		var user = Meteor.user();
 		if (!user) {
 			throw new Meteor.Error(401, "You need to login to post test results");
 		}
 
 		var testscript = Testscripts.findOne(id);
-		var ticket = Tickets.findOne(testscript.ticketId);
+		var ticket = Tickets.findOne({ assemblaId: testscript.ticketAssemblaId });
 		if (passTest === '') {
 			Testscripts.update(testscript._id, {
 				$pull: { 
-					failers: user.username,
+					failers: { username: user.username },
 					passers: user.username 
 				}
 			});
 		}
 		else if (passTest) {
 			Testscripts.update(testscript._id, {
-				$pull: { failers: user.username },
+				$pull: { failers: { username: user.username }},
 				$addToSet: { passers: user.username }
 			});
 		}
@@ -110,10 +120,25 @@ Meteor.methods({
 			createFailNotification(ticket._id, user.username);
 			Testscripts.update(testscript._id, {
 				$pull: { passers: user.username },
-				$addToSet: { failers: user.username }
+				$addToSet: { 
+					failers:  {
+						username: user.username,
+						failReason: failReason
+					}
+				}
 			});
 		}
 		Meteor.call('updateTicketStatus', ticket);
+	},
+	editTestscriptTicketDescription: function(id, remove) {
+		if (Meteor.isServer) {
+			Assembla.editTestscriptTicketDescription(id, remove)
+		}
+		if (remove) {
+			Testscripts.remove(id);
+		}
 	}
 });
+
+
 

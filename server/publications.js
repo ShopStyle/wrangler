@@ -1,9 +1,17 @@
 Meteor.publish('tickets', function() {
-	return Tickets.find();
+	//only for current milestone, add only those with done assembla status
+	// var currentSpaceId = Milestones.findOne({ current: true }).space_id;
+	var currentMilestoneId = 4853043; // stand in for development, 1/28/2014
+	// return Tickets.find({ milestoneId: currentMilestoneId, statusName: "In Progress" });
+	return Tickets.find({ assemblaId: 3633 });
 });
 
-Meteor.publish('testscripts', function(ticketId) {
-	return Testscripts.find({ ticketId: ticketId });
+Meteor.publish('users', function() {
+	return AssemblaUsers.find({}, { fields: { login: 1, id: 1 }});
+});
+
+Meteor.publish('testscripts', function(assemblaId) {
+	return Testscripts.find({ ticketAssemblaId: assemblaId });
 });
 
 Meteor.publish('notifications', function() {
