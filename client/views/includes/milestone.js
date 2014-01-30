@@ -3,6 +3,10 @@ Template.milestones.events({
 		e.preventDefault();
 		var milestoneId = document.getElementById('milestone-choice').value;
 		Meteor.call('setCurrentMilestone', milestoneId);
+		$('.milestone-alert').css("opacity", "1");
+		Meteor.setTimeout(function() {
+			$('.milestone-alert').fadeTo(500, 0)
+		}, 4000);
 	}
 });
 
