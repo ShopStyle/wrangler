@@ -7,7 +7,7 @@ Template.ticketEdit.events({
 		var currentTicketId = this._id;
 		
 		var ticketProperties = {
-			comments: $(e.target).find('[name=comments]').val()
+			comments: $.trim($(e.target).find('[name=comments]').val()) + "\n"
 		};
 
 		var oldComments = Tickets.findOne(currentTicketId).comments;
@@ -19,21 +19,21 @@ Template.ticketEdit.events({
 		});
 		
 		Meteor.call('updateTicketCommentDescription', oldComments, ticketProperties.comments, currentTicketId);
-	},
-	'click .btn-delete': function(e) {
-		e.preventDefault();
-		
-		if (confirm('Delete this ticket?')) {
-			var currentTicketId = this._id;
-			Meteor.call('removeTicket', currentTicketId, function(error) {
-				Router.go('ticketsList');
-				if (error) {
-					throwError(error.reason);
-				}
-			});
-			
-		}
-	}
+	}// ,
+// 	'click .btn-delete': function(e) {
+// 		e.preventDefault();
+// 		
+// 		if (confirm('Delete this ticket?')) {
+// 			var currentTicketId = this._id;
+// 			Meteor.call('removeTicket', currentTicketId, function(error) {
+// 				Router.go('ticketsList');
+// 				if (error) {
+// 					throwError(error.reason);
+// 				}
+// 			});
+// 			
+// 		}
+// 	}
 });
 
 Template.ticketEdit.helpers({

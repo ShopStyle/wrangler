@@ -42,9 +42,12 @@ Assembla.updateMilestoneCollection = function() {
 	
 	var milestoneResponse = Assembla.makeGetRequest(Assembla.milestonesUrl, {});
 	if (milestoneResponse.statusCode == 200) {
-		Milestones.remove({})
 		_.each(milestoneResponse.data, function(milestone) {
-			Milestones.insert(milestone);	
+			Milestones.update({id: milestone.id}, {
+				$set: {
+					id: milestone.id,
+					title: milestone.title
+				}}, {upsert: true});	
 		})
 	}
 	else {

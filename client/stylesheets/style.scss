@@ -500,6 +500,20 @@ li.relative-container {
 	}
 }
 
+.admin {
+	margin: 10px;
+	
+	h1 {
+		margin: 10px 0;
+		font-size: 1.1em;
+	}
+	
+	.title {
+		display: inline-block;
+		max-width: 500px;
+		vertical-align: middle;
+	}
+}
 
 
 
