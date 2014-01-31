@@ -1,6 +1,14 @@
 <template name="admin">
 	<div class="admin">
 		<h1>Note: these settings affect all users</h1>
+		<div class="stream">
+			*Turn off stream when not in testing mode
+			{{#if streamOn}}
+				<div class="red btn-new-testscript streamer">Stop Streaming</div>
+			{{else}}
+				<div class="btn-new-testscript streamer">Start Streaming</div>
+			{{/if}}
+		</div>
 		<div class="milestones">
 			{{> milestones}}
 		</div>

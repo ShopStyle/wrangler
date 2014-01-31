@@ -1,9 +1,11 @@
+//this is used to turn off and on the stream from assembla
+intervalHandle = null;
+
 Meteor.publish('tickets', function() {
-	//only for current milestone, add only those with done assembla status
-	// var currentSpaceId = Milestones.findOne({ current: true }).space_id;
-	var currentMilestoneId = 4853043; // stand in for development, 1/28/2014
-	// return Tickets.find({ milestoneId: currentMilestoneId, statusName: "In Progress" });
-	return Tickets.find({ assemblaId: 3633 });
+	var currentMilestone = Milestones.findOne({ current: true })
+	if (currentMilestone) {
+		return Tickets.find({ milestoneId: currentMilestone.id, statusName: "Done" });	
+	}
 });
 
 Meteor.publish('users', function() {
@@ -21,4 +23,9 @@ Meteor.publish('notifications', function() {
 
 Meteor.publish('milestones', function() {
 	return Milestones.find();
-})
+});
+
+Meteor.publish('stream', function() {
+	return Stream.find();
+});
+

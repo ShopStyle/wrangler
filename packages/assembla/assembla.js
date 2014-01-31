@@ -1,20 +1,14 @@
-// // ACTIVITY = 'activity'
-// // TICKET = 'spaces/%s/tickets'
-// // TICKETS = 'spaces/%s/tickets/%i'
-// // USERS = 'spaces/%s/users'
-// // MILESTONES = 'spaces/%s/milestones'
-// // COMPONENTS = 'spaces/%s/ticket_components'
-
 Assembla = {
 	milestonesUrl: 'https://api.assembla.com/v1/spaces/shopstyle/milestones.json',
 	ticketsUrl: 'https://api.assembla.com/v1/spaces/shopstyle/tickets/milestone/',
 	usersUrl: 'https://api.assembla.com/v1/spaces/shopstyle/users.json',
 	assemblaUrl: 'https://www.assembla.com/spaces/shopstyle/tickets/',
 	ticketUrl: 'https://api.assembla.com/v1/spaces/shopstyle/tickets/',
-	testscriptsAndcommentRegex: /\*\*TESTING\n*([\s\S]*)\*\*END$/i,
+	testscriptsAndcommentRegex: /\*\*TESTING\n*([\s\S]*)\*\*END/i,
 	commentRegex: /\*\*COMMENTS\n*([\s\S]*)\*\*TESTSCRIPTS/i,
 	testscriptsRegex: /\*\*TESTSCRIPTS\n*([\s\S]*)/i,
 	singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i, 
+	streamUrl: 'https://api.assembla.com/v1/activity.json',
 	_headers: {
 		'X-Api-Key': Meteor.settings.API_KEY,
 	    'X-Api-Secret': Meteor.settings.API_SECRET
@@ -55,7 +49,7 @@ Assembla.updateMilestoneCollection = function() {
 	}
 	Milestones.remove({ title: { $in: 
 		["Bug Backlog", "Enhancement Backlog", "Bug Hit List", "Pending Prioritization",
-		 "Reports ", "Ongoing Tasks", "Monday Meeting Discussion", "Android Fixes for Mobile Web"] 
+		 "Reports ", "Ongoing Tasks", "Monday Meeting Discussion", "Android Fixes for Mobile Web", "Testing"] 
 	}});
 }
 
@@ -133,7 +127,7 @@ Assembla.extractTicketInfoFromDescription = function(description, ticketNumber) 
 Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ticketNumber) {
 	var testscripts = innerDescription.split("**ENDSCRIPT");
 	_.each(testscripts, function(testscript) {
-		matches = testscript.match(Assembla.singleTestscriptRegex)
+		var matches = testscript.match(Assembla.singleTestscriptRegex)
 		if (!matches) {
 			return;
 		}
@@ -196,18 +190,15 @@ Assembla.populateTicketCollection = function() {
 	if (!Meteor.settings.API_KEY || !Meteor.settings.API_SECRET) {
 		throw new Meteor.Error(500, 'Please provide secret/key in Meteor.settings');
 	}
-	
-	// var currentMilestoneId = Milestones.findOne({ current: true }).id;
-	// var currentMilestoneId = "4853043"; // stand in for development, 1/28/2014
-// 	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
-	var url = Assembla.ticketUrl + "3633.json";
+	var currentMilestoneId = Milestones.findOne({ current: true }).id;
+	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
 	var ticketResponse = Assembla.makeGetRequest(url, {per_page: 500});
 	
 	if (ticketResponse.statusCode == 200) {
 		//I really don't like how I am qerying the database and setting things in a loop...
-		// _.each(ticketResponse.data, function(ticket) {
-			Assembla.updateSingleTicket(ticketResponse.data);
-		// });
+		_.each(ticketResponse.data, function(ticket) {
+			Assembla.updateSingleTicket(ticket);
+		});
 		Tickets.update({ 
 			passers: { $exists: false }, 
 			failers: { $exists: false }, 
@@ -239,10 +230,36 @@ Assembla.populateAssemblaUsers = function() {
 	}
 }
 
+Assembla.watchTicketStream = function() {
+	console.log("called ticket stream");
+	var stream = Assembla.makeGetRequest(Assembla.streamUrl, {page: 1, per_page: 50}).data;
+	if (!stream) {
+		return;
+	}
+	var lastTime = LastTime.findOne();
+	if (!lastTime) {
+		var date = new Date(stream[stream.length - 1].date);
+		lastTime = {date: date};
+		LastTime.insert(lastTime);
+	}
+	lastTime = lastTime.date;
+
+	_.each(stream, function(item) {
+		var date = new Date(item.date);
+		if (date < lastTime) {
+			return;
+		}
+		if (item.ticket && item.author_name !== "shopstylebot") {
+			var url = Assembla.ticketUrl + item.ticket.number + '.json';
+			var ticket = Assembla.makeGetRequest(url, {});
+			Assembla.updateSingleTicket(ticket.data);
+		}
+	})
+}
+ 
 if (Meteor.isServer) {
 	Meteor.startup(function() {
 		Assembla.populateAssemblaUsers();
 		Assembla.updateMilestoneCollection();
-		Assembla.populateTicketCollection();
 	});
 }

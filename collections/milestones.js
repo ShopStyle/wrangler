@@ -6,6 +6,9 @@ if (Meteor.isServer) {
 Meteor.methods({
 	setCurrentMilestone: function(milestoneId) {
 		Milestones.update({current: true, id: {$nin: [milestoneId]}}, {$set: {current: false}}, {multi: true});
-		var success = Milestones.update({id: parseInt(milestoneId)}, {$set: {current: true}});	
+		Milestones.update({id: parseInt(milestoneId)}, {$set: {current: true}});
+		if (Meteor.isServer) {
+			Assembla.populateTicketCollection();			
+		}	
 	}
 })
