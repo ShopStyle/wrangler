@@ -29,3 +29,7 @@ Meteor.publish('stream', function() {
 	return Stream.find();
 });
 
+Meteor.publish('userData', function() {
+	return Meteor.users.find({}, {fields: {username: 1}});
+})
+

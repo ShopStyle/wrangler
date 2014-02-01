@@ -12,7 +12,7 @@ createFailNotification = function(ticketId, username) {
 	if (dev && username !== dev.login) {
 		Notifications.insert({
 			dev: dev.login,
-			ticketId: ticketId,
+			assemblaId: ticket.assemblaId,
 			failerName: username,
 			read: false
 		});

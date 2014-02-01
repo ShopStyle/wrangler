@@ -1,14 +1,12 @@
 <template name="milestones">
-	<div class="milestones">
-		<div class="title">Select a milestone for testing (the "Testing" milestone is also included, so make sure to clean it out on assembla)</div>
-		<select id="milestone-choice">
-			{{#each milestones}}
-				{{> milestone}}
-			{{/each}}
-		</select>
-		<div class="select-milestone btn-new-testscript">Select Milestone</div>
-		<div class="milestone-alert">Milestone selected</div>
-	</div>
+	<span>Choose a milestone to test.</span>
+	<div class="select-milestone btn-new-testscript">Select Milestone</div>
+	<select id="milestone-choice">
+		{{#each milestones}}
+			{{> milestone}}
+		{{/each}}
+	</select>
+	<div class="milestone-alert">Milestone selected</div>
 </template>
 
 <template name="milestone">

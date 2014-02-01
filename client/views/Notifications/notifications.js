@@ -17,7 +17,7 @@ Template.notifications.helpers({
 
 Template.notification.helpers({
 	notificationPostPath: function() {
-		return Router.routes.ticketPage.path({ _id: this.ticketId });
+		return Router.routes.ticketPage.path({ assemblaId: this.assemblaId });
 	}
 });
 

@@ -493,7 +493,8 @@ li.relative-container {
 }
 
 .admin {
-	margin: 10px;
+	margin: 10px auto;
+	width: 800px;
 	
 	h1 {
 		margin: 10px 0;
@@ -501,7 +502,6 @@ li.relative-container {
 	}
 	
 	.title {
-		display: inline-block;
 		max-width: 500px;
 		vertical-align: middle;
 	}
@@ -510,19 +510,54 @@ li.relative-container {
 		margin-left: 10px;
 	}
 	
+	.milestones, .stream {
+		background-color: rgba(238, 238, 238, 0.7);
+		
+		span, select {
+			margin-left: 10px;
+			position: relative;
+			top: 22px;
+		}
+		
+		select {
+			top: 20px;
+		}
+	}
+	
+	.btn-new-testscript, .milestone-alert {
+		float: right;
+		position: relative;
+		top: 12px;
+		right: 10px;
+		padding: 10px;
+		width: 130px;
+		text-align: center;
+	}
+	
 	.milestone-alert {
-		display: inline-block;
 		background-color: $blue;
 		color: white;
-		padding: 10px;
-		font-size: 1.2em;
 		opacity: 0;
 		border-radius: 5px;
-		margin-left: 10px;
+		width: auto;
 	}
 	
 	.red.btn-new-testscript {
 		background-color: $red;
+	}
+	
+	.stream, .milestones {
+		margin: 15px 0;
+		height: 60px;
+	}
+	.user {
+		margin: 5px 0;
+		border-bottom: 1px solid $grey;
+		height: 30px;
+		
+		select, input {
+			float: right;
+		}
 	}
 }
 

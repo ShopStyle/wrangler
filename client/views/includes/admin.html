@@ -1,8 +1,7 @@
 <template name="admin">
 	<div class="admin">
-		<h1>Note: these settings affect all users</h1>
 		<div class="stream">
-			*Turn off stream when not in testing mode
+			<span>Toggle stream from Assembla.</span>
 			{{#if streamOn}}
 				<div class="red btn-new-testscript streamer">Stop Streaming</div>
 			{{else}}
@@ -12,5 +11,27 @@
 		<div class="milestones">
 			{{> milestones}}
 		</div>
+		<div class="users">
+			{{#each users}}
+				{{> user}}
+			{{/each}}
+		</div>
+	</div>
+</template>
+
+<template name="user">
+	<div class="user">
+		<span>{{username}}</span>
+		<input name="{{username}}" value="username" type="checkbox" checked="checked">
+		<select>
+			{{#each browserOptions}}
+				<option value="{{this}}">{{this}}</option>
+			{{/each}}
+		</select>
+		<select>
+			{{#each localeOptions}}
+				<option value="{{this}}">{{this}}</option>
+			{{/each}}
+		</select>
 	</div>
 </template>
