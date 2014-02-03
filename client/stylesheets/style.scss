@@ -510,7 +510,9 @@ li.relative-container {
 		margin-left: 10px;
 	}
 	
-	.milestones, .stream {
+	.milestones, .stream, .assign {
+		margin: 15px 0;
+		height: 60px;
 		background-color: rgba(238, 238, 238, 0.7);
 		
 		span, select {
@@ -546,10 +548,6 @@ li.relative-container {
 		background-color: $red;
 	}
 	
-	.stream, .milestones {
-		margin: 15px 0;
-		height: 60px;
-	}
 	.user {
 		margin: 5px 0;
 		border-bottom: 1px solid $grey;
@@ -559,6 +557,20 @@ li.relative-container {
 			float: right;
 		}
 	}
+	
+	.randomize {
+		margin-right: 20px;
+		background-color: white;
+		color: black;
+		border: 2px solid $grey;
+		box-sizing: border-box;
+		padding: 8px;
+	}
+	
+	.user-tests {
+		height: 60px;
+	}
+
 }
 
 

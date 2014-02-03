@@ -1,3 +1,6 @@
+browserOptions = ["IE8", "IE9", "Chrome", "Firefox", "iPad", "iPhone", "Android", "Safari"];
+localeOptions = ["UK", "AU", "JP", "DE", "FR", "CA"];
+
 Template.admin.helpers({
 	streamOn: function() {
 		var stream = Stream.findOne();
@@ -16,14 +19,17 @@ Template.admin.helpers({
 Template.admin.events({
 	'click .streamer': function() {
 		Meteor.call('handleInterval');
+	},
+	'click .randomize': function() {
+		
 	}
 });
 
 Template.user.helpers({
 	browserOptions: function() {
-		return ["IE8", "IE9", "Chrome", "Firefox", "iPad", "iPhone", "Android", "Safari"];
+		return browserOptions;
 	},
 	localeOptions: function() {
-		return ["UK", "AU", "JP", "DE", "FR", "CA"];
+		return localeOptions;
 	}
 });
