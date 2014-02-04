@@ -37,13 +37,18 @@ Template.admin.events({
 		})
 	},
 	'click .assign-browsers': function() {
+		$('.browser-alert').css("opacity", "0.8");
+		Meteor.setTimeout(function() {
+			$('.browser-alert').fadeTo(500, 0)
+		}, 4000);
+		
 		var userBrowsers = [];
 		var users = $('.user');
 		
 		for (var i = 0, len = users.length; i < len; i++) {
 			var $user = $(users.get(i));
 			if (!$user.find('input').prop('checked')) {
-				return;
+				continue;
 			}
 			
 			var user = {};
@@ -54,6 +59,18 @@ Template.admin.events({
 		}
 		
 		Meteor.call('assignBrowsers', userBrowsers);
+	},
+	'click .assign-tickets': function() {
+		$('.ticket-alert').css("opacity", "0.8");
+		Meteor.setTimeout(function() {
+			$('.ticket-alert').fadeTo(500, 0)
+		}, 4000);
+		
+		Meteor.call('assignTickets', function(error) {
+			if (error) {
+				throwError(error.reason);
+			}
+		})
 	}
 });
 

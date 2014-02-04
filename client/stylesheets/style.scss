@@ -526,7 +526,7 @@ li.relative-container {
 		}
 	}
 	
-	.btn-new-testscript, .milestone-alert {
+	.btn-new-testscript, .alert {
 		float: right;
 		position: relative;
 		top: 12px;
@@ -536,7 +536,7 @@ li.relative-container {
 		text-align: center;
 	}
 	
-	.milestone-alert {
+	.alert {
 		background-color: $blue;
 		color: white;
 		opacity: 0;
@@ -559,7 +559,7 @@ li.relative-container {
 	}
 	
 	.randomize {
-		margin-right: 5px;
+		margin: 0 5px;
 		background-color: white;
 		color: black;
 		border: 2px solid $grey;
@@ -569,6 +569,10 @@ li.relative-container {
 	
 	.user-tests {
 		height: 50px;
+	}
+	
+	.assign-tickets {
+		margin-left: 5px;
 	}
 
 }
