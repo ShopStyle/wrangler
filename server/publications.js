@@ -33,3 +33,10 @@ Meteor.publish('userData', function() {
 	return Meteor.users.find({}, {fields: {username: 1}});
 })
 
+Meteor.publish('browserAssignments', function() {
+	var currentMilestoneId = Milestones.findOne({current: true});
+	if (currentMilestoneId) {
+		currentMilestoneId = currentMilestoneId.id;
+	}
+	return BrowserAssignments.find({milestoneId: currentMilestoneId});
+})

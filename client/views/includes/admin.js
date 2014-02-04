@@ -21,7 +21,39 @@ Template.admin.events({
 		Meteor.call('handleInterval');
 	},
 	'click .randomize': function() {
+		var browsers = _.shuffle(browserOptions);
+		var locales = _.shuffle(localeOptions);
 		
+		_.each($('.user'), function(user) {
+			if (locales.length === 0) {
+				locales = _.shuffle(localeOptions);
+			}
+			if (browsers.length === 0) {
+				browsers = _.shuffle(browserOptions);
+			}
+			
+			$(user).find('.browser').val(browsers.pop());
+			$(user).find('.locale').val(locales.pop());
+		})
+	},
+	'click .assign-browsers': function() {
+		var userBrowsers = [];
+		var users = $('.user');
+		
+		for (var i = 0, len = users.length; i < len; i++) {
+			var $user = $(users.get(i));
+			if (!$user.find('input').prop('checked')) {
+				return;
+			}
+			
+			var user = {};
+			user.username = $user.find('span').text();
+			user.browser = $user.find('.browser').val();
+			user.locale = $user.find('.locale').val();
+			userBrowsers.push(user);
+		}
+		
+		Meteor.call('assignBrowsers', userBrowsers);
 	}
 });
 
