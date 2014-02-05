@@ -84,6 +84,19 @@ Meteor.methods({
 		}
 		else if (numPassers >= numTestersReq) {
 			status = 'pass';
+			Tickets.update(ticket._id, {
+				$set: {
+					status: status,
+					statusName: 'Verified on Dev',
+					failers: failers,
+					passers: allTestscriptPassers
+				}
+			});
+			
+			if (Meteor.isServer) {
+				Assembla.verifyTicketOnDev(ticket.assemblaId);
+			}
+			return;
 		}
 
 		Tickets.update(ticket._id, {

@@ -256,6 +256,11 @@ Assembla.watchTicketStream = function() {
 		}
 	})
 }
+
+Assembla.verifyTicketOnDev = function(assemblaId) {
+	var url = Assembla.ticketUrl + assemblaId + '.json';
+	Assembla.makePutRequest(url, {"ticket": {"status": "Verified on Dev"}});
+}
  
 if (Meteor.isServer) {
 	Meteor.startup(function() {
