@@ -165,7 +165,7 @@ Assembla._extractCommentFromInnerDescription = function(innerDescription) {
 Assembla.updateSingleTicket = function(ticket) {
 	var assemblaUrl = Assembla.assemblaUrl + ticket.number;
 	var extractedComments = Assembla.extractTicketInfoFromDescription(ticket.description, ticket.number);
-	Tickets.update({ assemblaId: ticket.number }, 
+	Tickets.update({assemblaId: ticket.number}, 
 		{
 			$set: 
 			{
@@ -183,7 +183,7 @@ Assembla.updateSingleTicket = function(ticket) {
 				comments: extractedComments,
 			}
 		}, { upsert: true }
-	);	
+	);
 }
 
 Assembla.populateTicketCollection = function() {

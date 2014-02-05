@@ -4,7 +4,7 @@ intervalHandle = null;
 Meteor.publish('tickets', function() {
 	var currentMilestone = Milestones.findOne({ current: true })
 	if (currentMilestone) {
-		return Tickets.find({ milestoneId: currentMilestone.id, statusName: "Done" });	
+		return Tickets.find({ milestoneId: currentMilestone.id, statusName: {$in: ["Done"]} });	
 	}
 });
 

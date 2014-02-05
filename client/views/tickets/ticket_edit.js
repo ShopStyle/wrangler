@@ -1,3 +1,5 @@
+selectedTesterEditPage = '';
+
 Template.ticketEdit.events({
 	'submit form': function(e) {
 		e.preventDefault();
@@ -5,18 +7,24 @@ Template.ticketEdit.events({
 		$('.main.ticket').show();
 		
 		var currentTicketId = this._id;
-		
+		var testers = []
+		var testerValues = $(e.target).find('select');
+		_.each(testerValues, function(option) {
+			testers.push($(option).val());
+		})
+
 		var ticketProperties = {
-			comments: $.trim($(e.target).find('[name=comments]').val()) + "\n"
+			comments: $.trim($(e.target).find('[name=comments]').val()) + "\n",
+			testers: testers
 		};
 
-		var oldComments = Tickets.findOne(currentTicketId).comments;
 		Tickets.update(currentTicketId, {$set: ticketProperties}, function(error) {
 			if (error) {
 				throwError(error.reason);
 			}
 		});
 		
+		var oldComments = Tickets.findOne(currentTicketId).comments;
 		Meteor.call('updateTicketCommentDescription', oldComments, ticketProperties.comments, currentTicketId);
 	}
 });
@@ -38,6 +46,25 @@ Template.ticketEdit.helpers({
 		else {
 			return ['', '', ''];
 		}
+	}
+});
+
+Template.testerUsers.helpers({
+	testers: function() {
+		selectedTesterEditPage = this.toString();
+		var currentMilestone = Milestones.findOne({current: true});
+		var testersObjs = BrowserAssignments.findOne({milestoneId: currentMilestone.id}).assignments;
+		var testers = [];
+		_.each(testersObjs, function(obj) {
+			testers.push(obj.username);
+		})
+		return testers;
+	}
+})
+
+Template.testerUser.helpers({
+	selected: function() {
+		return selectedTesterEditPage == this.toString();
 	}
 })
 

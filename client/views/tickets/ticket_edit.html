@@ -6,20 +6,32 @@
 			<div><strong>Component: </strong>{{component}}</div>
 			<div><strong>Browser: </strong>{{browser}}</div>
 			<div><strong>OS: </strong>{{os}}</div>
-			<label for="comments">Prerequisite/Comments</label>
+			<div><label for="comments">Prerequisite/Comments</label></div>
 			<textarea name="comments" type="text" placeholder="additional info">{{comments}}</textarea>
-			<input type="submit" value="Submit Changes" class="btn-edit submit"/>
 			<div class="testers">
+				Testers
 				{{#each ticketTesters}}
 					<select>
-						{{>testerUser}}
+						{{>testerUsers}}
 					</select>
 				{{/each}}
 			</div>
+			<input type="submit" value="Submit Changes" class="btn-edit submit"/>
 		</form>
 	</div>
 </template>
 
+<template name="testerUsers">
+	{{#each testers}}
+		{{>testerUser}}
+	{{/each}}
+</template>
+
+
 <template name="testerUser">
-	<option value="{{this}}" selected="selected">{{this}}</option>
+	{{#if selected}}
+		<option value="{{this}}" selected="selected">{{this}}</option>
+	{{else}}
+		<option value="{{this}}">{{this}}</option>
+	{{/if}}
 </template>
