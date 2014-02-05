@@ -13,27 +13,12 @@ Template.ticketEdit.events({
 		var oldComments = Tickets.findOne(currentTicketId).comments;
 		Tickets.update(currentTicketId, {$set: ticketProperties}, function(error) {
 			if (error) {
-				//display the error to the user
 				throwError(error.reason);
 			}
 		});
 		
 		Meteor.call('updateTicketCommentDescription', oldComments, ticketProperties.comments, currentTicketId);
-	}// ,
-// 	'click .btn-delete': function(e) {
-// 		e.preventDefault();
-// 		
-// 		if (confirm('Delete this ticket?')) {
-// 			var currentTicketId = this._id;
-// 			Meteor.call('removeTicket', currentTicketId, function(error) {
-// 				Router.go('ticketsList');
-// 				if (error) {
-// 					throwError(error.reason);
-// 				}
-// 			});
-// 			
-// 		}
-// 	}
+	}
 });
 
 Template.ticketEdit.helpers({
@@ -42,5 +27,18 @@ Template.ticketEdit.helpers({
 			return AssemblaUsers.findOne({ id: this.assignedToId }).login;
 		}
 		return '';
+	},
+	ticketTesters: function() {
+		if (this.testers) {
+			while (this.testers.length < 3) {
+				this.testers.push('');
+			}
+			return this.testers;
+		}
+		else {
+			return ['', '', ''];
+		}
 	}
 })
+
+

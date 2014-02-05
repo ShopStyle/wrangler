@@ -27,11 +27,17 @@ Meteor.methods({
 
 		tickets.forEach(function(ticket) {
 			var testers = [];
-			for (var i = 0; i < 3; i++) {
+			while (testers.length < 3) {
 				if (assignments.length === 0) {
 					assignments = _.shuffle(currentBrowser.assignments);
 				}
-				testers.push(assignments.pop().username);  	
+				var tester = _.sample(assignments).username;
+				if (_.indexOf(testers, tester) === -1) {
+					testers.push(tester);
+					assignments = _.reject(assignments, function(assignment) { 
+						return assignment.username == tester; 
+					});
+				}
 			}
 			Tickets.update(
 				{assemblaId: ticket.assemblaId},

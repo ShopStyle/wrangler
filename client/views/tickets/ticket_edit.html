@@ -9,6 +9,17 @@
 			<label for="comments">Prerequisite/Comments</label>
 			<textarea name="comments" type="text" placeholder="additional info">{{comments}}</textarea>
 			<input type="submit" value="Submit Changes" class="btn-edit submit"/>
+			<div class="testers">
+				{{#each ticketTesters}}
+					<select>
+						{{>testerUser}}
+					</select>
+				{{/each}}
+			</div>
 		</form>
 	</div>
+</template>
+
+<template name="testerUser">
+	<option value="{{this}}" selected="selected">{{this}}</option>
 </template>

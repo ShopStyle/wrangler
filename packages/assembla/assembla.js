@@ -180,7 +180,7 @@ Assembla.updateSingleTicket = function(ticket) {
 				os: ticket.custom_fields.OS,
 				assemblaUrl: assemblaUrl,
 				description: ticket.description,
-				comments: extractedComments
+				comments: extractedComments,
 			}
 		}, { upsert: true }
 	);	

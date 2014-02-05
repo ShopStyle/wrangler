@@ -21,5 +21,13 @@ Template.ticketPage.helpers({
 			return AssemblaUsers.findOne({ id: this.assignedToId }).login;
 		}
 		return '';
+	},
+	ticketTesters: function() {
+		if (this.testers) {
+			return this.testers.join(', ');
+		}
+		else {
+			return 'No Testers Assigned';
+		}
 	}
 })
