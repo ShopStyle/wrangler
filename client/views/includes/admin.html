@@ -33,15 +33,27 @@
 	<div class="user">
 		<span>{{username}}</span>
 		<input name="{{username}}" value="username" type="checkbox" checked="checked">
-		<select class="browser">
-			{{#each browserOptions}}
-				<option value="{{this}}">{{this}}</option>
-			{{/each}}
-		</select>
-		<select class="locale">
-			{{#each localeOptions}}
-				<option value="{{this}}">{{this}}</option>
-			{{/each}}
-		</select>
+		{{>browserLocaleOptions username}}
 	</div>
+</template>
+
+<template name="browserLocaleOptions">
+	<select class="browser">
+		{{#each browserOptions}}
+			{{#if isCurrentlyAssigned ../this}}
+				<option value="{{this}}" selected="selected">{{this}}</option>
+			{{else}}
+				<option value="{{this}}">{{this}}</option>
+			{{/if}}
+		{{/each}}
+	</select>
+	<select class="locale">
+		{{#each localeOptions}}
+			{{#if isCurrentlyAssigned ../this true}}
+				<option value="{{this}}" selected="selected">{{this}}</option>
+			{{else}}
+				<option value="{{this}}">{{this}}</option>
+			{{/if}}
+		{{/each}}
+	</select>
 </template>

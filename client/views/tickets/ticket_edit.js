@@ -53,10 +53,10 @@ Template.testerUsers.helpers({
 	testers: function() {
 		selectedTesterEditPage = this.toString();
 		var currentMilestone = Milestones.findOne({current: true});
-		var testersObjs = BrowserAssignments.findOne({milestoneId: currentMilestone.id}).assignments;
+		var testersObjs = BrowserAssignments.findOne({milestoneId: currentMilestone.id}).assignments[0];
 		var testers = [];
-		_.each(testersObjs, function(obj) {
-			testers.push(obj.username);
+		_.each(browsersObjs, function(username, browser) {
+			testers.push(username);
 		})
 		return testers;
 	}

@@ -44,21 +44,20 @@ Template.admin.events({
 		
 		var userBrowsers = [];
 		var users = $('.user');
-		
+		var browsers = {};
+		var locales = {};
 		for (var i = 0, len = users.length; i < len; i++) {
 			var $user = $(users.get(i));
 			if (!$user.find('input').prop('checked')) {
 				continue;
 			}
-			
-			var user = {};
-			user.username = $user.find('span').text();
-			user.browser = $user.find('.browser').val();
-			user.locale = $user.find('.locale').val();
-			userBrowsers.push(user);
+
+			var username = $user.find('span').text();
+			browsers[username] = $user.find('.browser').val();
+			locales[username] = $user.find('.locale').val();
 		}
 		
-		Meteor.call('assignBrowsers', userBrowsers);
+		Meteor.call('assignBrowsers', browsers, locales);
 	},
 	'click .assign-tickets': function() {
 		$('.ticket-alert').css("opacity", "0.8");
@@ -74,11 +73,18 @@ Template.admin.events({
 	}
 });
 
-Template.user.helpers({
+Template.browserLocaleOptions.helpers({
 	browserOptions: function() {
 		return browserOptions;
 	},
 	localeOptions: function() {
 		return localeOptions;
+	},
+	isCurrentlyAssigned: function(username, locale) {
+		var browser = this.toString();
+		var current;
+		var choice = locale === true ? 1 : 0;
+		current = BrowserAssignments.findOne().assignments[choice];
+		return current[username] === browser;
 	}
 });
