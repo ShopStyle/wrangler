@@ -24,6 +24,17 @@ Handlebars.registerHelper('failersConcat', function(ticket) {
 	}
 });
 
+Handlebars.registerHelper('activeRouteClass', function() {
+	var args = Array.prototype.slice.call(arguments, 0);
+	args.pop();
+
+	var active = _.any(args, function(name) {
+		return Router.current().route.name === name;	
+	});
+
+	return active && 'active';
+});
+
 Handlebars.registerHelper('passersConcat', function(ticket) {
 	var names = ticket.passers ? ticket.passers.join(', ') : '';
 	return names;

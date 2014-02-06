@@ -6,6 +6,11 @@
 				<img src="http://data3.whicdn.com/images/1410283/2350510452_6852c3428e_original.jpg">
 			</div>
 		{{/if}}
+		{{#if activeRouteClass 'todo'}}
+			{{#if testingUserAssignment}}
+				<div class="testing-assignment">You are assigned to: <strong>{{testingUserAssignment}}</strong></div>
+			{{/if}}
+		{{/if}}
 		{{#each tickets}}
 			{{> ticket}}
 		{{/each}}

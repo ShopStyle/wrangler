@@ -2,6 +2,18 @@ Template.ticketsList.helpers({
 	allPassed: function() {
 		var allPassed = Tickets.find({ status: 'pass' }).count() === Tickets.find().count();
 		return allPassed;
+	},
+	testingUserAssignment: function() {
+		var user = Meteor.user();
+		if (user) {
+			debugger;
+			var assignment, browser, locale;
+			user = user.username;
+			assignment = BrowserAssignments.findOne().assignments;
+			browser = assignment[0][user];
+			locale = assignment[1][user];
+			return browser + ' - US, ' + locale; 
+		}
 	}
 });
 
