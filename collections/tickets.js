@@ -23,19 +23,25 @@ Meteor.methods({
 		}
 		
 		var tickets = Tickets.find({milestoneId: currentMilestone.id, statusName: "Done"});
-		var assignments = _.shuffle(currentBrowser.assignments);
+		var assignments = currentBrowser.assignments[0];
+		var users = [];
+		
+		_.each(assignments, function(browser, user) {
+			users.push(user);
+		})
+		var samplers = _.shuffle(users);
 
 		tickets.forEach(function(ticket) {
 			var testers = [];
 			while (testers.length < 3) {
-				if (assignments.length === 0) {
-					assignments = _.shuffle(currentBrowser.assignments);
+				if (samplers.length === 0) {
+					samplers = _.shuffle(users);
 				}
-				var tester = _.sample(assignments).username;
+				var tester = _.sample(samplers);
 				if (_.indexOf(testers, tester) === -1) {
 					testers.push(tester);
-					assignments = _.reject(assignments, function(assignment) { 
-						return assignment.username == tester; 
+					samplers = _.reject(samplers, function(sample) { 
+						return sample == tester; 
 					});
 				}
 			}
