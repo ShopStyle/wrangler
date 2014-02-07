@@ -6,7 +6,6 @@ Template.ticketsList.helpers({
 	testingUserAssignment: function() {
 		var user = Meteor.user();
 		if (user) {
-			debugger;
 			var assignment, browser, locale;
 			user = user.username;
 			assignment = BrowserAssignments.findOne().assignments;

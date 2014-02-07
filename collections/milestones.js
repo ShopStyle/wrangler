@@ -10,5 +10,8 @@ Meteor.methods({
 		if (Meteor.isServer) {
 			Assembla.populateTicketCollection();			
 		}	
+	},
+	setDefaultMilestone: function() {
+		Milestones.update({title: "Testing App"}, {$set: {current: true}});		
 	}
 })

@@ -38,5 +38,5 @@ Meteor.publish('browserAssignments', function() {
 	if (currentMilestoneId) {
 		currentMilestoneId = currentMilestoneId.id;
 	}
-	return BrowserAssignments.find({milestoneId: currentMilestoneId});
+	return BrowserAssignments.find({milestoneId: currentMilestoneId}) ;
 })
