@@ -19,7 +19,7 @@ Meteor.methods({
 		
 		var currentBrowser = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
 		if (!currentBrowser) {
-			throw new Meteor.Error(401, "Please select a current milestone to assign tickets");
+			throw new Meteor.Error(401, "Please assign browsers to assign tickets");
 		}
 		
 		var tickets = Tickets.find({milestoneId: currentMilestone.id, statusName: "Done"});
@@ -30,6 +30,10 @@ Meteor.methods({
 			users.push(user);
 		})
 		var samplers = _.shuffle(users);
+
+		if (samplers.length < 3) {
+			throw new Meteor.Error(401, "Please assign at least three people to test");
+		}
 
 		tickets.forEach(function(ticket) {
 			var testers = [];

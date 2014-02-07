@@ -60,14 +60,15 @@ Template.admin.events({
 		Meteor.call('assignBrowsers', browsers, locales);
 	},
 	'click .assign-tickets': function() {
-		$('.ticket-alert').css("opacity", "0.8");
-		Meteor.setTimeout(function() {
-			$('.ticket-alert').fadeTo(500, 0)
-		}, 4000);
-		
 		Meteor.call('assignTickets', function(error) {
 			if (error) {
 				throwError(error.reason);
+			}
+			else {
+				$('.ticket-alert').css("opacity", "0.8");
+				Meteor.setTimeout(function() {
+					$('.ticket-alert').fadeTo(500, 0)
+				}, 4000);
 			}
 		})
 	}
