@@ -223,6 +223,11 @@ body {
 }
 
 #login-buttons {
+	#login-sign-in-link {
+		position: relative;
+		top: 4px;
+	}
+	
 	a {
 		text-decoration: none;
 		padding: 0;
