@@ -5,14 +5,18 @@ Template.ticketsList.helpers({
 	},
 	testingUserAssignment: function() {
 		var user = Meteor.user();
-		if (user) {
+		var browserAssignments = BrowserAssignments.findOne();
+		if (user && browserAssignments) {
 			var assignment, browser, locale;
 			user = user.username;
-			assignment = BrowserAssignments.findOne().assignments;
+			assignment = browserAssignments.assignments;
 			browser = assignment[0][user];
 			locale = assignment[1][user];
 			return browser + ' - US, ' + locale; 
 		}
+	},
+	noTickets: function(tickets) {
+		return tickets.count() === 0;
 	}
 });
 

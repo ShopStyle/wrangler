@@ -5,10 +5,12 @@ Template.testscriptSubmit.events({
 		$('#new-testscript').hide();
 		var attributes = {
 			steps: $.trim($(e.target).find('[name=steps]').val()),
-			ticketAssemblaId: parseInt(Router.current().params.assemblaId)
+			ticketAssemblaId: parseInt(Router.current().params.assemblaId),
+			testscriptNum: 1000
 		};
 		
-		Meteor.call('createNewTestscript', attributes, function(error, id) {
+		var _id = Testscripts.insert(attributes);
+		Meteor.call('createNewTestscript', attributes, _id, function(error) {
 			if (error) {
 				throwError(error.reason);
 			}

@@ -3,6 +3,7 @@ Template.ticketPage.events({
 		e.preventDefault();
 		e.stopPropagation;
 		if (Meteor.user()) {
+			$('#new-testscript').find('textarea').val('');
 			$('#new-testscript').show();
 		}
 	},
@@ -24,10 +25,11 @@ Template.ticketPage.helpers({
 	},
 	ticketTesters: function() {
 		if (this.testers) {
-			return this.testers.join(', ');
+			var testers = _.filter(this.tester, function(tester) { return tester !== '' });
+			if (testers.length > 0) {
+				return testers.join(', ');				
+			}
 		}
-		else {
-			return 'No Testers Assigned';
-		}
+		return 'No Testers Assigned';
 	}
 })

@@ -408,6 +408,8 @@ footer span {
 	&.notification {
 		color: $blue;
 		width: 22px;
+		position: relative;
+		top: -1px;
 	}
 }
 

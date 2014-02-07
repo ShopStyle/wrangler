@@ -7,7 +7,7 @@ Testscripts.allow({
 });
 
 Meteor.methods({
-	createNewTestscript: function(attributes) {
+	createNewTestscript: function(attributes, _id) {
 		var user = Meteor.user();
 		var ticket = Tickets.findOne({ assemblaId: attributes.ticketAssemblaId });
 
@@ -39,11 +39,13 @@ Meteor.methods({
 				passers: []
 			}
 		);
-		Testscripts.insert(testscript);
-		Meteor.call('updateTicketStatus', ticket);
+
 		if (Meteor.isServer) {
+			Testscripts.update({_id: _id}, {$set: testscript}, {upsert: true});
 			Assembla.createTestscript(testscript, ticket);
 		}
+
+		Meteor.call('updateTicketStatus', ticket);
 	},
 	updateTicketStatus: function(ticket) {
 		var status = '';
@@ -79,7 +81,7 @@ Meteor.methods({
 
 		failers = _.uniq(failers);
 		
-		if (failers.length > 0) {
+		if (failers[0] != undefined && failers.length > 0) {
 			status = 'fail';
 		}
 		else if (numPassers >= numTestersReq) {

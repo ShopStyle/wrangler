@@ -97,7 +97,7 @@ Assembla.updateTicketCommentDescription = function(oldComments, newComments, ass
 		newDescription = oldDesc.replace(oldComments, newComments);
 	}
 	else {
-		newDescription = oldDesc + '**TESTING\n**COMMENTS' + newComments + '\n**TESTSCRIPTS\n**END';
+		newDescription = oldDesc + '\n\n**TESTING\n**COMMENTS\n' + newComments + '**TESTSCRIPTS\n**END';
 	}
 	
 	Assembla._setNewDescription(newDescription, ticket.assemblaId);
@@ -142,12 +142,14 @@ Assembla.extractTicketInfoFromDescription = function(description, ticketNumber) 
 
 Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ticketNumber) {
 	var testscripts = innerDescription.split("**ENDSCRIPT");
+	var currentTestscripts = [];
 	_.each(testscripts, function(testscript) {
 		var matches = testscript.match(Assembla.singleTestscriptRegex)
 		if (!matches) {
 			return;
 		}
 		var testscriptNum = parseInt(matches[1]);
+		currentTestscripts.push(testscriptNum);
 		var steps = matches[2];
 		Testscripts.update({ ticketAssemblaId: ticketNumber, testscriptNum: testscriptNum }, 
 			{ $set: 
@@ -160,6 +162,7 @@ Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ti
 			{ upsert: true }
 		);
 	});
+	Testscripts.remove({testscriptNum: {$nin: currentTestscripts}});
 	Testscripts.update({ 
 		passers: { $exists: false }, 
 		failers: { $exists: false }, 
@@ -282,5 +285,6 @@ if (Meteor.isServer) {
 	Meteor.startup(function() {
 		Assembla.populateAssemblaUsers();
 		Assembla.updateMilestoneCollection();
+		Meteor.call('setDefaultMilestone');
 	});
 }
