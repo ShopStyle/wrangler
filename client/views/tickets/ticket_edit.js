@@ -8,6 +8,9 @@ Template.ticketEdit.events({
 		
 		var currentTicketId = this._id;
 		var testers = []
+		var ticket = Tickets.findOne(currentTicketId);
+		var oldComments = ticket.comments;
+		
 		var testerValues = $(e.target).find('select');
 		_.each(testerValues, function(option) {
 			testers.push($(option).val());
@@ -18,14 +21,7 @@ Template.ticketEdit.events({
 			testers: testers
 		};
 
-		Tickets.update(currentTicketId, {$set: ticketProperties}, function(error) {
-			if (error) {
-				throwError(error.reason);
-			}
-		});
-		
-		var oldComments = Tickets.findOne(currentTicketId).comments;
-		Meteor.call('updateTicketCommentDescription', oldComments, ticketProperties.comments, currentTicketId);
+		Meteor.call('updateTicketCommentDescription', oldComments, ticketProperties, ticket.assemblaId);
 	}
 });
 
@@ -53,9 +49,9 @@ Template.testerUsers.helpers({
 	testers: function() {
 		selectedTesterEditPage = this.toString();
 		var currentMilestone = Milestones.findOne({current: true});
-		var browsersObjs = BrowserAssignments.findOne({milestoneId: currentMilestone.id}).assignments[0];
+		var browsersObj = BrowserAssignments.findOne({milestoneId: currentMilestone.id}).assignments[0];
 		var testers = [];
-		_.each(browsersObjs, function(username, browser) {
+		_.each(browsersObj, function(browser, username) {
 			testers.push(username);
 		})
 		return testers;

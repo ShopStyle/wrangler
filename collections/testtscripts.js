@@ -148,13 +148,16 @@ Meteor.methods({
 			Assembla.editTestscriptTicketDescription(id, remove)
 		}
 		if (remove) {
+			console.log("removed");
 			Testscripts.remove(id);
 		}
 	}, 
-	updateTicketCommentDescription: function(oldComments, newComments, ticketId) {
+	updateTicketCommentDescription: function(oldComments, ticketProperties, assemblaId) {
+		var newComments = ticketProperties.comments;
 		if (Meteor.isServer) {
-			Assembla.updateTicketCommentDescription(oldComments, newComments, ticketId);
+			Assembla.updateTicketCommentDescription(oldComments, newComments, assemblaId);
 		}
+		Tickets.update({assemblaId: assemblaId}, {$set: ticketProperties});
 	}
 });
 

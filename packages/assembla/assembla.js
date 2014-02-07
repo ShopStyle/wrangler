@@ -54,17 +54,25 @@ Assembla.updateMilestoneCollection = function() {
 }
 
 Assembla.addTestscriptTicketDescription = function(testscript, ticket) {
+	var newDescription;
 	var currentDescription = ticket.description;
-	var innerDescription = currentDescription.match(Assembla.testscriptsAndcommentRegex)[1];
+	var innerDescription = currentDescription.match(Assembla.testscriptsAndcommentRegex);
 	
 	if (innerDescription) {
-		nnerDescription = innerDescription[1];
+		innerDescription = innerDescription[1];
 		var noTestDescription = currentDescription.replace(Assembla.testscriptsAndcommentRegex, '');
 		innerDescription += '**' + testscript.testscriptNum + '\n' + testscript.steps;
-		var newDescription = noTestDescription + '**TESTING\n' + innerDescription + '\n**ENDSCRIPT\n**END';
-		Tickets.update({assemblaId: ticket.assemblaId}, {$set: {description: newDescription}});
-		return newDescription;
+		newDescription = noTestDescription + '**TESTING\n' + innerDescription + '\n**ENDSCRIPT\n**END';
 	}
+	else {
+		var testing = '\n\n**TESTING\n**COMMENTS\n**TESTSCRIPTS\n**';
+		testing += testscript.testscriptNum + '\n' + testscript.steps;
+		testing += '\n**ENDSCRIPT\n**END';
+		newDescription = currentDescription + testing;
+	}
+	
+	Tickets.update({assemblaId: ticket.assemblaId}, {$set: {description: newDescription}});
+	return newDescription;
 }
 
 Assembla.editTestscriptTicketDescription = function(id, remove) {
@@ -72,7 +80,7 @@ Assembla.editTestscriptTicketDescription = function(id, remove) {
 	var ticket = Tickets.findOne({assemblaId: testscript.ticketAssemblaId});
 	var oldTestDesc = ticket.description.match(Assembla.testscriptsAndcommentRegex);
 
-	if (remove) {
+	if (remove && oldTestDesc) {
 		Assembla._updateAssemblaTicketDescription(testscript, ticket, oldTestDesc, '');
 	}
 	else if (oldTestDesc) {
@@ -80,10 +88,18 @@ Assembla.editTestscriptTicketDescription = function(id, remove) {
 	}
 }
 
-Assembla.updateTicketCommentDescription = function(oldComments, newComments, ticketId) {
-	var ticket = Tickets.findOne(ticketId);
+Assembla.updateTicketCommentDescription = function(oldComments, newComments, assemblaId) {
+	var newDescription;
+	var ticket = Tickets.findOne({assemblaId: assemblaId});
 	var oldDesc = ticket.description;
-	var newDescription = oldDesc.replace(oldComments, newComments);
+	
+	if (oldComments) {
+		newDescription = oldDesc.replace(oldComments, newComments);
+	}
+	else {
+		newDescription = oldDesc + '**TESTING\n**COMMENTS' + newComments + '\n**TESTSCRIPTS\n**END';
+	}
+	
 	Assembla._setNewDescription(newDescription, ticket.assemblaId);
 }
 
