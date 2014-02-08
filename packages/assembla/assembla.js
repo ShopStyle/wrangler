@@ -184,6 +184,10 @@ Assembla._extractCommentFromInnerDescription = function(innerDescription) {
 Assembla.updateSingleTicket = function(ticket) {
 	var assemblaUrl = Assembla.assemblaUrl + ticket.number;
 	var extractedComments = Assembla.extractTicketInfoFromDescription(ticket.description, ticket.number);
+	var statusName = ticket.status;
+	if (statusName === 'Verified on Dev') {
+		Tickets.update({assemblaId: ticket.number}, {$set: {status: 'pass'}});
+	}
 	Tickets.update({assemblaId: ticket.number}, 
 		{
 			$set: 
@@ -193,7 +197,7 @@ Assembla.updateSingleTicket = function(ticket) {
 				milestoneId: ticket.milestone_id,
 				updatedAt: ticket.updated_at,
 				summary: ticket.summary,
-				statusName: ticket.status,
+				statusName: statusName,
 				component: ticket.custom_fields.Component,
 				browser: ticket.custom_fields.Browser,
 				os: ticket.custom_fields.OS,
@@ -211,7 +215,7 @@ Assembla.populateTicketCollection = function() {
 	}
 	var currentMilestoneId = Milestones.findOne({ current: true }).id;
 	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
-	var ticketResponse = Assembla.makeGetRequest(url, {per_page: 500});
+	var ticketResponse = Assembla.makeGetRequest(url, {per_page: 500, ticket_status: "all"});
 	
 	if (ticketResponse.statusCode == 200) {
 		//I really don't like how I am qerying the database and setting things in a loop...

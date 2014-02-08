@@ -87,7 +87,7 @@ Template.browserLocaleOptions.helpers({
 		var choice = locale === true ? 1 : 0;
 		current = BrowserAssignments.findOne()
 		if (current) {
-			current.assignments[choice];
+			current = current.assignments[choice];
 			return current[username] === browser;	
 		}
 	}

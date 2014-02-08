@@ -18,7 +18,7 @@ Meteor.publish('testscripts', function(assemblaId) {
 });
 
 Meteor.publish('notifications', function() {
-	return Notifications.find();
+	return Notifications.find({read: false});
 });
 
 Meteor.publish('milestones', function() {
