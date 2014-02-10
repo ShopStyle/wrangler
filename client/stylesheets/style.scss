@@ -271,23 +271,26 @@ body {
 	}
 }
 
-.alert-error {
-	display: inline-block;
+.errors {
 	position: fixed;
-	top: 10px;
-	left: 10px;
-	background-color: $red;
-	color: white;
-	border-radius: 5px;
-	padding: 10px;
-	cursor: default;
-	opacity: 0.9;
-	z-index: 1;
+	top: 45px;
+	z-index: 2;
 	
-	.close {
-		cursor: pointer;
-		font-weight: bold;
-	}
+	.alert-error {
+		display: inline-block;
+		background-color: $red;
+		color: white;
+		border-radius: 5px;
+		padding: 10px;
+		cursor: default;
+		opacity: 0.9;
+		z-index: 1;
+	
+		.close {
+			cursor: pointer;
+			font-weight: bold;
+		}
+	}	
 }
 
 #spinner { 
