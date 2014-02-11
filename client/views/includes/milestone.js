@@ -1,7 +1,7 @@
 Template.milestones.events({
 	'click .select-milestone': function(e) {
 		e.preventDefault();
-		var milestoneId = document.getElementById('milestone-choice').value;
+		var milestoneId = $('#milestone-choice').val();
 		Meteor.call('setCurrentMilestone', milestoneId);
 		$('.milestone-alert').css("opacity", "0.8");
 		Meteor.setTimeout(function() {

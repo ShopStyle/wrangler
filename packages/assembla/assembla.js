@@ -194,6 +194,10 @@ Assembla.updateSingleTicket = function(ticket) {
 	if (statusName === 'Verified on Dev') {
 		Tickets.update({assemblaId: ticket.number}, {$set: {status: 'pass'}});
 	}
+	var description = ticket.description;
+	if (!description) {
+		description = '';
+	}
 	Tickets.update({assemblaId: ticket.number}, 
 		{
 			$set: 
@@ -208,7 +212,7 @@ Assembla.updateSingleTicket = function(ticket) {
 				browser: ticket.custom_fields.Browser,
 				os: ticket.custom_fields.OS,
 				assemblaUrl: assemblaUrl,
-				description: ticket.description,
+				description: description,
 				comments: extractedComments,
 			}
 		}, { upsert: true }
@@ -224,7 +228,7 @@ Assembla.populateTicketCollection = function() {
 	var ticketResponse = Assembla.makeGetRequest(url, {per_page: 500, ticket_status: "all"});
 	
 	if (ticketResponse.statusCode == 200) {
-		//I really don't like how I am qerying the database and setting things in a loop...
+		//I really don't like how I am querying the database and setting things in a loop...
 		_.each(ticketResponse.data, function(ticket) {
 			Assembla.updateSingleTicket(ticket);
 		});

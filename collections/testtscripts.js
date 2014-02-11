@@ -150,7 +150,6 @@ Meteor.methods({
 			Assembla.editTestscriptTicketDescription(id, remove)
 		}
 		if (remove) {
-			console.log("removed");
 			Testscripts.remove(id);
 		}
 	}, 
