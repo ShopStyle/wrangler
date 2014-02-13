@@ -5,7 +5,8 @@ Template.ticketsList.helpers({
 	},
 	testingUserAssignment: function() {
 		var user = Meteor.user();
-		var browserAssignments = BrowserAssignments.findOne();
+		var currentMilestone = Milestones.findOne({current: true});
+		var browserAssignments = BrowserAssignments.findOne({milestoneId: currentMilestone.id})
 		if (user && browserAssignments) {
 			var assignment, browser, locale;
 			user = user.username;

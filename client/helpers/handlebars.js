@@ -76,6 +76,9 @@ Handlebars.registerHelper('showUndo', function(testscript) {
 
 //modified from https://github.com/stu-smith/Handlebars-Helpers/blob/2c2232b8c466414a4faa364710e99ad8c3f22462/helpers.js
 Handlebars.registerHelper('breakLines', function (text) {
+	if (!text) {
+		return;
+	}
     var lines = text.split(/\r\n|\r|\n/),
     	result = '', first = true, i;
     for (i = 0; i < lines.length; ++i) {

@@ -85,7 +85,8 @@ Template.browserLocaleOptions.helpers({
 		var browser = this.toString();
 		var current;
 		var choice = locale === true ? 1 : 0;
-		current = BrowserAssignments.findOne()
+		var currentMilestone = Milestones.findOne({current: true});
+		current = BrowserAssignments.findOne({milestoneId: currentMilestone.id})
 		if (current) {
 			current = current.assignments[choice];
 			return current[username] === browser;	
