@@ -34,7 +34,7 @@ Assembla.updateMilestoneCollection = function() {
 		throw new Meteor.Error(500, 'Please provide secret/key in Meteor.settings');
 	}
 	
-	var milestoneResponse = Assembla.makeGetRequest(Assembla.milestonesUrl, {});
+	var milestoneResponse = Assembla.makeGetRequest(Assembla.milestonesUrl, {per_page: 50});
 	if (milestoneResponse.statusCode == 200) {
 		_.each(milestoneResponse.data, function(milestone) {
 			Milestones.update({id: milestone.id}, {
@@ -184,7 +184,11 @@ Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ti
 	
 Assembla._extractCommentFromInnerDescription = function(innerDescription) {
 	var comment = innerDescription.match(Assembla.commentRegex);
-	return comment[1];
+	
+	if (comment) {
+		return comment[1];
+	}
+	return '';
 }
 
 Assembla.updateSingleTicket = function(ticket) {
@@ -225,11 +229,13 @@ Assembla.populateTicketCollection = function() {
 	}
 	var currentMilestoneId = Milestones.findOne({ current: true }).id;
 	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
-	var ticketResponse = Assembla.makeGetRequest(url, {per_page: 500, ticket_status: "all"});
+	var ticketResponseAll = Assembla.makeGetRequest(url, {per_page: 500, ticket_status: "all"});
+	var ticketResponseClosed = Assembla.makeGetRequest(url, {per_page: 500, ticket_status: "closed"});
 	
-	if (ticketResponse.statusCode == 200) {
+	if (ticketResponseAll.statusCode == 200 && ticketResponseClosed.statusCode == 200) {
+		var ticketResponse = ticketResponseAll.data.concat(ticketResponseClosed.data);
 		//I really don't like how I am querying the database and setting things in a loop...
-		_.each(ticketResponse.data, function(ticket) {
+		_.each(ticketResponse, function(ticket) {
 			Assembla.updateSingleTicket(ticket);
 		});
 		Tickets.update({ 

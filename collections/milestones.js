@@ -19,5 +19,11 @@ Meteor.methods({
 			Stream.remove({});
 			Stream.insert({on: false});
 		}
+	},
+	updateMilestones: function() {
+		if (Meteor.isServer) {
+			Assembla.populateAssemblaUsers();
+			Assembla.updateMilestoneCollection();
+		}
 	}
 })

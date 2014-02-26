@@ -33,3 +33,4 @@ Meteor.publish('userData', function() {
 Meteor.publish('browserAssignments', function(currentMilestoneId) {
 	return BrowserAssignments.find() ;
 })
+
