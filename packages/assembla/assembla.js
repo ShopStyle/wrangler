@@ -229,9 +229,9 @@ Assembla.populateTicketCollection = function() {
 	}
 	var currentMilestoneId = Milestones.findOne({ current: true }).id;
 	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
-	var ticketResponseAll = Assembla.makeGetRequest(url, {per_page: 500, ticket_status: "all"});
-	var ticketResponseClosed = Assembla.makeGetRequest(url, {per_page: 500, ticket_status: "closed"});
-	
+	var ticketResponseAll = Assembla.makeGetRequest(url, {per_page: 100, ticket_status: "all"});
+	var ticketResponseClosed = Assembla.makeGetRequest(url, {per_page: 100, ticket_status: "closed"});
+	//need a way to deal with over 100 tickets. maybe have a counter, and then just ping again looking for page 2
 	if (ticketResponseAll.statusCode == 200 && ticketResponseClosed.statusCode == 200) {
 		var ticketResponse = ticketResponseAll.data.concat(ticketResponseClosed.data);
 		//I really don't like how I am querying the database and setting things in a loop...

@@ -1,4 +1,5 @@
-browserOptions = ["IE8", "IE9", "IE10", "IE11", "Chrome", "Firefox", "iPad", "iPhone", "Android", "Safari"];
+browserOptions = ["IE8", "IE9", "IE10", "IE11", "Chrome", 
+	"Firefox", "iPad", "iPhone", "Android", "Safari", "Windows - Firefox", "Windows - Chrome"];
 localeOptions = ["UK", "AU", "JP", "DE", "FR", "CA"];
 
 Template.admin.helpers({
