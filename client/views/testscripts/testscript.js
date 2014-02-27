@@ -1,14 +1,7 @@
 Template.testscript.events({
 	'dblclick .text': function(e) {
 		if (Meteor.user()) {
-			// var $editor, steps, sessionVariable;
-
-			// $editor = $(e.currentTarget).find('.editor');
-			// steps = this.steps;
-// 			$editor.find('textarea').val(steps);
 			setEditingStatus(this, true, true);
-			// $editor.show();
-// 			$(e.currentTarget).find('.testscript-steps').hide();
 		}
 	},
 	'click .btn-test': function(e) {
@@ -82,8 +75,6 @@ Template.testscriptEdit.events({
 		if (Meteor.user()) {
 			var testscript = this;
 			setEditingStatus(testscript, true, false)
-			// $(e.currentTarget).find('.editor').hide();
-// 			$(e.currentTarget).find('.testscript-steps').show()
 			var steps = $(e.currentTarget).siblings('textarea').val();
 			Testscripts.update(testscript._id, { $set: { steps: $.trim(steps) }});
 			
@@ -92,9 +83,6 @@ Template.testscriptEdit.events({
 	},
 	'click .btn-new-testscript.edit.delete': function(e) {
 		if (Meteor.user()) {
-			// $(e.currentTarget).find('.editor').hide();
-// 			$(e.currentTarget).find('.testscript-steps').show();
-
 			if (confirm("Delete this testscript?")) {
 				var testscript = this;
 				setEditingStatus(testscript, true, false);
@@ -115,13 +103,7 @@ Template.testscriptEdit.helpers({
 		if (!getEditingStatus(testscript, true)) {
 			return 'invisible';
 		}
-	},
-	// nonReactiveSteps: function() {
-	// 	var testscript = this;
-	// 	Deps.nonreactive(function() {
-	// 		return testscript.steps;
-	// 	});
-	// }
+	}
 });
 
 Template.testscriptEdit.preserve({

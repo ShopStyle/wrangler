@@ -3,8 +3,7 @@ selectedTesterEditPage = '';
 Template.ticketEdit.events({
 	'submit form': function(e) {
 		e.preventDefault();
-		$('.edit-ticket').hide();
-		$('.main.ticket').show();
+		setEditingStatus(this, false, false);
 		
 		var currentTicketId = this._id;
 		var testers = []
@@ -22,6 +21,9 @@ Template.ticketEdit.events({
 		};
 
 		Meteor.call('updateTicketCommentDescription', oldComments, ticketProperties, ticket.assemblaId);
+	},
+	'click .cancel': function() {
+		setEditingStatus(this, false, false);
 	}
 });
 

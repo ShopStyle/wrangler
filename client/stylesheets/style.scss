@@ -155,9 +155,9 @@ body {
 			display: block;
 		}
 	
-		.btn-edit.submit {
+		.btn-edit.submit, .btn-edit.cancel {
 			position: static;
-			display: block;
+			display: inline-block;
 			border: none;
 			font-size: 1.2em;
 			background-color: $green;
@@ -166,8 +166,14 @@ body {
 			min-width: 0;
 		}
 		
-		.btn-edit.submit:hover {
+		.btn-edit.submit:hover, .btn-edit.cancel:hover {
 			text-decoration: none;
+		}
+		
+		.btn-edit.cancel {
+			background-color: $grey;
+			color: $dark-grey;
+			padding: 7px;
 		}
 		
 		div {
