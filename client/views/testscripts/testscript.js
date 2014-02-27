@@ -1,30 +1,15 @@
 Template.testscript.events({
 	'dblclick .text': function(e) {
 		if (Meteor.user()) {
-			$(e.currentTarget).find('.invisible').show();
-			$(e.currentTarget).find('.testscript-steps').hide()
-		}
-	},
-	'click .btn-new-testscript.edit.update': function(e) {
-		if (Meteor.user()) {
-			$(e.currentTarget).find('.invisible').hide();
-			$(e.currentTarget).find('.testscript-steps').show()
-			var steps = $(e.currentTarget).siblings('textarea').val();
-			var id = this._id;
-			Testscripts.update(id, { $set: { steps: $.trim(steps) }});
+			debugger;
+			var $editor, steps, sessionVariable;
+			setEditingStatus(this, true);
 			
-			Meteor.call('editTestscriptTicketDescription', id);
-		}
-	},
-	'click .btn-new-testscript.edit.delete': function(e) {
-		if (Meteor.user()) {
-			$(e.currentTarget).find('.invisible').hide();
-			$(e.currentTarget).find('.testscript-steps').show();
-
-			if (confirm("Delete this testscript?")) {
-				var id = this._id;
-				Meteor.call('editTestscriptTicketDescription', id, true);
-			}
+			$editor = $(e.currentTarget).find('.editor');
+			steps = this.steps;
+			$editor.find('textarea').val(steps);
+			$editor.show();
+			$(e.currentTarget).find('.testscript-steps').hide();
 		}
 	},
 	'click .btn-test': function(e) {
@@ -73,4 +58,68 @@ Template.testscript.events({
 		$(e.currentTarget).hide();
 		$(e.currentTarget).siblings('.results').show();
 	}
-})
+});
+
+Template.testscript.helpers({
+	stepsInvisible: function() {
+		var testscript = this;
+		if (getEditingStatus(testscript)) {
+			return 'invisible';
+		}
+	}
+});
+
+Template.testscriptEdit.events({
+	'click .btn-new-testscript.edit.update': function(e) {
+		if (Meteor.user()) {
+			var testscript = this;
+			setEditingStatus(testscript, false)
+			$(e.currentTarget).find('.editor').hide();
+			$(e.currentTarget).find('.testscript-steps').show()
+			var steps = $(e.currentTarget).siblings('textarea').val();
+			Testscripts.update(id, { $set: { steps: $.trim(steps) }});
+			
+			Meteor.call('editTestscriptTicketDescription', id);
+		}
+	},
+	'click .btn-new-testscript.edit.delete': function(e) {
+		if (Meteor.user()) {
+			$(e.currentTarget).find('.editor').hide();
+			$(e.currentTarget).find('.testscript-steps').show();
+
+			if (confirm("Delete this testscript?")) {
+				var testscript = this;
+				setEditingStatus(testscript, false);
+				Meteor.call('editTestscriptTicketDescription', id, true);
+			}
+		}
+	},
+	'click .cancel': function() {
+		var testscript = this;
+		setEditingStatus(testscript, false);
+		$('.editor').hide();
+	}
+});
+
+Template.testscriptEdit.helpers({
+	editingInvisible: function() {
+		var testscript = this;
+		if (!getEditingStatus(testscript)) {
+			return 'invisible';
+		}
+	}
+});
+
+setEditingStatus = function(testscript, status) {
+	var id = this._id;
+	var sessionVariable = 'currentlyEditingTestscript-' + testscript._id;
+	Session.set(sessionVariable, status);
+}
+
+getEditingStatus = function(testscript) {
+	var id = this._id;
+	var sessionVariable = 'currentlyEditingTestscript-' + testscript._id;
+	return Deps.nonreactive(function() {
+		Session.get(sessionVariable);
+	});
+}

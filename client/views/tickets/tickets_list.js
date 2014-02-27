@@ -13,6 +13,9 @@ Template.ticketsList.helpers({
 			assignment = browserAssignments.assignments;
 			browser = assignment[0][user];
 			locale = assignment[1][user];
+			if (browser === undefined || locale === undefined) {
+				return 'nothing, yet...';
+			}
 			return browser + ' - US, ' + locale; 
 		}
 	},

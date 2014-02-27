@@ -202,6 +202,14 @@ Assembla.updateSingleTicket = function(ticket) {
 	if (!description) {
 		description = '';
 	}
+	
+	var noTesting = false;
+	if (ticket.custom_fields["No Testing Required"]) {
+		if (ticket.custom_fields["No Testing Required"] === "yes") {
+			noTesting = true;
+		}
+	}
+	
 	Tickets.update({assemblaId: ticket.number}, 
 		{
 			$set: 
@@ -218,6 +226,7 @@ Assembla.updateSingleTicket = function(ticket) {
 				assemblaUrl: assemblaUrl,
 				description: description,
 				comments: extractedComments,
+				noTesting: noTesting
 			}
 		}, { upsert: true }
 	);

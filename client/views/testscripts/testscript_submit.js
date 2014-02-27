@@ -1,4 +1,7 @@
 Template.testscriptSubmit.events({
+	'click .cancel': function() {
+		$('#new-testscript').hide();
+	},
 	'submit form': function(e) {
 		e.preventDefault();
 		

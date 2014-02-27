@@ -322,6 +322,14 @@ body {
 		border-radius: 5px;
 		min-width: 300px;
 		min-height: 100px;
+		border-color: $grey;
+	}
+	
+	.cancel {
+		background-color: $grey;
+		padding: 4px;
+		margin-left: 150px;
+		color: $dark-grey;
 	}
 }
 
@@ -361,7 +369,12 @@ body {
 	
 	&.delete.edit {
 		background-color: red;
-		
+		margin-left: 130px;
+	}
+	
+	&.cancel.edit {
+		background-color: $grey;
+		color: $dark-grey;
 	}
 	
 	&.edit {
@@ -430,6 +443,9 @@ footer span {
 		color: white;
 		position: relative;
 		top: 5px;
+		background-color: white;
+		max-height: 300px;
+		overflow-y: auto;
 		
 		div {
 			opacity: 0.8;
