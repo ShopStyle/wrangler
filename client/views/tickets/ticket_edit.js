@@ -33,21 +33,27 @@ Template.ticketEdit.helpers({
 		return '';
 	},
 	ticketTesters: function() {
+		var testers;
 		if (this.testers) {
 			while (this.testers.length < 3) {
 				this.testers.push('');
 			}
-			return this.testers;
+			testers = this.testers;
+			
 		}
 		else {
-			return ['', '', ''];
+			testers = ['', '', ''];
 		}
+		
+		return _.map(testers, function(tester, index) {
+			return {index: index, tester: tester};
+		});
 	}
 });
 
 Template.testerUsers.helpers({
 	testers: function() {
-		selectedTesterEditPage = this.toString();
+		selectedTesterEditPage = this.tester.toString();
 		var currentMilestone = Milestones.findOne({current: true});
 		var browsersObj = BrowserAssignments.findOne({milestoneId: currentMilestone.id})
 		

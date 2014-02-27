@@ -10,9 +10,7 @@
 	<div class="ticket {{testscriptStatus this}}">
 		<div class="text">
 			<div class="{{stepsInvisible}} testscript-steps">{{breakLines steps}}</div>
-			{{#constant}}
-				{{> testscriptEdit}}
-			{{/constant}}
+			{{> testscriptEdit}}
 		</div>
 		<div class="btn-holder">
 			{{#if showUndo this}}

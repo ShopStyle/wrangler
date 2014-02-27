@@ -1,15 +1,14 @@
 Template.testscript.events({
 	'dblclick .text': function(e) {
 		if (Meteor.user()) {
-			debugger;
-			var $editor, steps, sessionVariable;
-			setEditingStatus(this, true);
-			
-			$editor = $(e.currentTarget).find('.editor');
-			steps = this.steps;
-			$editor.find('textarea').val(steps);
-			$editor.show();
-			$(e.currentTarget).find('.testscript-steps').hide();
+			// var $editor, steps, sessionVariable;
+
+			// $editor = $(e.currentTarget).find('.editor');
+			// steps = this.steps;
+// 			$editor.find('textarea').val(steps);
+			setEditingStatus(this, true, true);
+			// $editor.show();
+// 			$(e.currentTarget).find('.testscript-steps').hide();
 		}
 	},
 	'click .btn-test': function(e) {
@@ -63,9 +62,18 @@ Template.testscript.events({
 Template.testscript.helpers({
 	stepsInvisible: function() {
 		var testscript = this;
-		if (getEditingStatus(testscript)) {
+		if (getEditingStatus(testscript, true)) {
 			return 'invisible';
 		}
+	}
+});
+
+Template.testscript.preserve({
+	'textarea[name]': function(node) {
+		return node.name;
+	},
+	'select[name]': function(node) {
+		return node.name;
 	}
 });
 
@@ -73,30 +81,30 @@ Template.testscriptEdit.events({
 	'click .btn-new-testscript.edit.update': function(e) {
 		if (Meteor.user()) {
 			var testscript = this;
-			setEditingStatus(testscript, false)
-			$(e.currentTarget).find('.editor').hide();
-			$(e.currentTarget).find('.testscript-steps').show()
+			setEditingStatus(testscript, true, false)
+			// $(e.currentTarget).find('.editor').hide();
+// 			$(e.currentTarget).find('.testscript-steps').show()
 			var steps = $(e.currentTarget).siblings('textarea').val();
-			Testscripts.update(id, { $set: { steps: $.trim(steps) }});
+			Testscripts.update(testscript._id, { $set: { steps: $.trim(steps) }});
 			
 			Meteor.call('editTestscriptTicketDescription', id);
 		}
 	},
 	'click .btn-new-testscript.edit.delete': function(e) {
 		if (Meteor.user()) {
-			$(e.currentTarget).find('.editor').hide();
-			$(e.currentTarget).find('.testscript-steps').show();
+			// $(e.currentTarget).find('.editor').hide();
+// 			$(e.currentTarget).find('.testscript-steps').show();
 
 			if (confirm("Delete this testscript?")) {
 				var testscript = this;
-				setEditingStatus(testscript, false);
+				setEditingStatus(testscript, true, false);
 				Meteor.call('editTestscriptTicketDescription', id, true);
 			}
 		}
 	},
 	'click .cancel': function() {
 		var testscript = this;
-		setEditingStatus(testscript, false);
+		setEditingStatus(testscript, true, false);
 		$('.editor').hide();
 	}
 });
@@ -104,22 +112,38 @@ Template.testscriptEdit.events({
 Template.testscriptEdit.helpers({
 	editingInvisible: function() {
 		var testscript = this;
-		if (!getEditingStatus(testscript)) {
+		if (!getEditingStatus(testscript, true)) {
 			return 'invisible';
 		}
+	},
+	// nonReactiveSteps: function() {
+	// 	var testscript = this;
+	// 	Deps.nonreactive(function() {
+	// 		return testscript.steps;
+	// 	});
+	// }
+});
+
+Template.testscriptEdit.preserve({
+	'textarea[name]': function(node) {
+		return node.name;
 	}
 });
 
-setEditingStatus = function(testscript, status) {
-	var id = this._id;
-	var sessionVariable = 'currentlyEditingTestscript-' + testscript._id;
+setEditingStatus = function(testscript, isTestscript, status) {
+	var sessionVariable = _getSessionVariable(testscript, isTestscript);
 	Session.set(sessionVariable, status);
 }
 
-getEditingStatus = function(testscript) {
-	var id = this._id;
-	var sessionVariable = 'currentlyEditingTestscript-' + testscript._id;
-	return Deps.nonreactive(function() {
-		Session.get(sessionVariable);
-	});
+getEditingStatus = function(testscript, isTestscript) {
+	var sessionVariable = _getSessionVariable(testscript, isTestscript);
+	return Session.get(sessionVariable);
+}
+
+_getSessionVariable = function(testscript, isTestscript) {
+	var prefix = 'currentlyEditingTestscript-';
+	if (!isTestscript) {
+		prefix = 'currentlyEditingTicket-'
+	}
+	return 'currentlyEditingTestscript-' + testscript._id;
 }

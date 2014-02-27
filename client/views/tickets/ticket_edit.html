@@ -11,7 +11,7 @@
 			<div class="testers">
 				Testers
 				{{#each ticketTesters}}
-					<select>
+					<select name="select-{{index}}">
 						{{>testerUsers}}
 					</select>
 				{{/each}}
