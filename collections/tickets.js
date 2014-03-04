@@ -22,6 +22,10 @@ Meteor.methods({
 			throw new Meteor.Error(401, "Please assign browsers to assign tickets");
 		}
 		
+		Tickets.update({milestoneId: currentMilestone.id, statusName: "Done", noTesting: true}, 
+			{$set: {testers: []}},
+			{multi: true});
+			
 		var tickets = Tickets.find({milestoneId: currentMilestone.id, statusName: "Done", noTesting: false});
 		var assignments = currentBrowser.assignments[0];
 		var users = [];
