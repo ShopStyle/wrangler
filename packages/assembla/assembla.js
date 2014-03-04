@@ -243,6 +243,10 @@ Assembla.populateTicketCollection = function() {
 	//need a way to deal with over 100 tickets. maybe have a counter, and then just ping again looking for page 2
 	if (ticketResponseAll.statusCode == 200 && ticketResponseClosed.statusCode == 200) {
 		var ticketResponse = ticketResponseAll.data.concat(ticketResponseClosed.data);
+		
+		//hack way to deal with a ticket changing milestones and not changing in the app
+		Tickets.update({milestoneId: currentMilestoneId}, {$set: {milestoneId: 0}}, {multi: true});
+		
 		//I really don't like how I am querying the database and setting things in a loop...
 		_.each(ticketResponse, function(ticket) {
 			Assembla.updateSingleTicket(ticket);
