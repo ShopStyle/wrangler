@@ -1,12 +1,12 @@
 Template.ticketsList.helpers({
 	allPassed: function() {
-		var allPassed = Tickets.find({ status: 'pass' }).count() === Tickets.find().count();
+		var allPassed = Tickets.find({ status: 'pass' }).count() === Tickets.find({ noTesting: false }).count();
 		return allPassed;
 	},
 	testingUserAssignment: function() {
 		var user = Meteor.user();
-		var currentMilestone = Milestones.findOne({current: true});
-		var browserAssignments = BrowserAssignments.findOne({milestoneId: currentMilestone.id})
+		var currentMilestone = Milestones.findOne({ current: true });
+		var browserAssignments = BrowserAssignments.findOne({ milestoneId: currentMilestone.id });
 		if (user && browserAssignments) {
 			var assignment, browser, locale;
 			user = user.username;
@@ -21,6 +21,37 @@ Template.ticketsList.helpers({
 	},
 	noTickets: function(tickets) {
 		return tickets.count() === 0;
+	},
+	userTestedTickets: function() {
+		var username = Meteor.user().username;
+		var testedTickets = Tickets.find({
+			testers: {$in: [username]}, 
+			$or:
+			[
+				{passers: {$in: [username]}}, 
+				{failers: {$in: [username]}}
+			]
+		});
+		return testedTickets;
+	},
+	userUntestedTickets: function() {
+		var username = Meteor.user().username;
+		var untestedTickets = Tickets.find({
+			testers: {$in: [username]},
+			passers: {$nin: [username]}, 
+			failers: {$nin: [username]}
+		});
+		return untestedTickets;
+	},
+	userAllDone: function() {
+		//need to fix this copy paste stuff, just doing it for last minute work-around
+		var username = Meteor.user().username;
+		var untestedTickets = Tickets.find({
+			testers: {$in: [username]},
+			passers: {$nin: [username]}, 
+			failers: {$nin: [username]}
+		});
+		return untestedTickets.count() === 0;
 	}
 });
 

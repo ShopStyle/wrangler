@@ -16,13 +16,19 @@
 				<li><strong>Testers: </strong>{{ticketTesters}}</li>
 			</ul>
 		</div>
-		{{#if currentUser}}
-			<a href="#" id="add-testscript" class="btn-testscript">&#43; Add Testscript</a>
+		{{#if noTesting}}
+			<div class="no-testing-ticket">NO TESTING REQUIRED</div>
+		{{else}}
+			{{#if currentUser}}
+				<a href="#" id="add-testscript" class="btn-testscript">&#43; Add Testscript</a>
+			{{/if}}
 		{{/if}}
 	</div>
 	{{> testscriptSubmit}}
-	<div class="testscripts">
-		{{> testscriptList}}
-	</div>
+	{{#unless noTesting}}
+		<div class="testscripts">
+			{{> testscriptList}}
+		</div>
+	{{/unless}}
 </template>
 

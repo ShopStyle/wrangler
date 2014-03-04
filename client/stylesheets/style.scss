@@ -616,7 +616,34 @@ li.relative-container {
 	text-align: center;
 }
 
+.no-testing-ticket {
+	z-index: 2;
+	color: white;
+	background-color: $green;
+	padding: 10px;
+	font-size: 1.2em;
+	text-align: center;
+	opacity: 0.4;
+	position: absolute;
+	top: 30px;
+	left: 0;
+	right: 0;
+}
 
+.to-do {
+	min-height: 300px;
+	margin: 0 auto;
+	
+	img {
+		margin: auto;
+		display: block;
+	}
+}
+
+.completed-text {
+	margin: 10px auto;
+	text-align: center;
+}
 
 
 

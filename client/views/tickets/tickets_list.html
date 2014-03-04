@@ -1,7 +1,6 @@
 <template name="ticketsList">
 	<div>
 		{{#if allPassed}}
-			<a href="http://thecatapi.com"><img src="http://thecatapi.com/api/images/get?format=src&type=gif"></a>
 			<div class="corgi-success">
 				<div>Congratulations! All tests have passed.</div>
 				<img src="http://data3.whicdn.com/images/1410283/2350510452_6852c3428e_original.jpg">
@@ -14,10 +13,25 @@
 			{{#if testingUserAssignment}}
 				<div class="testing-assignment">You are assigned to: <strong>{{testingUserAssignment}}</strong></div>
 			{{/if}}
+			<div class="testing-assignment">To-do</div>
+			<div class="to-do">
+				{{#if userAllDone}}
+					<div class="completed-text">Yay! You did all your tests. Here is a cat gif.</div>
+					<a href="http://thecatapi.com"><img src="http://thecatapi.com/api/images/get?format=src&type=gif"></a>
+				{{/if}}
+				{{#each userUntestedTickets}}
+					{{> ticket}}
+				{{/each}}
+			</div>
+			{{#each userTestedTickets}}
+				<div class="testing-assignment">Completed</div>
+				{{> ticket}}
+			{{/each}}
+		{{else}}
+			{{#each tickets}}
+				{{> ticket}}
+			{{/each}}
 		{{/if}}
-		{{#each tickets}}
-			{{> ticket}}
-		{{/each}}
 	</div>
 </template>
 
@@ -28,15 +42,21 @@
 			<span>Assigned to: {{assignedTo}}</span>
 		</div>
 		<div class="btn-holder">
-			<div class="btn-test pass default">PASS <span class="circle"><span class="green">{{numPassers this}}</span></span></div>
-			<div class="btn-test fail default">FAIL <span class="circle"><span class="red">{{numFailers this}}</span></span></div>
+			{{#if noTesting}}
+				<div class="no-testing-ticket">NO TESTING REQUIRED</span>
+			{{else}}
+				<div class="btn-test pass default">PASS <span class="circle"><span class="green">{{numPassers this}}</span></span></div>
+				<div class="btn-test fail default">FAIL <span class="circle"><span class="red">{{numFailers this}}</span></span></div>
+			{{/if}}
 		</div>
-		<div class="testscript-results">
-			<div class="results">Results</div>
-			<div class="results-inner">
-				<div class="green">Pass: {{passersConcat this}}</div>
-				<div class="red">Fail: {{failersConcat this}}</div>
+		{{#unless noTesting}}
+			<div class="testscript-results">
+				<div class="results">Results</div>
+				<div class="results-inner">
+					<div class="green">Pass: {{passersConcat this}}</div>
+					<div class="red">Fail: {{failersConcat this}}</div>
+				</div>
 			</div>
-		</div>
+		{{/unless}}
 	</div>
 </template>
