@@ -20,7 +20,13 @@ Template.ticketEdit.events({
 			testers: testers
 		};
 
-		Meteor.call('updateTicketCommentDescription', oldComments, ticketProperties, ticket.assemblaId);
+		Meteor.call('updateTicketCommentDescription', oldComments, 
+			ticketProperties, ticket.assemblaId, ticket, function(error) {
+				if (error) {
+					throwError(error.reason);
+				}
+			}
+		);
 	},
 	'click .cancel': function() {
 		setEditingStatus(this, false, false);

@@ -4,16 +4,12 @@ Template.errors.helpers({
 	}
 });
 
-Template.error.rendered = function() {
-	var error = this.data;
-	Meteor.defer(function() {
-		Errors.update(error._id, {$set: {seen: true}});
-	});
-};
-
 Template.errors.events({
 	'click .close': function(e) {
 		e.preventDefault();
-		$(e.target).parents().first().hide();
+		var $errorDiv = $(e.target).parents().first()
+		var _id = $errorDiv.data('_id');
+		$errorDiv.hide();
+		Errors.update(_id, {$set: {seen: true}});	
 	}
 })

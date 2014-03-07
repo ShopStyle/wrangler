@@ -153,14 +153,21 @@ Meteor.methods({
 			Testscripts.remove(id);
 		}
 	}, 
-	updateTicketCommentDescription: function(oldComments, ticketProperties, assemblaId) {
+	updateTicketCommentDescription: function(oldComments, ticketProperties, assemblaId, ticket) {
 		var newComments = ticketProperties.comments;
+
+		if (Meteor.isClient) {
+			var correctFormatRegex = /\*\*TESTING\n*\*\*COMMENTS\n*([\s\S]*)\*\*END/i;
+			var ticketHasTestingNotes = ticket.description.match(correctFormatRegex);
+			
+			if (!ticketHasTestingNotes) {
+				throwError("The app made a new **TESTING block for you in Assembla because it couldn't find one. Please check the ticket in Assembla to make sure things went smoothly.");
+			}
+		}
+		
 		if (Meteor.isServer) {
 			Assembla.updateTicketCommentDescription(oldComments, newComments, assemblaId);
 		}
 		Tickets.update({assemblaId: assemblaId}, {$set: ticketProperties});
 	}
 });
-
-
-

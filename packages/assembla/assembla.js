@@ -7,7 +7,8 @@ Assembla = {
 	testscriptsAndcommentRegex: /\*\*TESTING\n*([\s\S]*)\*\*END/i,
 	commentRegex: /\*\*COMMENTS\n*([\s\S]*)\*\*TESTSCRIPTS/i,
 	testscriptsRegex: /\*\*TESTSCRIPTS\n*([\s\S]*)/i,
-	singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i, 
+	singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i,
+	correctFormatRegex: /\*\*TESTING\n*\*\*COMMENTS\n*([\s\S]*)\*\*END/i,
 	streamUrl: 'https://api.assembla.com/v1/activity.json',
 	_headers: {
 		'X-Api-Key': Meteor.settings.API_KEY,
@@ -92,14 +93,15 @@ Assembla.updateTicketCommentDescription = function(oldComments, newComments, ass
 	var newDescription;
 	var ticket = Tickets.findOne({assemblaId: assemblaId});
 	var oldDesc = ticket.description;
+	var ticketHasTestingNotes = oldDesc.match(Assembla.correctFormatRegex);
 	
 	if (oldComments) {
 		newDescription = oldDesc.replace(oldComments, newComments);
 	}
-	else {
+	else if (!ticketHasTestingNotes) {
 		newDescription = oldDesc + '\n\n**TESTING\n**COMMENTS\n' + newComments + '**TESTSCRIPTS\n**END';
 	}
-	
+
 	Assembla._setNewDescription(newDescription, ticket.assemblaId);
 }
 
@@ -114,7 +116,7 @@ Assembla._updateAssemblaTicketDescription = function(testscript, ticket, oldTest
 		+ testscript.testscriptNum + "[\\s\\S]*?\\*\\*ENDSCRIPT\\n*)", "i");
 	var oldSteps = oldTestDesc[1].match(testscriptRegex);
 	
-	if(newSteps === undefined) {
+	if (newSteps === undefined) {
 		var newSteps = "\*\*" + testscript.testscriptNum 
 			+ "\n" + testscript.steps + "\n\*\*ENDSCRIPT\n";
 	}
@@ -184,9 +186,12 @@ Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ti
 	
 Assembla._extractCommentFromInnerDescription = function(innerDescription) {
 	var comment = innerDescription.match(Assembla.commentRegex);
-	
+
 	if (comment) {
-		return comment[1];
+		if (comment[1]) {
+			return	comment[1];
+		}
+		return ' ';
 	}
 	return '';
 }

@@ -7,7 +7,7 @@
 			</div>
 		{{/if}}
 		{{#if noTickets tickets}}
-			<div class="testing-assignment">No tickets to display.</strong></div>
+			<div class="testing-assignment"><strong>No tickets to display.</strong></div>
 		{{/if}}
 		{{#if activeRouteClass 'todo'}}
 			{{#if testingUserAssignment}}
@@ -43,7 +43,7 @@
 		</div>
 		<div class="btn-holder">
 			{{#if noTesting}}
-				<div class="no-testing-ticket">NO TESTING REQUIRED</span>
+				<div class="no-testing-ticket">NO TESTING REQUIRED</div>
 			{{else}}
 				<div class="btn-test pass default">PASS <span class="circle"><span class="green">{{numPassers this}}</span></span></div>
 				<div class="btn-test fail default">FAIL <span class="circle"><span class="red">{{numFailers this}}</span></span></div>

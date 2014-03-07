@@ -281,6 +281,7 @@ body {
 	position: fixed;
 	top: 45px;
 	z-index: 2;
+	max-width: 1200px;
 	
 	.alert-error {
 		display: inline-block;
