@@ -171,17 +171,12 @@ Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ti
 	});
 
 	Testscripts.remove({ticketAssmblaId: ticketNumber, testscriptNum: {$nin: currentTestscripts}});
-	Testscripts.update({ 
-		passers: { $exists: false }, 
-		failers: { $exists: false }, 
-		status: { $exists: false }
-	}, {
-		$set: {
-			passers: [],
-			failers: [],
-			status: ''
-		}
-	}, { multi: true });
+	
+	//better way for this??
+	Testscripts.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
+	Testscripts.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });	
+	Testscripts.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });	
+	Testscripts.update({ allStepsCompleted: { $exists: false }}, { $set: { allStepsCompleted: [] }}, { multi: true });
 }	
 	
 Assembla._extractCommentFromInnerDescription = function(innerDescription) {

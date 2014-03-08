@@ -32,7 +32,7 @@ Template.testscript.events({
 			return;
 		}
 		e.preventDefault();
-		var failReason = $(e.currentTarget).parents().find('input').val();
+		var failReason = $(e.currentTarget).parents().first().find('input').val();
 		Meteor.call('updateTestscriptResult', this._id, false, failReason, function(error) {
 			if (error) {
 				throwError(error.reason);

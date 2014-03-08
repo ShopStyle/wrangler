@@ -25,12 +25,8 @@ Template.ticketsList.helpers({
 	userTestedTickets: function() {
 		var username = Meteor.user().username;
 		var testedTickets = Tickets.find({
-			testers: {$in: [username]}, 
-			$or:
-			[
-				{passers: {$in: [username]}}, 
-				{failers: {$in: [username]}}
-			]
+			testers: {$in: [username]},
+			allStepsCompleted: {$in: [username]} 
 		});
 		return testedTickets;
 	},
@@ -38,18 +34,16 @@ Template.ticketsList.helpers({
 		var username = Meteor.user().username;
 		var untestedTickets = Tickets.find({
 			testers: {$in: [username]},
-			passers: {$nin: [username]}, 
-			failers: {$nin: [username]}
+			allStepsCompleted: {$nin: [username]} 
 		});
 		return untestedTickets;
 	},
 	userAllDone: function() {
-		//need to fix this copy paste stuff, just doing it for last minute work-around
+		//should probably get rid of this duplicate logic
 		var username = Meteor.user().username;
 		var untestedTickets = Tickets.find({
 			testers: {$in: [username]},
-			passers: {$nin: [username]}, 
-			failers: {$nin: [username]}
+			allStepsCompleted: {$nin: [username]} 
 		});
 		return untestedTickets.count() === 0;
 	}

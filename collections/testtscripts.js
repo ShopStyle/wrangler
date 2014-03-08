@@ -56,13 +56,16 @@ Meteor.methods({
 		var numTestScripts = testscripts.count();
 		
 		testscripts.forEach(function(testscript) {
-			failers = failers.concat(testscript.failers);
+			_.each(testscript.failers, function(failerObj) {
+				failers.push(failerObj.username);
+			});
 			passers = passers.concat(testscript.passers);
 		});
 		
 		var numPassers = 0;
 		var passersCounts = {};
 		var allTestscriptPassers = [];
+		
 		passers.forEach(function(elem) {
 			if (passersCounts[elem] == null) {
 				passersCounts[elem] = 1;
@@ -76,6 +79,28 @@ Meteor.methods({
 			if (passersCounts[key] >= numTestScripts) {
 				numPassers += 1;
 				allTestscriptPassers.push(key);
+			}
+		}
+		
+		//this is pretty much the same logic as above, but decides who has completed all the testscripts for a ticket
+		var completedCounts = {};
+		var allStepsCompleted = [];
+		var allFailPass = [];
+		allFailPass = allFailPass.concat(passers);
+		allFailPass = allFailPass.concat(failers);
+
+		allFailPass.forEach(function(elem) {
+			if (completedCounts[elem] == null) {
+				completedCounts[elem] = 1;
+			}
+			else {
+				completedCounts[elem] += 1;
+			}
+		});
+
+		for (var key in completedCounts) {
+			if (completedCounts[key] >= numTestScripts) {
+				allStepsCompleted.push(key);
 			}
 		}
 
@@ -105,7 +130,8 @@ Meteor.methods({
 			$set: {
 				status: status,
 				failers: failers,
-				passers: allTestscriptPassers
+				passers: allTestscriptPassers,
+				allStepsCompleted: allStepsCompleted
 			}
 		});
 	},
