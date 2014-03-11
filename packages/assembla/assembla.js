@@ -97,12 +97,11 @@ Assembla.updateTicketCommentDescription = function(oldComments, newComments, ass
 	
 	if (oldComments) {
 		newDescription = oldDesc.replace(oldComments, newComments);
+		Assembla._setNewDescription(newDescription, ticket.assemblaId);
 	}
-	else if (!ticketHasTestingNotes) {
-		newDescription = oldDesc + '\n\n**TESTING\n**COMMENTS\n' + newComments + '**TESTSCRIPTS\n**END';
-	}
-
-	Assembla._setNewDescription(newDescription, ticket.assemblaId);
+	// else if (!ticketHasTestingNotes) {
+// 		newDescription = oldDesc + '\n\n**TESTING\n**COMMENTS\n' + newComments + '**TESTSCRIPTS\n**END';
+// 	}
 }
 
 Assembla._setNewDescription = function(newDescription, assemblaId) {
