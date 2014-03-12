@@ -1,24 +1,25 @@
 <template name="ticketEdit">
 	<div class="ticket {{passed this}}">
-		<form>
-			<div><strong>Title: </strong>{{summary}}</div>
-			<div><strong>Assigned to: </strong>{{assignedTo}}</div>
-			<div><strong>Component: </strong>{{component}}</div>
-			<div><strong>Browser: </strong>{{browser}}</div>
-			<div><strong>OS: </strong>{{os}}</div>
-			<div><label for="comments">Prerequisite/Comments</label></div>
-			<textarea name="comments" type="text" placeholder="additional info">{{comments}}</textarea>
-			<div class="testers">
-				Testers
-				{{#each ticketTesters}}
-					<select name="select-{{index}}">
-						{{>testerUsers}}
-					</select>
-				{{/each}}
-			</div>
-			<input type="submit" value="Submit Changes" class="btn-edit submit"/>
-			<div class="btn-edit cancel">Cancel</div>
-		</form>
+		<div class="text">
+			<h1><a href="{{assemblaUrl}}">{{summary}}</a></h1>
+			<ul>
+				<li><strong>Ticket: </strong>{{assemblaId}}</li>
+				<li><strong>Assigned to: </strong>{{assignedTo}}</li>
+				<li><strong>Component: </strong>{{component}}</li>
+				<li><strong>Browser: </strong>{{browser}}</li>
+				<li><strong>OS: </strong>{{os}}</li>
+				<li><strong>Prerequisite/comments: </strong></li>
+				<li>{{breakLines comments}}</li>
+			</ul>
+		</div>
+		<div class="testers">
+			Testers
+			{{#each ticketTesters}}
+				<select name="select-{{index}}">
+					{{>testerUsers}}
+				</select>
+			{{/each}}
+		</div>
 	</div>
 </template>
 

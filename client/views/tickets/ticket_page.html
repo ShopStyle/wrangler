@@ -2,7 +2,7 @@
 	<div class="{{editStepsInvisible}} edit-ticket">
 		{{> ticketEdit}}
 	</div>
-	<div class="main ticket {{status}} {{stepsInvisible}}">
+	<div class="main ticket {{status}}">
 		<div class="text">
 			<h1><a href="{{assemblaUrl}}">{{summary}}</a></h1>
 			<ul>
@@ -18,13 +18,8 @@
 		</div>
 		{{#if noTesting}}
 			<div class="no-testing-ticket">NO TESTING REQUIRED</div>
-		{{else}}
-			{{#if currentUser}}
-				<a href="#" id="add-testscript" class="btn-testscript">&#43; Add Testscript</a>
-			{{/if}}
 		{{/if}}
 	</div>
-	{{> testscriptSubmit}}
 	{{#unless noTesting}}
 		<div class="testscripts">
 			{{> testscriptList}}

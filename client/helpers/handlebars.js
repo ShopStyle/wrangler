@@ -1,3 +1,5 @@
+userAdmins = ['kkassir', 'tgaribaldi@popsugar.com', 'laurenhendrickson'];
+
 Handlebars.registerHelper('numFailers',function(ticket) {
 	var length = ticket.failers ? ticket.failers.length : 0;
 	return length;
@@ -73,6 +75,11 @@ Handlebars.registerHelper('showUndo', function(testscript) {
 	}
 	return false;
 });
+
+Handlebars.registerHelper('userAdmin', function() {
+	var username = Meteor.user().username;
+	return _.contains(userAdmins, username);
+})
 
 //modified from https://github.com/stu-smith/Handlebars-Helpers/blob/2c2232b8c466414a4faa364710e99ad8c3f22462/helpers.js
 Handlebars.registerHelper('breakLines', function (text) {

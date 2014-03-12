@@ -9,8 +9,7 @@
 <template name="testscript">
 	<div class="ticket {{testscriptStatus this}}">
 		<div class="text">
-			<div class="{{stepsInvisible}} testscript-steps">{{breakLines steps}}</div>
-			{{> testscriptEdit}}
+			<div class="testscript-steps">{{breakLines steps}}</div>
 		</div>
 		<div class="btn-holder">
 			{{#if showUndo this}}
@@ -32,14 +31,5 @@
 				<div class="red">Fail: {{failersConcat this}}</div>
 			</div>
 		</div>
-	</div>
-</template>
-
-<template name="testscriptEdit">
-	<div class="{{editingInvisible}} editor">
-		<textarea name="steps">{{steps}}</textarea>
-		<div class="btn-new-testscript edit update">Submit Changes</div>
-		<div class="btn-new-testscript edit cancel">Cancel</div>
-		<div class="btn-new-testscript edit delete">DELETE</div>
 	</div>
 </template>

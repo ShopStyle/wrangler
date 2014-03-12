@@ -1,1 +1,1 @@
-AssemblaUsers = new Meteor.Collection('assemblaUsers')
+AssemblaUsers = new Meteor.Collection('assemblaUsers');

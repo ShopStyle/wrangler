@@ -1,6 +1,5 @@
-selectedTesterEditPage = '';
-
 Template.ticketEdit.events({
+	//change all this logic to just be selecting the testers
 	'submit form': function(e) {
 		e.preventDefault();
 		setEditingStatus(this, false, false);

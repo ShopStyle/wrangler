@@ -7,46 +7,6 @@ Testscripts.allow({
 });
 
 Meteor.methods({
-	createNewTestscript: function(attributes, _id) {
-		var user = Meteor.user();
-		var ticket = Tickets.findOne({ assemblaId: attributes.ticketAssemblaId });
-
-		if (!user) {
-			throw new Meteor.Error(401, "You need to login to make a testscript");
-		}
-			
-		if (!attributes.steps)
- 			throw new Meteor.Error(422, "Please write some steps");
-		
-		if (!ticket) {
-			throw new Meteor.Error(422, "You must create a testscript for a ticket");
-		}
-		var testscriptNum =  1;
-		var allTestscriptsForTicket = Testscripts.find(
-			{ticketAssemblaId: attributes.ticketAssemblaId},
-			{sort: {testscriptNum: -1}}
-		);
-		if (allTestscriptsForTicket.count() > 0) {
-			testscriptNum = allTestscriptsForTicket.fetch()[0].testscriptNum + 1;
-		} 
-		var testscript = _.extend(_.pick(attributes, 
-				'ticketAssemblaId', 'steps'), 
-			{
-				userId: user._id,
-				submitted: new Date().getTime(),
-				testscriptNum: testscriptNum,
-				failers: [],
-				passers: []
-			}
-		);
-
-		if (Meteor.isServer) {
-			Testscripts.update({_id: _id}, {$set: testscript}, {upsert: true});
-			Assembla.createTestscript(testscript, ticket);
-		}
-
-		Meteor.call('updateTicketStatus', ticket);
-	},
 	updateTicketStatus: function(ticket) {
 		var status = '';
 		var passers = [];
@@ -170,30 +130,5 @@ Meteor.methods({
 			});
 		}
 		Meteor.call('updateTicketStatus', ticket);
-	},
-	editTestscriptTicketDescription: function(id, remove) {
-		if (Meteor.isServer) {
-			Assembla.editTestscriptTicketDescription(id, remove)
-		}
-		if (remove) {
-			Testscripts.remove(id);
-		}
-	}, 
-	updateTicketCommentDescription: function(oldComments, ticketProperties, assemblaId, ticket) {
-		var newComments = ticketProperties.comments;
-
-		if (Meteor.isClient) {
-			var correctFormatRegex = /\*\*TESTING\n*\*\*COMMENTS\n*([\s\S]*)\*\*END/i;
-			var ticketHasTestingNotes = ticket.description.match(correctFormatRegex);
-			
-			if (!ticketHasTestingNotes) {
-				throwError("The app made a new **TESTING block for you in Assembla because it couldn't find one. Please check the ticket in Assembla to make sure things went smoothly.");
-			}
-		}
-		
-		if (Meteor.isServer) {
-			Assembla.updateTicketCommentDescription(oldComments, newComments, assemblaId);
-		}
-		Tickets.update({assemblaId: assemblaId}, {$set: ticketProperties});
 	}
 });
