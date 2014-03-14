@@ -4,11 +4,11 @@ Assembla = {
 	usersUrl: 'https://api.assembla.com/v1/spaces/shopstyle/users.json',
 	assemblaUrl: 'https://www.assembla.com/spaces/shopstyle/tickets/',
 	ticketUrl: 'https://api.assembla.com/v1/spaces/shopstyle/tickets/',
-	testscriptsAndcommentRegex: /\*\*TESTING\n*([\s\S]*)\*\*END/i,
-	commentRegex: /\*\*COMMENTS\n*([\s\S]*)\*\*TESTSCRIPTS/i,
-	testscriptsRegex: /\*\*TESTSCRIPTS\n*([\s\S]*)/i,
-	singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i,
-	correctFormatRegex: /\*\*TESTING\n*\*\*COMMENTS\n*([\s\S]*)\*\*END/i,
+	testscriptsAndcommentRegex: /TESTING([\s\S]*)END/,
+	commentRegex: /COMMENTS([\s\S]*?)(?=TESTSCRIPT)/,
+	testscriptsRegex: /TESTSCRIPT([\s\S]*)/,
+	// singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i,
+	// correctFormatRegex: /\*\*TESTING\n*\*\*COMMENTS\n*([\s\S]*)\*\*END/i,
 	streamUrl: 'https://api.assembla.com/v1/activity.json',
 	_headers: {
 		'X-Api-Key': Meteor.settings.API_KEY,
@@ -54,81 +54,81 @@ Assembla.updateMilestoneCollection = function() {
 	}});
 }
 
-Assembla.addTestscriptTicketDescription = function(testscript, ticket) {
-	var newDescription;
-	var currentDescription = ticket.description;
-	var innerDescription = currentDescription.match(Assembla.testscriptsAndcommentRegex);
-	
-	if (innerDescription) {
-		innerDescription = innerDescription[1];
-		var noTestDescription = currentDescription.replace(Assembla.testscriptsAndcommentRegex, '');
-		innerDescription += '**' + testscript.testscriptNum + '\n' + testscript.steps;
-		newDescription = noTestDescription + '**TESTING\n' + innerDescription + '\n**ENDSCRIPT\n**END';
-	}
-	else {
-		var testing = '\n\n**TESTING\n**COMMENTS\n**TESTSCRIPTS\n**';
-		testing += testscript.testscriptNum + '\n' + testscript.steps;
-		testing += '\n**ENDSCRIPT\n**END';
-		newDescription = currentDescription + testing;
-	}
-	
-	Tickets.update({assemblaId: ticket.assemblaId}, {$set: {description: newDescription}});
-	return newDescription;
-}
-
-Assembla.editTestscriptTicketDescription = function(id, remove) {
-	var testscript = Testscripts.findOne(id);
-	var ticket = Tickets.findOne({assemblaId: testscript.ticketAssemblaId});
-	var oldTestDesc = ticket.description.match(Assembla.testscriptsAndcommentRegex);
-
-	if (remove && oldTestDesc) {
-		Assembla._updateAssemblaTicketDescription(testscript, ticket, oldTestDesc, '');
-	}
-	else if (oldTestDesc) {
-		Assembla._updateAssemblaTicketDescription(testscript, ticket, oldTestDesc);
-	}
-}
-
-Assembla.updateTicketCommentDescription = function(oldComments, newComments, assemblaId) {
-	var newDescription;
-	var ticket = Tickets.findOne({assemblaId: assemblaId});
-	var oldDesc = ticket.description;
-	var ticketHasTestingNotes = oldDesc.match(Assembla.correctFormatRegex);
-	
-	if (oldComments) {
-		newDescription = oldDesc.replace(oldComments, newComments);
-		Assembla._setNewDescription(newDescription, ticket.assemblaId);
-	}
-	// else if (!ticketHasTestingNotes) {
-// 		newDescription = oldDesc + '\n\n**TESTING\n**COMMENTS\n' + newComments + '**TESTSCRIPTS\n**END';
+// Assembla.addTestscriptTicketDescription = function(testscript, ticket) {
+// 	var newDescription;
+// 	var currentDescription = ticket.description;
+// 	var innerDescription = currentDescription.match(Assembla.testscriptsAndcommentRegex);
+// 	
+// 	if (innerDescription) {
+// 		innerDescription = innerDescription[1];
+// 		var noTestDescription = currentDescription.replace(Assembla.testscriptsAndcommentRegex, '');
+// 		innerDescription += '**' + testscript.testscriptNum + '\n' + testscript.steps;
+// 		newDescription = noTestDescription + '**TESTING\n' + innerDescription + '\n**ENDSCRIPT\n**END';
 // 	}
-}
+// 	else {
+// 		var testing = '\n\n**TESTING\n**COMMENTS\n**TESTSCRIPTS\n**';
+// 		testing += testscript.testscriptNum + '\n' + testscript.steps;
+// 		testing += '\n**ENDSCRIPT\n**END';
+// 		newDescription = currentDescription + testing;
+// 	}
+// 	
+// 	Tickets.update({assemblaId: ticket.assemblaId}, {$set: {description: newDescription}});
+// 	return newDescription;
+// }
 
-Assembla._setNewDescription = function(newDescription, assemblaId) {
-	Tickets.update({ assemblaId: assemblaId}, {$set: {description: newDescription}});
-	var url = Assembla.ticketUrl + assemblaId + '.json';
-	Assembla.makePutRequest(url, {"ticket": {"description": newDescription}});
-}
+// Assembla.editTestscriptTicketDescription = function(id, remove) {
+// 	var testscript = Testscripts.findOne(id);
+// 	var ticket = Tickets.findOne({assemblaId: testscript.ticketAssemblaId});
+// 	var oldTestDesc = ticket.description.match(Assembla.testscriptsAndcommentRegex);
+// 
+// 	if (remove && oldTestDesc) {
+// 		Assembla._updateAssemblaTicketDescription(testscript, ticket, oldTestDesc, '');
+// 	}
+// 	else if (oldTestDesc) {
+// 		Assembla._updateAssemblaTicketDescription(testscript, ticket, oldTestDesc);
+// 	}
+// }
 
-Assembla._updateAssemblaTicketDescription = function(testscript, ticket, oldTestDesc, newSteps) {
-	var testscriptRegex = new RegExp("(\\*\\*" 
-		+ testscript.testscriptNum + "[\\s\\S]*?\\*\\*ENDSCRIPT\\n*)", "i");
-	var oldSteps = oldTestDesc[1].match(testscriptRegex);
-	
-	if (newSteps === undefined) {
-		var newSteps = "\*\*" + testscript.testscriptNum 
-			+ "\n" + testscript.steps + "\n\*\*ENDSCRIPT\n";
-	}
-	var newTestDesc = oldTestDesc[1].replace(oldSteps[1], newSteps);
-	
-	var newDescription = ticket.description.replace(oldTestDesc[1], newTestDesc);
-	Assembla._setNewDescription(newDescription, ticket.assemblaId);
-}
+// Assembla.updateTicketCommentDescription = function(oldComments, newComments, assemblaId) {
+// 	var newDescription;
+// 	var ticket = Tickets.findOne({assemblaId: assemblaId});
+// 	var oldDesc = ticket.description;
+// 	var ticketHasTestingNotes = oldDesc.match(Assembla.correctFormatRegex);
+// 	
+// 	if (oldComments) {
+// 		newDescription = oldDesc.replace(oldComments, newComments);
+// 		Assembla._setNewDescription(newDescription, ticket.assemblaId);
+// 	}
+// 	// else if (!ticketHasTestingNotes) {
+// // 		newDescription = oldDesc + '\n\n**TESTING\n**COMMENTS\n' + newComments + '**TESTSCRIPTS\n**END';
+// // 	}
+// }
 
-Assembla.createTestscript = function(testscript, ticket) {
-	var description = Assembla.addTestscriptTicketDescription(testscript, ticket);
-	Assembla._setNewDescription(description, ticket.assemblaId);
-}
+// Assembla._setNewDescription = function(newDescription, assemblaId) {
+// 	Tickets.update({ assemblaId: assemblaId}, {$set: {description: newDescription}});
+// 	var url = Assembla.ticketUrl + assemblaId + '.json';
+// 	Assembla.makePutRequest(url, {"ticket": {"description": newDescription}});
+// }
+// 
+// Assembla._updateAssemblaTicketDescription = function(testscript, ticket, oldTestDesc, newSteps) {
+// 	var testscriptRegex = new RegExp("(\\*\\*" 
+// 		+ testscript.testscriptNum + "[\\s\\S]*?\\*\\*ENDSCRIPT\\n*)", "i");
+// 	var oldSteps = oldTestDesc[1].match(testscriptRegex);
+// 	
+// 	if (newSteps === undefined) {
+// 		var newSteps = "\*\*" + testscript.testscriptNum 
+// 			+ "\n" + testscript.steps + "\n\*\*ENDSCRIPT\n";
+// 	}
+// 	var newTestDesc = oldTestDesc[1].replace(oldSteps[1], newSteps);
+// 	
+// 	var newDescription = ticket.description.replace(oldTestDesc[1], newTestDesc);
+// 	Assembla._setNewDescription(newDescription, ticket.assemblaId);
+// }
+// 
+// Assembla.createTestscript = function(testscript, ticket) {
+// 	var description = Assembla.addTestscriptTicketDescription(testscript, ticket);
+// 	Assembla._setNewDescription(description, ticket.assemblaId);
+// }
 
 Assembla.extractTicketInfoFromDescription = function(description, ticketNumber) {
 	if (description) {
@@ -146,27 +146,27 @@ Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ti
 	if (!testscriptsString) {
 		return;
 	}
-	var testscripts = testscriptsString[1].split("**ENDSCRIPT");
+	var testscripts = testscriptsString[1].split("TESTSCRIPT");
 
+	var testscriptNum = 1;
 	var currentTestscripts = [];
 	_.each(testscripts, function(testscript) {
-		var matches = testscript.match(Assembla.singleTestscriptRegex)
-		if (!matches) {
+		if (testscript.length === 0) {
 			return;
 		}
-		var testscriptNum = parseInt(matches[1]);
 		currentTestscripts.push(testscriptNum);
-		var steps = matches[2];
+		var testscriptSteps = testscript.replace(/^\s+|\s+$/g, '');
 		Testscripts.update({ ticketAssemblaId: ticketNumber, testscriptNum: testscriptNum }, 
 			{ $set: 
 				{ 
-					steps: steps,
+					steps: testscriptSteps,
 					ticketAssemblaId: ticketNumber,
 					testscriptNum: testscriptNum 
 				}
 			},
 			{ upsert: true }
 		);
+		testscriptNum += 1;
 	});
 
 	Testscripts.remove({ticketAssmblaId: ticketNumber, testscriptNum: {$nin: currentTestscripts}});
@@ -183,7 +183,7 @@ Assembla._extractCommentFromInnerDescription = function(innerDescription) {
 
 	if (comment) {
 		if (comment[1]) {
-			return	comment[1];
+			return	comment[1].replace(/^\s+|\s+$/g, '');
 		}
 		return ' ';
 	}

@@ -1,8 +1,8 @@
 <template name="header">
 <header class="navbar">
 	<ul class="navbar-left">
-		<li class="{{activeRouteClass 'ticketsList'}}">
-			<a class="home" href="{{pathFor 'ticketsList'}}">All</a>
+		<li>
+			<a class="home {{activeRouteClass 'ticketsList'}}" href="{{pathFor 'ticketsList'}}">All</a>
 		</li>
 		<li>
 			<a class="{{activeRouteClass 'passed'}}" href="{{pathFor 'passed'}}">
