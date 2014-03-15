@@ -10,16 +10,25 @@
 				<li><strong>OS: </strong>{{os}}</li>
 				<li><strong>Prerequisite/comments: </strong></li>
 				<li>{{breakLines comments}}</li>
+				<li class="num-testers">
+					<strong>Number of Testers:</strong>
+					<select>
+						{{#each numTesters}}
+							{{> numTester}}
+						{{/each}}
+					</select>
+				</li>
+				<li class="tester-select">
+					<strong>Testers:</strong>
+					{{#each ticketTesters}}
+						<select name="select-{{index}}">
+							{{>testerUsers}}
+						</select>
+					{{/each}}
+				</li>
 			</ul>
 		</div>
-		<div class="testers">
-			Testers
-			{{#each ticketTesters}}
-				<select name="select-{{index}}">
-					{{>testerUsers}}
-				</select>
-			{{/each}}
-		</div>
+		<a href="{{pathFor 'ticketPage'}}" class="btn-edit">back</a>
 	</div>
 </template>
 
@@ -35,5 +44,13 @@
 		<option value="{{this}}" selected="selected">{{this}}</option>
 	{{else}}
 		<option value="{{this}}">{{this}}</option>
+	{{/if}}
+</template>
+
+<template name="numTester">
+	{{#if selected}}
+		<option value="{{number}}" selected="selected">{{number}}</option>
+	{{else}}
+		<option value="{{number}}">{{number}}</option>
 	{{/if}}
 </template>

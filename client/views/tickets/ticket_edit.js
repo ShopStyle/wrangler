@@ -1,34 +1,26 @@
 Template.ticketEdit.events({
-	//change all this logic to just be selecting the testers
-	'submit form': function(e) {
-		e.preventDefault();
-		setEditingStatus(this, false, false);
-		
-		var currentTicketId = this._id;
+	'change select': function(e, template) {
+		var currentTicketId = template.data._id;
 		var testers = []
-		var ticket = Tickets.findOne(currentTicketId);
-		var oldComments = ticket.comments;
 		
-		var testerValues = $(e.target).find('select');
-		_.each(testerValues, function(option) {
-			testers.push($(option).val());
-		})
+		var numTesters = $('.num-testers').find('select').val();
+		
+		var testerValues = $('.tester-select').find('select');
+		
+		for (var i = 1; i <= numTesters; i++) {
+			var option = testerValues[i - 1];
+			if (option && option.value.length > 0) {
+				testers.push($(option).val());	
+			}
+		}
 
-		var ticketProperties = {
-			comments: $.trim($(e.target).find('[name=comments]').val()) + "\n",
-			testers: testers
-		};
-
-		Meteor.call('updateTicketCommentDescription', oldComments, 
-			ticketProperties, ticket.assemblaId, ticket, function(error) {
+		Tickets.update({_id: currentTicketId}, {$set: {testers: testers, numTesters: numTesters}}, 
+			function(error, num) {
 				if (error) {
 					throwError(error.reason);
 				}
 			}
 		);
-	},
-	'click .cancel': function() {
-		setEditingStatus(this, false, false);
 	}
 });
 
@@ -41,12 +33,12 @@ Template.ticketEdit.helpers({
 	},
 	ticketTesters: function() {
 		var testers;
+		var numTesters = this.numTesters ? this.numTesters : 3;
 		if (this.testers) {
-			while (this.testers.length < 3) {
+			while (this.testers.length < numTesters) {
 				this.testers.push('');
 			}
 			testers = this.testers;
-			
 		}
 		else {
 			testers = ['', '', ''];
@@ -55,6 +47,22 @@ Template.ticketEdit.helpers({
 		return _.map(testers, function(tester, index) {
 			return {index: index, tester: tester};
 		});
+	},
+	numTesters: function() {
+		var numTesters = this.numTesters ? this.numTesters : 3;
+		var numTestersRange = [];
+		for (var i = 1; i <= 10; i++) {
+			var testObj = {};
+			testObj.number = i;
+			testObj.selected = false;
+			
+			if (numTesters == i) {
+				testObj.selected = true;
+			}
+			
+			numTestersRange.push(testObj);
+		}
+		return numTestersRange;
 	}
 });
 
@@ -66,7 +74,7 @@ Template.testerUsers.helpers({
 		
 		if (browsersObj) {
 			browsersObj = browsersObj.assignments[0];
-			var testers = [];
+			var testers = [''];
 			_.each(browsersObj, function(browser, username) {
 				testers.push(username);
 			})

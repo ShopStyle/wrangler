@@ -1,12 +1,3 @@
-Template.ticketPage.events({
-	// 'dblclick .main.ticket': function(e) {
-	// 	e.preventDefault();
-	// 	if (Meteor.user()) {
-	// 		setEditingStatus(this, false, true);
-	// 	}
-	// }
-});
-
 Template.ticketPage.helpers({
 	assignedTo: function() {
 		if (AssemblaUsers.findOne({ id: this.assignedToId })) {
@@ -24,17 +15,5 @@ Template.ticketPage.helpers({
 			}
 		}
 		return 'No Testers Assigned';
-	}// ,
-// 	stepsInvisible: function() {
-// 		var ticket = this;
-// 		if (getEditingStatus(ticket, false)) {
-// 			return 'invisible';
-// 		}
-// 	},
-// 	editStepsInvisible: function() {
-// 		var ticket = this;
-// 		if (!getEditingStatus(ticket, false)) {
-// 			return 'invisible';
-// 		}
-// 	}
+	}
 });
