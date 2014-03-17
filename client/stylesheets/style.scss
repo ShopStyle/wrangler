@@ -547,7 +547,7 @@ li.relative-container {
 		margin-left: 10px;
 	}
 	
-	.milestones, .stream, .assign {
+	.milestones, .stream, .assign, .ticket-updates {
 		margin: 15px 0;
 		height: 60px;
 		background-color: rgba(238, 238, 238, 0.7);
@@ -608,7 +608,7 @@ li.relative-container {
 		height: 50px;
 	}
 	
-	.assign-tickets {
+	.assign-tickets, .select-update {
 		margin-left: 5px;
 	}
 }

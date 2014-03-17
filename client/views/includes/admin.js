@@ -74,6 +74,13 @@ Template.admin.events({
 				}
 			})	
 		}
+	},
+	'click .select-update': function(e) {
+		Meteor.call('updateTickets');
+		$('.update-alert').css("opacity", "0.8");
+		Meteor.setTimeout(function() {
+			$('.update-alert').fadeTo(500, 0)
+		}, 4000);
 	}
 });
 

@@ -1,31 +1,39 @@
 <template name="admin">
 	<div class="admin">
-		<div class="stream">
-			<span>Toggle stream from Assembla.</span>
-			{{#if streamOn}}
-				<div class="red btn-new-testscript streamer">Stop Streaming</div>
-			{{else}}
-				<div class="btn-new-testscript streamer">Start Streaming</div>
-			{{/if}}
-		</div>
-		<div class="milestones">
-			{{> milestones}}
-		</div>
-		<div class="users">
-			{{#each users}}
-				{{> user}}
-			{{/each}}
-			<div class="user-tests">
-				<div class="btn-new-testscript assign-browsers">Assign Browsers</div>
-				<div class="btn-new-testscript randomize">Randomize</div>
-				<div class="alert browser-alert">Assigned</div>
+		{{#if userAdmin}}
+			<div class="stream">
+				<span>Toggle stream from Assembla.</span>
+				{{#if streamOn}}
+					<div class="red btn-new-testscript streamer">Stop Streaming</div>
+				{{else}}
+					<div class="btn-new-testscript streamer">Start Streaming</div>
+				{{/if}}
 			</div>
-		</div>
-		<div class="assign">
-			<span>Assign users to tickets</span>
-			<div class="btn-new-testscript assign-tickets">Assign Tickets</div>
-			<div class="alert ticket-alert">Assigned</div>
-		</div>
+			<div class="milestones">
+				{{> milestones}}
+			</div>
+			<div class="users">
+				{{#each users}}
+					{{> user}}
+				{{/each}}
+				<div class="user-tests">
+					<div class="btn-new-testscript assign-browsers">Assign Browsers</div>
+					<div class="btn-new-testscript randomize">Randomize</div>
+					<div class="alert browser-alert">Assigned</div>
+				</div>
+			</div>
+			<div class="assign">
+				<span>Assign users to tickets</span>
+				<div class="btn-new-testscript assign-tickets">Assign Tickets</div>
+				<div class="alert ticket-alert">Assigned</div>
+			</div>
+		{{else}}
+			<div class="ticket-updates">
+				<span>Updates all the tickets from assembla</span>
+				<div class="select-update btn-new-testscript">Update Tickets</div>
+				<div class="alert update-alert">Tickets updating...</div>
+			</div>
+		{{/if}}
 	</div>
 </template>
 

@@ -73,5 +73,10 @@ Meteor.methods({
 				{$set: {testers: testers}}
 			)
 		});
+	},
+	updateTickets: function() {
+		if (Meteor.isServer) {
+			Assembla.populateTicketCollection();
+		}
 	}
 })

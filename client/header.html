@@ -33,12 +33,9 @@
 			<li>
 				<a class="{{activeRouteClass 'yours'}}" href="{{pathFor 'yours'}}">Own</a>
 			</li>
-			{{#if userAdmin}}
-			<!-- this is not 'secure', since the method doesn't check to see if it is an admin -->
-				<li>
-					<a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">Admin</a>
-				</li>
-			{{/if}}
+			<li>
+				<a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">Admin</a>
+			</li>
 		{{/if}}
 		{{loginButtons align="right"}}
 	</ul>
