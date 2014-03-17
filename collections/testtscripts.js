@@ -12,7 +12,7 @@ Meteor.methods({
 		var passers = [];
 		var failers = [];
 		var testscripts = Testscripts.find({ ticketAssemblaId: ticket.assemblaId });
-		var numTestersReq = ticket.testersReq || 3;
+		var numTestersReq = ticket.numTesters || 3;
 		var numTestScripts = testscripts.count();
 		
 		testscripts.forEach(function(testscript) {
@@ -83,7 +83,6 @@ Meteor.methods({
 			if (Meteor.isServer) {
 				Assembla.verifyTicketOnDev(ticket.assemblaId);
 			}
-			return;
 		}
 
 		Tickets.update(ticket._id, {

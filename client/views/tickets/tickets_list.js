@@ -33,7 +33,6 @@ Template.ticketsList.helpers({
 	userUntestedTickets: function() {
 		var username = Meteor.user().username;
 		var untestedTickets = Tickets.find({
-			status: {$nin: ['pass']},
 			testers: {$in: [username]},
 			allStepsCompleted: {$nin: [username]} 
 		});

@@ -40,6 +40,15 @@ Meteor.methods({
 		}
 
 		tickets.forEach(function(ticket) {
+			var numTesters = ticket.numTesters || 3;
+			if (numTesters > users.length - 1) {
+				var requiredNumTesters = parseInt(numTesters) + 1; 
+				var errorMessage = "Please assign more people to test. Ticket "
+					 + ticket.assemblaId + " requires " + requiredNumTesters
+					 + " testers to ensure it will not be assigned to the person that fixed it.";
+				throw new Meteor.Error(401, errorMessage);
+				return;
+			}
 			var testers = [];
 			var assemblaUserId = ticket.assignedToId;
 			var assignedToLogin = AssemblaUsers.findOne({id: assemblaUserId});
@@ -47,7 +56,7 @@ Meteor.methods({
 				return;
 			}
 			assignedToLogin = assignedToLogin.login;
-			while (testers.length < 3) {
+			while (testers.length < numTesters) {
 				if (samplers.length === 0 || samplers.length === 1 && samplers[0] === assignedToLogin) {
 					samplers = _.shuffle(users);
 				}

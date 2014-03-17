@@ -1,18 +1,29 @@
 Template.testscript.events({
-	'click .btn-test': function(e) {
+	'click .btn-test': function(e, template) {
 		e.preventDefault();
 		var pass = $(e.currentTarget).filter(".pass").length > 0;
 		var fail = $(e.currentTarget).filter(".fail").length > 0;
 		if (fail === true) {
-			if (Meteor.user()) {
-				$(e.currentTarget).parents('.btn-holder').hide();
-				$(e.currentTarget).parents('.btn-holder').siblings('.failure-reason').show();	
+			var username = Meteor.user() ? Meteor.user().username : null;
+			if (username) {
+				var failers = template.data.failers;
+				var alreadyFailed = false;
+				_.each(failers, function(failerObj) {
+					if (failerObj.username === username) {
+						alreadyFailed = true;
+					}
+				});
+				if (!alreadyFailed) {
+					$(e.currentTarget).parents('.btn-holder').hide();
+					$(e.currentTarget).parents('.btn-holder').siblings('.failure-reason').show();		
+				}
 			} 
 			else {
 				throwError("You need to login to post test results");
 			}
 			return;
 		}
+		
 		if (pass === false && fail === false) {
 			pass = '';
 		}

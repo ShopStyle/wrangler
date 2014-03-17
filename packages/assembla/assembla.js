@@ -175,7 +175,6 @@ Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ti
 	Testscripts.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
 	Testscripts.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });	
 	Testscripts.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });	
-	Testscripts.update({ allStepsCompleted: { $exists: false }}, { $set: { allStepsCompleted: [] }}, { multi: true });
 }	
 	
 Assembla._extractCommentFromInnerDescription = function(innerDescription) {
@@ -250,18 +249,13 @@ Assembla.populateTicketCollection = function() {
 		_.each(ticketResponse, function(ticket) {
 			Assembla.updateSingleTicket(ticket);
 		});
-		Tickets.update({ 
-			passers: { $exists: false }, 
-			failers: { $exists: false }, 
-			status: { $exists: false }
-		}, {
-			$set: 
-			{
-				passers: [],
-				failers: [],
-				status: ''
-			}
-		}, { multi: true });
+		
+		//this is only to make sure tickets have these fields. it might be better to set them when setting
+		//properties on the ticket in updateSingleTicket? 
+		Tickets.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
+		Tickets.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });	
+		Tickets.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });	
+		Tickets.update({ allStepsCompleted: { $exists: false }}, { $set: { allStepsCompleted: [] }}, { multi: true });
 	}
 	else {
 		throw new Meteor.Error(500, 'Assembla call failed');

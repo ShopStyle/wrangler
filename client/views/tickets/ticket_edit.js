@@ -1,12 +1,9 @@
 Template.ticketEdit.events({
 	'change select': function(e, template) {
-		var currentTicketId = template.data._id;
-		var testers = []
-		
 		var numTesters = $('.num-testers').find('select').val();
-		
+		var currentTicketId = template.data._id;
 		var testerValues = $('.tester-select').find('select');
-		
+		var testers = []
 		for (var i = 1; i <= numTesters; i++) {
 			var option = testerValues[i - 1];
 			if (option && option.value.length > 0) {
