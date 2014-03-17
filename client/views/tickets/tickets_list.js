@@ -19,8 +19,8 @@ Template.ticketsList.helpers({
 			return browser + ' - US, ' + locale; 
 		}
 	},
-	noTickets: function(tickets) {
-		return tickets.count() === 0;
+	noTickets: function(options) {
+		return Tickets.find(options).count() === 0;
 	},
 	userTestedTickets: function() {
 		var username = Meteor.user().username;
