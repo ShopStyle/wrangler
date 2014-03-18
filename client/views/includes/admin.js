@@ -96,10 +96,24 @@ Template.browserLocaleOptions.helpers({
 		var current;
 		var choice = locale === true ? 1 : 0;
 		var currentMilestone = Milestones.findOne({current: true});
-		current = BrowserAssignments.findOne({milestoneId: currentMilestone.id})
+		var current = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
 		if (current) {
 			current = current.assignments[choice];
 			return current[username] === browser;	
+		}
+	}
+});
+
+Template.user.helpers({
+	userAssignedToTest:	function(username) {
+		var currentMilestone = Milestones.findOne({current: true});
+		var current = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
+		if (current) {
+			current = current.assignments[0];
+			return current[username] != undefined;
+		}
+		else {
+			return true;
 		}
 	}
 });

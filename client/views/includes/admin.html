@@ -40,7 +40,11 @@
 <template name="user">
 	<div class="user">
 		<span>{{username}}</span>
-		<input name="{{username}}" value="username" type="checkbox" checked="checked">
+		{{#if userAssignedToTest username}}
+			<input name="{{username}}" value="username" type="checkbox" checked="checked">
+		{{else}}
+			<input name="{{username}}" value="username" type="checkbox">
+		{{/if}}
 		{{>browserLocaleOptions username}}
 	</div>
 </template>

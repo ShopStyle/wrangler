@@ -1,8 +1,15 @@
 //this is used to turn off and on the stream from assembla
 intervalHandle = null;
 
-Meteor.publish('tickets', function(currentMilestoneId) {
-	return Tickets.find({ milestoneId: currentMilestoneId, statusName: {$in: ["Done", "Verified on Dev"]} });	
+Meteor.publish('tickets', function() {
+	var currentMilestone = Milestones.findOne({current: true});
+	if (currentMilestone) {
+		currentMilestone = currentMilestone.id;
+	}
+	else {
+		currentMilestone = 5194263;
+	}
+	return Tickets.find({ milestoneId: currentMilestone, statusName: {$in: ["Done", "Verified on Dev"]} });	
 });
 
 Meteor.publish('users', function() {
@@ -30,7 +37,7 @@ Meteor.publish('userData', function() {
 	return Meteor.users.find({}, {fields: {username: 1}});
 })
 
-Meteor.publish('browserAssignments', function(currentMilestoneId) {
-	return BrowserAssignments.find() ;
+Meteor.publish('browserAssignments', function() {
+	return BrowserAssignments.find();
 })
 
