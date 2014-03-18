@@ -256,6 +256,7 @@ Assembla.populateTicketCollection = function() {
 		Tickets.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });	
 		Tickets.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });	
 		Tickets.update({ allStepsCompleted: { $exists: false }}, { $set: { allStepsCompleted: [] }}, { multi: true });
+		Tickets.update({ noTesting: true }, { $set: { testers: [] }}, { multi: true });
 	}
 	else {
 		throw new Meteor.Error(500, 'Assembla call failed');
