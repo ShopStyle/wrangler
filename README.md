@@ -1,4 +1,1 @@
-testy
-=====
-
-Learning meteor by doing. This is an app that syncs up with Assembla in order to simplify any group manual testing that should be done for tickets. 
+Learning meteor by doing. This is an app that syncs up with Assembla in order to simplify any group manual testing that should be done for tickets. It started as a little side project, so you will see things being done differently throughout the app, and there are many areas asking to be refactored/made more efficient. Please feel free to make a pull request!
