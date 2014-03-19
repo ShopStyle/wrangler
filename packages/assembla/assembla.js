@@ -7,8 +7,6 @@ Assembla = {
 	testscriptsAndcommentRegex: /TESTING([\s\S]*)END/,
 	commentRegex: /COMMENTS([\s\S]*?)(?=TESTSCRIPT)/,
 	testscriptsRegex: /TESTSCRIPT([\s\S]*)/,
-	// singleTestscriptRegex: /\*\*(\d+)\n*([\s\S]*)/i,
-	// correctFormatRegex: /\*\*TESTING\n*\*\*COMMENTS\n*([\s\S]*)\*\*END/i,
 	streamUrl: 'https://api.assembla.com/v1/activity.json',
 	_headers: {
 		'X-Api-Key': Meteor.settings.API_KEY,
@@ -53,82 +51,6 @@ Assembla.updateMilestoneCollection = function() {
 		 "Reports ", "Ongoing Tasks", "Monday Meeting Discussion", "Android Fixes for Mobile Web", "Testing"] 
 	}});
 }
-
-// Assembla.addTestscriptTicketDescription = function(testscript, ticket) {
-// 	var newDescription;
-// 	var currentDescription = ticket.description;
-// 	var innerDescription = currentDescription.match(Assembla.testscriptsAndcommentRegex);
-// 	
-// 	if (innerDescription) {
-// 		innerDescription = innerDescription[1];
-// 		var noTestDescription = currentDescription.replace(Assembla.testscriptsAndcommentRegex, '');
-// 		innerDescription += '**' + testscript.testscriptNum + '\n' + testscript.steps;
-// 		newDescription = noTestDescription + '**TESTING\n' + innerDescription + '\n**ENDSCRIPT\n**END';
-// 	}
-// 	else {
-// 		var testing = '\n\n**TESTING\n**COMMENTS\n**TESTSCRIPTS\n**';
-// 		testing += testscript.testscriptNum + '\n' + testscript.steps;
-// 		testing += '\n**ENDSCRIPT\n**END';
-// 		newDescription = currentDescription + testing;
-// 	}
-// 	
-// 	Tickets.update({assemblaId: ticket.assemblaId}, {$set: {description: newDescription}});
-// 	return newDescription;
-// }
-
-// Assembla.editTestscriptTicketDescription = function(id, remove) {
-// 	var testscript = Testscripts.findOne(id);
-// 	var ticket = Tickets.findOne({assemblaId: testscript.ticketAssemblaId});
-// 	var oldTestDesc = ticket.description.match(Assembla.testscriptsAndcommentRegex);
-// 
-// 	if (remove && oldTestDesc) {
-// 		Assembla._updateAssemblaTicketDescription(testscript, ticket, oldTestDesc, '');
-// 	}
-// 	else if (oldTestDesc) {
-// 		Assembla._updateAssemblaTicketDescription(testscript, ticket, oldTestDesc);
-// 	}
-// }
-
-// Assembla.updateTicketCommentDescription = function(oldComments, newComments, assemblaId) {
-// 	var newDescription;
-// 	var ticket = Tickets.findOne({assemblaId: assemblaId});
-// 	var oldDesc = ticket.description;
-// 	var ticketHasTestingNotes = oldDesc.match(Assembla.correctFormatRegex);
-// 	
-// 	if (oldComments) {
-// 		newDescription = oldDesc.replace(oldComments, newComments);
-// 		Assembla._setNewDescription(newDescription, ticket.assemblaId);
-// 	}
-// 	// else if (!ticketHasTestingNotes) {
-// // 		newDescription = oldDesc + '\n\n**TESTING\n**COMMENTS\n' + newComments + '**TESTSCRIPTS\n**END';
-// // 	}
-// }
-
-// Assembla._setNewDescription = function(newDescription, assemblaId) {
-// 	Tickets.update({ assemblaId: assemblaId}, {$set: {description: newDescription}});
-// 	var url = Assembla.ticketUrl + assemblaId + '.json';
-// 	Assembla.makePutRequest(url, {"ticket": {"description": newDescription}});
-// }
-// 
-// Assembla._updateAssemblaTicketDescription = function(testscript, ticket, oldTestDesc, newSteps) {
-// 	var testscriptRegex = new RegExp("(\\*\\*" 
-// 		+ testscript.testscriptNum + "[\\s\\S]*?\\*\\*ENDSCRIPT\\n*)", "i");
-// 	var oldSteps = oldTestDesc[1].match(testscriptRegex);
-// 	
-// 	if (newSteps === undefined) {
-// 		var newSteps = "\*\*" + testscript.testscriptNum 
-// 			+ "\n" + testscript.steps + "\n\*\*ENDSCRIPT\n";
-// 	}
-// 	var newTestDesc = oldTestDesc[1].replace(oldSteps[1], newSteps);
-// 	
-// 	var newDescription = ticket.description.replace(oldTestDesc[1], newTestDesc);
-// 	Assembla._setNewDescription(newDescription, ticket.assemblaId);
-// }
-// 
-// Assembla.createTestscript = function(testscript, ticket) {
-// 	var description = Assembla.addTestscriptTicketDescription(testscript, ticket);
-// 	Assembla._setNewDescription(description, ticket.assemblaId);
-// }
 
 Assembla.extractTicketInfoFromDescription = function(description, ticketNumber) {
 	if (description) {
