@@ -112,6 +112,9 @@ Assembla._extractCommentFromInnerDescription = function(innerDescription) {
 }
 
 Assembla.updateSingleTicket = function(ticket) {
+	if (ticket == null) {
+		return;
+	}
 	var assemblaUrl = Assembla.assemblaUrl + ticket.number;
 	var extractedComments = Assembla.extractTicketInfoFromDescription(ticket.description, ticket.number);
 	var statusName = ticket.status;
@@ -161,7 +164,7 @@ Assembla.populateTicketCollection = function() {
 	var ticketResponseAll = Assembla.makeGetRequest(url, {per_page: 100, ticket_status: "all"});
 	var ticketResponseClosed = Assembla.makeGetRequest(url, {per_page: 100, ticket_status: "closed"});
 	//need a way to deal with over 100 tickets. maybe have a counter, and then just ping again looking for page 2
-	if (ticketResponseAll.statusCode == 200 && ticketResponseClosed.statusCode == 200) {
+	if ((ticketResponseAll.statusCode).toString()[0] == 2 && (ticketResponseClosed.statusCode).toString()[0] == 2) {
 		var ticketResponse = ticketResponseAll.data.concat(ticketResponseClosed.data);
 		
 		//hack way to deal with a ticket changing milestones and not changing in the app
