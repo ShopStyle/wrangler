@@ -12,20 +12,20 @@ Meteor.methods({
 		var passers = [];
 		var failers = [];
 		var testscripts = Testscripts.find({ ticketAssemblaId: ticket.assemblaId });
-		var numTestersReq = ticket.numTesters || 3;
+		var numTestersReq = ticket.numTesters || 2;
 		var numTestScripts = testscripts.count();
-		
+
 		testscripts.forEach(function(testscript) {
 			_.each(testscript.failers, function(failerObj) {
 				failers.push(failerObj.username);
 			});
 			passers = passers.concat(testscript.passers);
 		});
-		
+
 		var numPassers = 0;
 		var passersCounts = {};
 		var allTestscriptPassers = [];
-		
+
 		passers.forEach(function(elem) {
 			if (passersCounts[elem] == null) {
 				passersCounts[elem] = 1;
@@ -41,7 +41,7 @@ Meteor.methods({
 				allTestscriptPassers.push(key);
 			}
 		}
-		
+
 		//this is pretty much the same logic as above, but decides who has completed all the testscripts for a ticket
 		var completedCounts = {};
 		var allStepsCompleted = [];
@@ -65,7 +65,7 @@ Meteor.methods({
 		}
 
 		failers = _.uniq(failers);
-		
+
 		if (failers[0] != undefined && failers.length > 0) {
 			status = 'fail';
 		}
@@ -79,7 +79,7 @@ Meteor.methods({
 					passers: allTestscriptPassers
 				}
 			});
-			
+
 			if (Meteor.isServer) {
 				Assembla.verifyTicketOnDev(ticket.assemblaId);
 			}
@@ -104,9 +104,9 @@ Meteor.methods({
 		var ticket = Tickets.findOne({ assemblaId: testscript.ticketAssemblaId });
 		if (passTest === '') {
 			Testscripts.update(testscript._id, {
-				$pull: { 
+				$pull: {
 					failers: { username: user.username },
-					passers: user.username 
+					passers: user.username
 				}
 			});
 		}
@@ -120,7 +120,7 @@ Meteor.methods({
 			createFailNotification(ticket._id, user.username);
 			Testscripts.update(testscript._id, {
 				$pull: { passers: user.username },
-				$addToSet: { 
+				$addToSet: {
 					failers:  {
 						username: user.username,
 						failReason: failReason

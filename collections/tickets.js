@@ -12,37 +12,40 @@ Tickets.allow({
 
 Meteor.methods({
 	assignTickets: function() {
+		var defaultNumTesters = 2;
 		var currentMilestone = Milestones.findOne({current: true});
 		if (!currentMilestone) {
 			return;
 		}
-		
+
 		var currentBrowser = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
 		if (!currentBrowser) {
 			throw new Meteor.Error(401, "Please assign browsers to assign tickets");
 		}
-		
-		Tickets.update({milestoneId: currentMilestone.id, statusName: "Done", noTesting: true}, 
+
+		Tickets.update({milestoneId: currentMilestone.id, statusName: "Done", noTesting: true},
 			{$set: {testers: []}},
 			{multi: true});
-			
+
 		var tickets = Tickets.find({milestoneId: currentMilestone.id, statusName: "Done", noTesting: false});
 		var assignments = currentBrowser.assignments[0];
 		var users = [];
-		
+
 		_.each(assignments, function(browser, user) {
 			users.push(user);
 		})
 		var samplers = _.shuffle(users);
 
-		if (samplers.length < 4) {
-			throw new Meteor.Error(401, "Please assign at least four people to test");
+		if (samplers.length < defaultNumTesters + 1) {
+			var numToAssign = defaultNumTesters + 1;
+			var error = "Please assign at least " + numToAssign + " people to test"
+			throw new Meteor.Error(401, error);
 		}
 
 		tickets.forEach(function(ticket) {
-			var numTesters = ticket.numTesters || 3;
+			var numTesters = ticket.numTesters || defaultNumTesters;
 			if (numTesters > users.length - 1) {
-				var requiredNumTesters = parseInt(numTesters) + 1; 
+				var requiredNumTesters = parseInt(numTesters) + 1;
 				var errorMessage = "Please assign more people to test. Ticket "
 					 + ticket.assemblaId + " requires " + requiredNumTesters
 					 + " testers to ensure it will not be assigned to the person that fixed it.";
@@ -63,8 +66,8 @@ Meteor.methods({
 				var tester = _.sample(samplers);
 				if (_.indexOf(testers, tester) === -1 && tester !== assignedToLogin) {
 					testers.push(tester);
-					samplers = _.reject(samplers, function(sample) { 
-						return sample == tester; 
+					samplers = _.reject(samplers, function(sample) {
+						return sample == tester;
 					});
 				}
 			}
