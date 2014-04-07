@@ -38,7 +38,7 @@ Meteor.methods({
 
 		if (samplers.length < defaultNumTesters + 1) {
 			var numToAssign = defaultNumTesters + 1;
-			var error = "Please assign at least " + numToAssign + " people to test"
+			var error = "Please assign at least " + numToAssign + " people to test";
 			throw new Meteor.Error(401, error);
 		}
 
