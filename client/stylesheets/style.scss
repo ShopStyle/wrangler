@@ -87,31 +87,32 @@ body {
 	border-color: $grey;
 	min-height: 130px;
 	background-color: white;
-	
-	
+
+
 	.text {
 		display: inline-block;
 		margin: 7px;
 		max-width: 800px;
-		
+		line-height: 18px;
+
 		h1 {
 			font-size: 1.6em;
 		}
-		
+
 		h3 {
 			font-size: 1.2em;
 			margin-bottom: 5px;
 		}
-		
+
 		li {
 			margin: 10px 0;
 		}
 	}
-	
+
 	.btn-holder {
 		float: right;
 	}
-	
+
 	.btn-edit {
 		z-index: 1;
 		position: absolute;
@@ -122,11 +123,11 @@ body {
 		text-decoration: none;
 		color: $dark-grey;
 	}
-	
+
 	.btn-edit:hover {
 		text-decoration: underline;
 	}
-	
+
 	.btn-testscript {
 		position: absolute;
 		bottom: 7px;
@@ -138,7 +139,7 @@ body {
 		border-radius: 5px;
 		color: white;
 	}
-	
+
 	input {
 		min-width: 400px;
 		margin: 7px;
@@ -147,14 +148,14 @@ body {
 		border-radius: 5px;
 		box-sizing: border-box;
 	}
-	
+
 	form {
 		margin: 10px;
-		
+
 		input {
 			display: block;
 		}
-	
+
 		.btn-edit.submit, .btn-edit.cancel {
 			position: static;
 			display: inline-block;
@@ -165,17 +166,17 @@ body {
 			border-radius: 5px;
 			min-width: 0;
 		}
-		
+
 		.btn-edit.submit:hover, .btn-edit.cancel:hover {
 			text-decoration: none;
 		}
-		
+
 		.btn-edit.cancel {
 			background-color: $grey;
 			color: $dark-grey;
 			padding: 7px;
 		}
-		
+
 		div {
 			margin: 8px;
 		}
@@ -184,19 +185,19 @@ body {
 	textarea {
 		margin: 7px;
 		display: block;
-		border: 2px solid $grey; 
+		border: 2px solid $grey;
 		border-radius: 5px;
 		min-width: 400px;
 		min-height: 75px;
 		box-sizing: border-box;
-		
+
 		&.invisible {
 			display: none;
 		}
 	}
-	
+
 	.alert.browser-alert {
-		
+
 	}
 }
 
@@ -210,7 +211,7 @@ body {
 	border-radius: 5px;
 }
 
-.btn-test {
+.btn-test, .failure-reason-cancel {
 	display: inline-block;
 	background-color: $dark-grey;
 	color: white;
@@ -218,17 +219,22 @@ body {
 	padding: 7px;
 	border-radius: 5px;
 	cursor: pointer;
-	
+
 	&.default {
 		cursor: default;
 	}
-	
+
 	&.pass {
 		background-color: $green;
 	}
-	
+
 	&.fail {
 		background-color: $red;
+	}
+
+	&.cancel {
+		background-color: $grey;
+		color: $dark-grey;
 	}
 }
 
@@ -237,14 +243,14 @@ body {
 		position: relative;
 		top: 4px;
 	}
-	
+
 	a {
 		text-decoration: none;
 		padding: 0;
 		text-decoration: none;
 		border: none;
 	}
-	
+
 	#login-dropdown-list {
 		color:  black;
 		background-color: white;
@@ -286,7 +292,7 @@ body {
 	top: 45px;
 	z-index: 2;
 	max-width: 1200px;
-	
+
 	.alert-error {
 		display: inline-block;
 		background-color: $red;
@@ -296,16 +302,16 @@ body {
 		cursor: default;
 		opacity: 0.9;
 		z-index: 1;
-	
+
 		.close {
 			cursor: pointer;
 			font-weight: bold;
 		}
-	}	
+	}
 }
 
-#spinner { 
-	height: 300px 
+#spinner {
+	height: 300px
 }
 
 .corgi-success {
@@ -335,7 +341,7 @@ body {
 		min-height: 100px;
 		border-color: $grey;
 	}
-	
+
 	.cancel {
 		background-color: $grey;
 		padding: 4px;
@@ -352,7 +358,7 @@ body {
 	position: absolute;
 	top: 10px;
 	right: 10px;
-	
+
 	&:hover {
 		text-decoration: none;
 	}
@@ -360,6 +366,7 @@ body {
 
 .testscript-steps {
 	max-width: 600px;
+	word-wrap: break-word;
 }
 
 .invisible {
@@ -377,23 +384,23 @@ body {
 	margin-left: 0;
 	cursor: pointer;
 	padding: 5px;
-	
+
 	&.delete.edit {
 		background-color: red;
 		margin-left: 130px;
 	}
-	
+
 	&.cancel.edit {
 		background-color: $grey;
 		color: $dark-grey;
 	}
-	
+
 	&.edit {
 		padding: 0 5px;
 		margin-top: 20px;
 		margin-left: 5px;
 	}
-	
+
 	&:hover {
 		text-decoration: none;
 	}
@@ -423,15 +430,15 @@ footer span {
 	width: 15px;
 	text-align: center;
 	font-weight: bold;
-	
+
 	.green {
 		color: $green;
 	}
-	
+
 	.red {
 		color: $red;
 	}
-	
+
 	&.notification {
 		color: $blue;
 		width: 22px;
@@ -447,7 +454,7 @@ footer span {
 	color: $dark-grey;
 	cursor: pointer;
 	float: right;
-	
+
 	.results-inner {
 		z-index: 1;
 		display: none;
@@ -457,18 +464,18 @@ footer span {
 		background-color: white;
 		max-height: 300px;
 		overflow-y: auto;
-		
+
 		div {
 			opacity: 0.8;
 			padding: 10px;
 		}
-		
+
 		.green {
 			background-color: $green;
 			border-radius: 5px 5px 0 0;
 			border-bottom: 1px solid white;
 		}
-		
+
 		.red {
 			background-color: $red;
 			border-radius: 0 0px 5px 5px;
@@ -488,7 +495,7 @@ footer span {
 	font-size: 0.9em;
 	border: 2px solid $grey;
 	width: 350px;
-	
+
 	a {
 		padding: 0;
 		text-decoration: none;
@@ -496,13 +503,13 @@ footer span {
 		border: none;
 		margin: 5px 0;
 		border-radius: 0;
-		
+
 		&:hover {
 			color: white;
 			background-color: $red;
 		}
 	}
-	
+
 	li {
 		display: block;
 		margin: 7px 0;
@@ -532,37 +539,45 @@ li.relative-container {
 .admin {
 	margin: 10px auto;
 	width: 800px;
-	
+
 	h1 {
 		margin: 10px 0;
 		font-size: 1.1em;
 	}
-	
+
 	.title {
 		max-width: 500px;
 		vertical-align: middle;
 	}
-	
+
 	.select-milestone {
 		margin-left: 10px;
 	}
-	
+
 	.milestones, .stream, .assign, .ticket-updates {
 		margin: 15px 0;
 		height: 60px;
 		background-color: rgba(238, 238, 238, 0.7);
-		
+
 		span, select {
 			margin-left: 10px;
 			position: relative;
 			top: 22px;
 		}
-		
+
 		select {
 			top: 20px;
 		}
 	}
-	
+
+	.users {
+		line-height: 18px;
+	}
+
+	#milestone-choice {
+		min-width: 200px;
+	}
+
 	.btn-new-testscript, .alert {
 		float: right;
 		position: relative;
@@ -572,7 +587,7 @@ li.relative-container {
 		width: 130px;
 		text-align: center;
 	}
-	
+
 	.alert {
 		background-color: $blue;
 		color: white;
@@ -580,21 +595,22 @@ li.relative-container {
 		border-radius: 5px;
 		width: auto;
 	}
-	
+
 	.red.btn-new-testscript {
 		background-color: $red;
 	}
-	
+
 	.user {
 		margin: 5px 0;
 		border-bottom: 1px solid $grey;
-		height: 30px;
-		
+		padding-bottom: 5px;
+		min-height: 30px;
+
 		select, input {
 			float: right;
 		}
 	}
-	
+
 	.randomize {
 		margin: 0 5px;
 		background-color: white;
@@ -603,11 +619,11 @@ li.relative-container {
 		padding: 8px;
 		width: 130px;
 	}
-	
+
 	.user-tests {
 		height: 50px;
 	}
-	
+
 	.assign-tickets, .select-update {
 		margin-left: 5px;
 	}
@@ -638,7 +654,7 @@ li.relative-container {
 .to-do {
 	min-height: 300px;
 	margin: 0 auto;
-	
+
 	img {
 		margin: auto;
 		display: block;

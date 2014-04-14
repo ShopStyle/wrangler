@@ -32,7 +32,7 @@ Assembla.updateMilestoneCollection = function() {
 	if (!Meteor.settings.API_KEY || !Meteor.settings.API_SECRET) {
 		throw new Meteor.Error(500, 'Please provide secret/key in Meteor.settings');
 	}
-	
+
 	var milestoneResponse = Assembla.makeGetRequest(Assembla.milestonesUrl, {per_page: 50});
 	if (milestoneResponse.statusCode == 200) {
 		_.each(milestoneResponse.data, function(milestone) {
@@ -40,15 +40,15 @@ Assembla.updateMilestoneCollection = function() {
 				$set: {
 					id: milestone.id,
 					title: milestone.title
-				}}, {upsert: true});	
+				}}, {upsert: true});
 		})
 	}
 	else {
 		throw new Meteor.Error(500, 'Assembla call failed');
 	}
-	Milestones.remove({ title: { $in: 
+	Milestones.remove({ title: { $in:
 		["Bug Backlog", "Enhancement Backlog", "Bug Hit List", "Pending Prioritization",
-		 "Reports ", "Ongoing Tasks", "Monday Meeting Discussion", "Android Fixes for Mobile Web", "Testing"] 
+		 "Reports ", "Ongoing Tasks", "Monday Meeting Discussion", "Android Fixes for Mobile Web", "Testing"]
 	}});
 }
 
@@ -78,12 +78,12 @@ Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ti
 		}
 		currentTestscripts.push(testscriptNum);
 		var testscriptSteps = testscript.replace(/^\s+|\s+$/g, '');
-		Testscripts.update({ ticketAssemblaId: ticketNumber, testscriptNum: testscriptNum }, 
-			{ $set: 
-				{ 
+		Testscripts.update({ ticketAssemblaId: ticketNumber, testscriptNum: testscriptNum },
+			{ $set:
+				{
 					steps: testscriptSteps,
 					ticketAssemblaId: ticketNumber,
-					testscriptNum: testscriptNum 
+					testscriptNum: testscriptNum
 				}
 			},
 			{ upsert: true }
@@ -92,13 +92,13 @@ Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ti
 	});
 
 	Testscripts.remove({ticketAssmblaId: ticketNumber, testscriptNum: {$nin: currentTestscripts}});
-	
+
 	//better way for this??
 	Testscripts.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
-	Testscripts.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });	
-	Testscripts.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });	
-}	
-	
+	Testscripts.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });
+	Testscripts.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });
+}
+
 Assembla._extractCommentFromInnerDescription = function(innerDescription) {
 	var comment = innerDescription.match(Assembla.commentRegex);
 
@@ -125,17 +125,17 @@ Assembla.updateSingleTicket = function(ticket) {
 	if (!description) {
 		description = '';
 	}
-	
+
 	var noTesting = false;
 	if (ticket.custom_fields["No Testing Required"]) {
 		if (ticket.custom_fields["No Testing Required"] === "yes") {
 			noTesting = true;
 		}
 	}
-	
-	Tickets.update({assemblaId: ticket.number}, 
+
+	Tickets.update({assemblaId: ticket.number},
 		{
-			$set: 
+			$set:
 			{
 				assignedToId: ticket.assigned_to_id,
 				assemblaId: ticket.number,
@@ -166,20 +166,20 @@ Assembla.populateTicketCollection = function() {
 	//need a way to deal with over 100 tickets. maybe have a counter, and then just ping again looking for page 2
 	if ((ticketResponseAll.statusCode).toString()[0] == 2 && (ticketResponseClosed.statusCode).toString()[0] == 2) {
 		var ticketResponse = ticketResponseAll.data.concat(ticketResponseClosed.data);
-		
+
 		//hack way to deal with a ticket changing milestones and not changing in the app
 		Tickets.update({milestoneId: currentMilestoneId}, {$set: {milestoneId: 0}}, {multi: true});
-		
+
 		//I really don't like how I am querying the database and setting things in a loop...
 		_.each(ticketResponse, function(ticket) {
 			Assembla.updateSingleTicket(ticket);
 		});
-		
+
 		//this is only to make sure tickets have these fields. it might be better to set them when setting
-		//properties on the ticket in updateSingleTicket? 
+		//properties on the ticket in updateSingleTicket?
 		Tickets.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
-		Tickets.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });	
-		Tickets.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });	
+		Tickets.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });
+		Tickets.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });
 		Tickets.update({ allStepsCompleted: { $exists: false }}, { $set: { allStepsCompleted: [] }}, { multi: true });
 		Tickets.update({ noTesting: true }, { $set: { testers: [] }}, { multi: true });
 	}
@@ -229,10 +229,13 @@ Assembla.watchTicketStream = function() {
 }
 
 Assembla.verifyTicketOnDev = function(assemblaId) {
+	if (assemblaId == 4929 || assemblaId == 5026 || assemblaId == 5154) {
+		return;
+	}
 	var url = Assembla.ticketUrl + assemblaId + '.json';
 	Assembla.makePutRequest(url, {"ticket": {"status": "Verified on Dev"}});
 }
- 
+
 if (Meteor.isServer) {
 	Meteor.startup(function() {
 		Assembla.populateAssemblaUsers();

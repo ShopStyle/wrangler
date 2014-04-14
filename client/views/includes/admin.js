@@ -1,4 +1,4 @@
-browserOptions = ["IE8", "IE9", "IE10", "IE11", "Chrome", 
+browserOptions = ["IE8", "IE9", "IE10", "IE11", "Chrome",
 	"Firefox", "iPad", "iPhone", "Android", "Safari", "Windows - Firefox", "Windows - Chrome"];
 localeOptions = ["UK", "AU", "JP", "DE", "FR", "CA"];
 
@@ -24,7 +24,7 @@ Template.admin.events({
 	'click .randomize': function() {
 		var browsers = _.shuffle(browserOptions);
 		var locales = _.shuffle(localeOptions);
-		
+
 		_.each($('.user'), function(user) {
 			if (locales.length === 0) {
 				locales = _.shuffle(localeOptions);
@@ -32,7 +32,7 @@ Template.admin.events({
 			if (browsers.length === 0) {
 				browsers = _.shuffle(browserOptions);
 			}
-			
+
 			$(user).find('.browser').val(browsers.pop());
 			$(user).find('.locale').val(locales.pop());
 		})
@@ -42,7 +42,7 @@ Template.admin.events({
 		Meteor.setTimeout(function() {
 			$('.browser-alert').fadeTo(500, 0)
 		}, 4000);
-		
+
 		var userBrowsers = [];
 		var users = $('.user');
 		var browsers = {};
@@ -57,7 +57,7 @@ Template.admin.events({
 			browsers[username] = $user.find('.browser').val();
 			locales[username] = $user.find('.locale').val();
 		}
-		
+
 		Meteor.call('assignBrowsers', browsers, locales);
 	},
 	'click .assign-tickets': function() {
@@ -72,7 +72,7 @@ Template.admin.events({
 						$('.ticket-alert').fadeTo(500, 0)
 					}, 4000);
 				}
-			})	
+			})
 		}
 	},
 	'click .select-update': function(e) {
@@ -96,10 +96,12 @@ Template.browserLocaleOptions.helpers({
 		var current;
 		var choice = locale === true ? 1 : 0;
 		var currentMilestone = Milestones.findOne({current: true});
-		var current = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
-		if (current) {
-			current = current.assignments[choice];
-			return current[username] === browser;	
+		if (currentMilestone) {
+			var current = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
+			if (current) {
+				current = current.assignments[choice];
+				return current[username] === browser;
+			}
 		}
 	}
 });
@@ -107,13 +109,29 @@ Template.browserLocaleOptions.helpers({
 Template.user.helpers({
 	userAssignedToTest:	function(username) {
 		var currentMilestone = Milestones.findOne({current: true});
-		var current = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
-		if (current) {
-			current = current.assignments[0];
-			return current[username] != undefined;
+		if (currentMilestone) {
+			var current = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
+			if (current) {
+				current = current.assignments[0];
+				return current[username] != undefined;
+			}
+			else {
+				return true;
+			}
 		}
-		else {
-			return true;
-		}
+	}
+});
+
+Template.userStatus.helpers({
+	userTicketsIncomplete: function(username) {
+		return Tickets.find({testers: {$in: [username]},
+			passers: {$nin: [username]},
+			failers: {$nin: [username]}});
+	},
+	userTicketsPassed: function(username) {
+		return Tickets.find({passers: {$in: [username]}});
+	},
+	userTicketsFailed: function(username) {
+		return Tickets.find({failers: {$in: [username]}});
 	}
 });

@@ -27,11 +27,15 @@ Handlebars.registerHelper('failersConcat', function(ticket) {
 });
 
 Handlebars.registerHelper('activeRouteClass', function() {
+	if (Router.current() === null) {
+		return
+	}
+
 	var args = Array.prototype.slice.call(arguments, 0);
 	args.pop();
 
 	var active = _.any(args, function(name) {
-		return Router.current().route.name === name;	
+		return Router.current().route.name === name;
 	});
 
 	return active && 'active';
@@ -47,7 +51,7 @@ Handlebars.registerHelper('testscriptStatus', function(testscript) {
 	if (user === null) {
 		return;
 	}
-	
+
 	var pass = _.contains(testscript.passers, user.username);
 	var fail = _.filter(testscript.failers, function(failer) {
 		return failer.username === user.username;
@@ -69,7 +73,24 @@ Handlebars.registerHelper('showUndo', function(testscript) {
 	if (user === null) {
 		return;
 	}
-	var status = Handlebars._default_helpers.testscriptStatus(testscript);
+	var status;
+	// should probably put this repeated logic into a global method,
+	// or find another way to do it
+	var pass = _.contains(testscript.passers, user.username);
+	var fail = _.filter(testscript.failers, function(failer) {
+		return failer.username === user.username;
+	});
+	fail = fail.length > 0;
+	if (fail) {
+		return 'fail';
+	}
+	else if (pass) {
+		return 'pass';
+	}
+	else {
+		return '';
+	}
+
 	if (status === 'fail' || status === 'pass') {
 		return true;
 	}
@@ -77,8 +98,11 @@ Handlebars.registerHelper('showUndo', function(testscript) {
 });
 
 Handlebars.registerHelper('userAdmin', function() {
-	var username = Meteor.user().username;
-	return _.contains(userAdmins, username);
+	if (typeof Meteor.user() !== "undefined" && Meteor.user() !== null) {
+		var username = Meteor.user().username;
+		return _.contains(userAdmins, username);
+	}
+	return false;
 })
 
 //modified from https://github.com/stu-smith/Handlebars-Helpers/blob/2c2232b8c466414a4faa364710e99ad8c3f22462/helpers.js

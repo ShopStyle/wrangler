@@ -1,4 +1,9 @@
 Template.testscript.events({
+	'click .failure-reason-cancel': function(e) {
+		failReason = $(e.currentTarget).parents('.failure-reason');
+		failReason.hide();
+		failReason.siblings('.btn-holder').show();
+	},
 	'click .btn-test': function(e, template) {
 		e.preventDefault();
 		var pass = $(e.currentTarget).filter(".pass").length > 0;
@@ -15,15 +20,15 @@ Template.testscript.events({
 				});
 				if (!alreadyFailed) {
 					$(e.currentTarget).parents('.btn-holder').hide();
-					$(e.currentTarget).parents('.btn-holder').siblings('.failure-reason').show();		
+					$(e.currentTarget).parents('.btn-holder').siblings('.failure-reason').show();
 				}
-			} 
+			}
 			else {
 				throwError("You need to login to post test results");
 			}
 			return;
 		}
-		
+
 		if (pass === false && fail === false) {
 			pass = '';
 		}
@@ -44,6 +49,8 @@ Template.testscript.events({
 				throwError(error.reason);
 			}
 		});
+		$(e.currentTarget).hide()
+		$(e.currentTarget).siblings('.btn-holder').show()
 	},
 	'click .testscript-results': function(e) {
 		e.preventDefault();
