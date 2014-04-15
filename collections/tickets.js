@@ -14,7 +14,9 @@ Meteor.methods({
 	assignTickets: function() {
 		var smokeTestTickets = [4929, 5026, 5154];
 		Tickets.update({assemblaId: {$in: smokeTestTickets}},
-			{$set: {passers: [], failers: [], testers: []}}, {multi: true});
+			{$set: {passers: [], failers: [], testers: [], status: '', allStepsCompleted: []}}, {multi: true});
+		Testscripts.update({ticketAssemblaId: {$in: smokeTestTickets}},
+			{$set: {passers: [], failers: [], status: ''}}, {multi: true});
 
 		var defaultNumTesters = 2;
 		var currentMilestone = Milestones.findOne({current: true});
