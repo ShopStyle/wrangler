@@ -6,7 +6,9 @@ Template.ticketsList.helpers({
 	testingUserAssignment: function() {
 		var user = Meteor.user();
 		var currentMilestone = Milestones.findOne({ current: true });
-		var browserAssignments = BrowserAssignments.findOne({ milestoneId: currentMilestone.id });
+		if (currentMilestone) {
+			var browserAssignments = BrowserAssignments.findOne({ milestoneId: currentMilestone.id });
+		}
 		if (user && browserAssignments) {
 			var assignment, browser, locale;
 			user = user.username;
@@ -16,36 +18,42 @@ Template.ticketsList.helpers({
 			if (browser === undefined || locale === undefined) {
 				return 'nothing, yet...';
 			}
-			return browser + ' - US, ' + locale; 
+			return browser + ' - US, ' + locale;
 		}
 	},
 	noTickets: function(options) {
 		return Tickets.find(options).count() === 0;
 	},
 	userTestedTickets: function() {
-		var username = Meteor.user().username;
-		var testedTickets = Tickets.find({
-			testers: {$in: [username]},
-			allStepsCompleted: {$in: [username]} 
-		});
-		return testedTickets;
+		if (Meteor.user()) {
+			var username = Meteor.user().username;
+			var testedTickets = Tickets.find({
+				testers: {$in: [username]},
+				allStepsCompleted: {$in: [username]}
+			});
+			return testedTickets;
+		}
 	},
 	userUntestedTickets: function() {
-		var username = Meteor.user().username;
-		var untestedTickets = Tickets.find({
-			testers: {$in: [username]},
-			allStepsCompleted: {$nin: [username]} 
-		});
-		return untestedTickets;
+		if (Meteor.user()) {
+			var username = Meteor.user().username;
+			var untestedTickets = Tickets.find({
+				testers: {$in: [username]},
+				allStepsCompleted: {$nin: [username]}
+			});
+			return untestedTickets;
+		}
 	},
 	userAllDone: function() {
 		//should probably get rid of this duplicate logic
-		var username = Meteor.user().username;
-		var untestedTickets = Tickets.find({
-			testers: {$in: [username]},
-			allStepsCompleted: {$nin: [username]} 
-		});
-		return untestedTickets.count() === 0;
+		if (Meteor.user()) {
+			var username = Meteor.user().username;
+			var untestedTickets = Tickets.find({
+				testers: {$in: [username]},
+				allStepsCompleted: {$nin: [username]}
+			});
+			return untestedTickets.count() === 0;
+		}
 	}
 });
 
