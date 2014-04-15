@@ -12,6 +12,10 @@ Tickets.allow({
 
 Meteor.methods({
 	assignTickets: function() {
+		var smokeTestTickets = [4929, 5026, 5154];
+		Tickets.update({assemblaId: {$in: smokeTestTickets}},
+			{$set: {passers: [], failers: [], testers: []}}, {multi: true});
+
 		var defaultNumTesters = 2;
 		var currentMilestone = Milestones.findOne({current: true});
 		if (!currentMilestone) {

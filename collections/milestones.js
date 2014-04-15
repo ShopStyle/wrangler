@@ -10,9 +10,6 @@ Meteor.methods({
 		if (Meteor.isServer) {
 			Assembla.populateTicketCollection();
 		}
-		var smokeTestTickets = [4929, 5026, 5154];
-		Tickets.update({assemblaId: {$in: smokeTestTickets}},
-			{$set: {passers: [], failers: [], testers: []}}, {multi: true});
 	},
 	setDefaultMilestone: function() {
 		if (!Milestones.findOne({current: true})) {
