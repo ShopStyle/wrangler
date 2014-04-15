@@ -12,9 +12,7 @@ Meteor.methods({
 		}
 		var smokeTestTickets = [4929, 5026, 5154];
 		Tickets.update({assemblaId: {$in: smokeTestTickets}},
-			{$set: {passers: []}},
-			{$set: {failers: []}},
-			{$set: {testers: []}}, {multi: true});
+			{$set: {passers: [], failers: [], testers: []}}, {multi: true});
 	},
 	setDefaultMilestone: function() {
 		if (!Milestones.findOne({current: true})) {
