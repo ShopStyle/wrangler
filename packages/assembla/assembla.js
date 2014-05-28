@@ -229,7 +229,7 @@ Assembla.watchTicketStream = function() {
 }
 
 Assembla.verifyTicketOnDev = function(assemblaId) {
-	if (assemblaId == 4929 || assemblaId == 5026 || assemblaId == 5154) {
+	if (assemblaId == 4929 || assemblaId == 5026 || assemblaId == 5154 || assemblaId == 6399) {
 		return;
 	}
 	var url = Assembla.ticketUrl + assemblaId + '.json';
