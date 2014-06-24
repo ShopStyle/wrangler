@@ -156,16 +156,29 @@ Assembla.updateSingleTicket = function(ticket) {
 }
 
 Assembla.populateTicketCollection = function() {
+	// TODO: clean this up
 	if (!Meteor.settings.API_KEY || !Meteor.settings.API_SECRET) {
 		throw new Meteor.Error(500, 'Please provide secret/key in Meteor.settings');
 	}
+	var allTickets = [];
+	var ticketPage = 1;
 	var currentMilestoneId = Milestones.findOne({ current: true }).id;
 	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
-	var ticketResponseAll = Assembla.makeGetRequest(url, {per_page: 100, ticket_status: "all"});
+	var ticketResponseAll = Assembla.makeGetRequest(url, {per_page: 100, ticket_status: "all", page: ticketPage});
+
+	while (ticketResponseAll.data.length === 100) {
+		allTickets = allTickets.concat(ticketResponseAll.data);
+		ticketPage = ticketPage + 1;
+		ticketResponseAll = Assembla.makeGetRequest(url, {per_page: 100, ticket_status: "all", page: ticketPage});
+	}
+
+	allTickets = allTickets.concat(ticketResponseAll.data);
+
 	var ticketResponseClosed = Assembla.makeGetRequest(url, {per_page: 100, ticket_status: "closed"});
+
 	//need a way to deal with over 100 tickets. maybe have a counter, and then just ping again looking for page 2
 	if ((ticketResponseAll.statusCode).toString()[0] == 2 && (ticketResponseClosed.statusCode).toString()[0] == 2) {
-		var ticketResponse = ticketResponseAll.data.concat(ticketResponseClosed.data);
+		var ticketResponse = allTickets.concat(ticketResponseClosed.data);
 
 		//hack way to deal with a ticket changing milestones and not changing in the app
 		Tickets.update({milestoneId: currentMilestoneId}, {$set: {milestoneId: 0}}, {multi: true});
