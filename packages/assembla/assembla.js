@@ -156,7 +156,7 @@ Assembla.updateSingleTicket = function(ticket) {
 }
 
 Assembla.populateTicketCollection = function() {
-	// TODO: clean this up
+	// TODO: clean this up. not very nice last minute code!
 	if (!Meteor.settings.API_KEY || !Meteor.settings.API_SECRET) {
 		throw new Meteor.Error(500, 'Please provide secret/key in Meteor.settings');
 	}
@@ -166,7 +166,7 @@ Assembla.populateTicketCollection = function() {
 	var url = Assembla.ticketsUrl + currentMilestoneId + '.json';
 	var ticketResponseAll = Assembla.makeGetRequest(url, {per_page: 100, ticket_status: "all", page: ticketPage});
 
-	while (ticketResponseAll.data.length === 100) {
+	while ((ticketResponseAll.statusCode).toString()[0] != 204 && ticketResponseAll.data.length === 100) {
 		allTickets = allTickets.concat(ticketResponseAll.data);
 		ticketPage = ticketPage + 1;
 		ticketResponseAll = Assembla.makeGetRequest(url, {per_page: 100, ticket_status: "all", page: ticketPage});
