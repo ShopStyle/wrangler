@@ -1,5 +1,5 @@
 Assembla = {
-	milestonesUrl: 'https://api.assembla.com/v1/spaces/shopstyle/milestones.json',
+	milestonesUrl: 'https://api.assembla.com/v1/spaces/shopstyle/milestones/upcoming.json',
 	ticketsUrl: 'https://api.assembla.com/v1/spaces/shopstyle/tickets/milestone/',
 	usersUrl: 'https://api.assembla.com/v1/spaces/shopstyle/users.json',
 	assemblaUrl: 'https://www.assembla.com/spaces/shopstyle/tickets/',
@@ -127,8 +127,8 @@ Assembla.updateSingleTicket = function(ticket) {
 	}
 
 	var noTesting = false;
-	if (ticket.custom_fields["No Testing Required"]) {
-		if (ticket.custom_fields["No Testing Required"] === "yes") {
+	if (ticket.custom_fields["Testing Required"]) {
+		if (ticket.custom_fields["Testing Required"] === "No") {
 			noTesting = true;
 		}
 	}
