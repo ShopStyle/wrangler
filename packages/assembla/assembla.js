@@ -242,7 +242,8 @@ Assembla.watchTicketStream = function() {
 }
 
 Assembla.verifyTicketOnDev = function(assemblaId) {
-	if (assemblaId == 4929 || assemblaId == 5026 || assemblaId == 5154 || assemblaId == 6399) {
+	var smokeTestTickets = [4929, 5026, 5154, 6399, 7036];
+	if (_.indexOf(smokeTestTickets, assemblaId) !== -1) {
 		return;
 	}
 	var url = Assembla.ticketUrl + assemblaId + '.json';

@@ -12,7 +12,7 @@ Tickets.allow({
 
 Meteor.methods({
 	assignTickets: function() {
-		var smokeTestTickets = [4929, 5026, 5154, 6399];
+		var smokeTestTickets = [4929, 5026, 5154, 6399, 7036];
 		Tickets.update({assemblaId: {$in: smokeTestTickets}},
 			{$set: {passers: [], failers: [], testers: [], status: '', allStepsCompleted: []}}, {multi: true});
 		Testscripts.update({ticketAssemblaId: {$in: smokeTestTickets}},
