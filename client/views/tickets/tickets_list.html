@@ -39,7 +39,8 @@
 	<div class="ticket {{status}}">
 		<div class="text">
 			<h3><a href="{{pathFor 'ticketPage'}}">{{assemblaId}} - {{summary}}</a></h3>
-			<span>Assigned to: {{assignedTo}}</span>
+			<span>Assigned to: {{assignedTo}}</span><br>
+			<span>Testers: {{ticketTesters}}</span>
 		</div>
 		<div class="btn-holder">
 			{{#if noTesting}}
@@ -60,3 +61,4 @@
 		{{/unless}}
 	</div>
 </template>
+
