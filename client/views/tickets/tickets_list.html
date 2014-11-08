@@ -16,8 +16,7 @@
 			<div class="testing-assignment">To-do</div>
 			<div class="to-do">
 				{{#if userAllDone}}
-					<div class="completed-text">Yay! You did all your tests. Here is a cat gif.</div>
-					<a href="http://thecatapi.com"><img src="http://thecatapi.com/api/images/get?format=src&type=gif"></a>
+					{{ > userGif}}
 				{{/if}}
 				{{#each userUntestedTickets}}
 					{{> ticket}}
@@ -37,19 +36,21 @@
 
 <template name="ticket">
 	<div class="ticket {{status}}">
+		<h3><a href="{{pathFor 'ticketPage'}}">{{assemblaId}} - {{summary}}</a></h3>
 		<div class="text">
-			<h3><a href="{{pathFor 'ticketPage'}}">{{assemblaId}} - {{summary}}</a></h3>
 			<span>Assigned to: {{assignedTo}}</span><br>
 			<span>Testers: {{ticketTesters}}</span>
 		</div>
+
+		{{#if noTesting}}
+			<div class="no-testing-ticket">NO TESTING REQUIRED</div>
+		{{else}}
 		<div class="btn-holder">
-			{{#if noTesting}}
-				<div class="no-testing-ticket">NO TESTING REQUIRED</div>
-			{{else}}
-				<div class="btn-test pass default">PASS <span class="circle"><span class="green">{{numPassers this}}</span></span></div>
-				<div class="btn-test fail default">FAIL <span class="circle"><span class="red">{{numFailers this}}</span></span></div>
-			{{/if}}
+			<div class="btn-test pass default">PASS <span class="circle"><span class="green">{{numPassers this}}</span></span></div>
+			<div class="btn-test fail default">FAIL <span class="circle"><span class="red">{{numFailers this}}</span></span></div>
 		</div>
+		{{/if}}
+
 		{{#unless noTesting}}
 			<div class="testscript-results">
 				<div class="results">Results</div>
@@ -61,4 +62,3 @@
 		{{/unless}}
 	</div>
 </template>
-

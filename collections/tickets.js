@@ -1,8 +1,9 @@
+var DEFAULT_TESTERS_PER_TICKET = 2;
+
 Tickets = new Meteor.Collection('tickets');
 if (Meteor.isServer) {
 	Tickets._ensureIndex({ "assemblaId": 1 }, { unique: true });
 }
-
 
 Tickets.allow({
 	update: function() {
@@ -18,71 +19,82 @@ Meteor.methods({
 		Testscripts.update({ticketAssemblaId: {$in: smokeTestTickets}},
 			{$set: {passers: [], failers: [], status: ''}}, {multi: true});
 
-		var defaultNumTesters = 2;
 		var currentMilestone = Milestones.findOne({current: true});
 		if (!currentMilestone) {
-			return;
+			throw new Meteor.Error(401, "Milestone not found");
 		}
 
-		var currentBrowser = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
-		if (!currentBrowser) {
+		var testers = []
+		var testersCollection = TestingAssignments.find({milestoneId: currentMilestone.id});
+		if (!testersCollection) {
 			throw new Meteor.Error(401, "Please assign browsers to assign tickets");
 		}
+		else if (testersCollection.count() < DEFAULT_TESTERS_PER_TICKET) {
+			throw new Meteor.Error(401, "Please assign at least " + DEFAULT_TESTERS_PER_TICKET + " people to test");
+		}
 
+		// remove testers from all tickets with no-testing required
 		Tickets.update({milestoneId: currentMilestone.id, statusName: "Done", noTesting: true},
 			{$set: {testers: []}},
 			{multi: true});
 
+		// get all tickets that need testers assigned
 		var tickets = Tickets.find({milestoneId: currentMilestone.id, statusName: "Done", noTesting: false});
-		var assignments = currentBrowser.assignments[0];
-		var users = [];
 
-		_.each(assignments, function(browser, user) {
-			users.push(user);
-		})
-		var samplers = _.shuffle(users);
-
-		if (samplers.length < defaultNumTesters + 1) {
-			var numToAssign = defaultNumTesters + 1;
-			var error = "Please assign at least " + numToAssign + " people to test";
-			throw new Meteor.Error(401, error);
-		}
+		var MAX_TICKETS_PER_TESTER = Math.floor((tickets.count() * DEFAULT_TESTERS_PER_TICKET) / testersCollection.count());
 
 		tickets.forEach(function(ticket) {
-			var numTesters = ticket.numTesters || defaultNumTesters;
-			if (numTesters > users.length - 1) {
+			// some tickets might have a tester num override, check that here.
+			var numTesters = ticket.numTesters || DEFAULT_TESTERS_PER_TICKET;
+			if (numTesters >= testersCollection.count()) {
 				var requiredNumTesters = parseInt(numTesters) + 1;
-				var errorMessage = "Please assign more people to test. Ticket "
-					 + ticket.assemblaId + " requires " + requiredNumTesters
-					 + " testers to ensure it will not be assigned to the person that fixed it.";
+				var errorMessage = "Please assign more people to test. Ticket " +
+					ticket.assemblaId + " requires " + requiredNumTesters +
+					" testers to ensure it will not be assigned to the person that fixed it.";
 				throw new Meteor.Error(401, errorMessage);
-				return;
 			}
-			var testers = [];
+
+			var ticketTesters = [];
 			var assemblaUserId = ticket.assignedToId;
 			var assignedToLogin = AssemblaUsers.findOne({id: assemblaUserId});
 			if (!assignedToLogin) {
 				return;
 			}
 			assignedToLogin = assignedToLogin.login;
-			while (testers.length < numTesters) {
-				if (samplers.length === 0 || samplers.length === 1 && samplers[0] === assignedToLogin) {
-					samplers = _.shuffle(users);
+
+			while (ticketTesters.length < numTesters) {
+				// reset queue of testers when empty
+				if (testers.length === 0) {
+					testers = _.shuffle(testersCollection.fetch());
 				}
-				var tester = _.sample(samplers);
-				if (_.indexOf(testers, tester) === -1 && tester !== assignedToLogin) {
-					testers.push(tester);
-					samplers = _.reject(samplers, function(sample) {
-						return sample == tester;
-					});
+
+				// validate potential tester for ticket
+				var potentialTester = testers.pop();
+				// 1. can't test your own ticket
+				if (potentialTester.name === assignedToLogin) {
+					continue;
 				}
+
+				// 2. can't test the same ticket twice
+				if (_.contains(ticketTesters, potentialTester.name)) {
+					continue;
+				}
+
+				potentialTester.tickets.push(ticket);
+				TestingAssignments.update(
+					{milestoneId: currentMilestone.id, name: potentialTester.name},
+					{$set: {tickets: potentialTester.tickets}});
+
+				ticketTesters.push(potentialTester.name);
 			}
+
 			Tickets.update(
 				{assemblaId: ticket.assemblaId},
-				{$set: {testers: testers}}
+				{$set: {testers: ticketTesters}}
 			)
 		});
 	},
+
 	updateTickets: function() {
 		if (Meteor.isServer) {
 			Assembla.populateTicketCollection();

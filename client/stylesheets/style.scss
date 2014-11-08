@@ -1,6 +1,7 @@
 $background-brown: #F2E9CE;
 $green: #62BD19;
-$blue: #0F8BCA;
+$blue: #00b4ff;
+$blue-lighter: #4dcbff;
 $red: #FF3737;
 $pink: #D11B7E;
 $yellow: #F6EF2A;
@@ -9,9 +10,15 @@ $light-blue: #D3E5FB;
 $grey: #EEEEEE;
 $dark-grey: #939393;
 
+$header-grey: #fafafa;
+$header-grey-alt: #e0e0e0;
+
+@import '.meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap';
+
 html {
 	background-color: white;
-	font-family: 'Open Sans', sans-serif;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-weight: 300;
 	color: black;
 }
 
@@ -37,72 +44,118 @@ body {
 	padding-top: 0;
 }
 
+$navbar-height: 50px;
+
 .container {
 	min-height: 700px;
+	margin-top: $navbar-height + 10;
+
+	.entry {
+		max-width: 400px;
+	}
 }
 
 .navbar {
-	height: 40px;
-	background-color: $blue;
-	border-radius: 0 0 5px 5px;
+	height: $navbar-height;
+	background-color: $header-grey;
+	border-bottom: 1px solid $header-grey-alt;
 	font-size: 1.4em;
 	text-decoration: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: auto;
+	right: 0;
+	z-index: 100;
+	padding: 0 20px;
+	line-height: $navbar-height;
+	text-transform: uppercase;
+	font-size: 14px;
+
+	.notifications {
+		line-height: 20px;
+	}
+
+	a {
+		text-decoration: none;
+		color:  black;
+	}
+
+	li {
+		display: inline-block;
+		padding: 0 5px;
+
+		&:hover {
+			background: $blue-lighter;
+
+			.header-dropdown {
+				display: block;
+			}
+		}
+	}
+
+	// first level nav only
+	> ul li {
+		letter-spacing: 1px;
+		font-weight: 400;
+	}
+
+	.navbar-left {
+		float: left;
+	}
+
+	.navbar-right {
+		float: right;
+	}
+
+	.header-dropdown {
+		display: none;
+		position: absolute;
+		background: white;
+		width: 200px;
+		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+		margin-left: -5px;
+		overflow: hidden;
+
+		li {
+			width: 100%;
+		}
+	}
 }
 
-.navbar a {
-	padding: 0 5px;
-	text-decoration: none;
-	color:  white;
-}
-
-.navbar a:hover {
-	color: $light-blue;
-}
-
-.navbar a.active {
-	color: $light-blue;
-}
-
-.navbar-left {
-	float: left;
-	margin-top: 9px;
-	margin-left: 10px;
-}
-
-.navbar-right {
-	float: right;
-	margin-top: 5px;
-	margin-right: 10px;
-}
-
-.navbar li {
-	display: inline;
-}
 
 .ticket {
 	position: relative;
 	margin: 10px 0;
-	border: 2px solid;
-	border-radius: 0;
-	border-color: $grey;
+	border: 1px solid $grey;
 	min-height: 130px;
 	background-color: white;
+	padding: 10px;
 
+	h3 {
+		font-size: 1.2em;
+		margin: 5px 0;
+		letter-spacing: 0.7px;
+		margin-right: 170px;
+	}
+
+	&.main, #main & {
+		.text {
+			margin: 0 30px 0 0;
+		}
+	}
 
 	.text {
 		display: inline-block;
 		margin: 7px;
 		max-width: 800px;
 		line-height: 18px;
+		margin-right: 170px;
 
 		h1 {
 			font-size: 1.6em;
 			line-height: 1.2em;
-		}
-
-		h3 {
-			font-size: 1.2em;
-			margin-bottom: 5px;
+			margin: 0;
 		}
 
 		li {
@@ -111,7 +164,9 @@ body {
 	}
 
 	.btn-holder {
-		float: right;
+		position: absolute;
+		right: 0;
+		top: 0;
 	}
 
 	.btn-edit {
@@ -196,20 +251,14 @@ body {
 			display: none;
 		}
 	}
-
-	.alert.browser-alert {
-
-	}
 }
 
 .ticket.pass {
-	border-color: $green;
-	border-radius: 5px;
+	border-left: 5px solid $green;
 }
 
 .ticket.fail {
-	border-color: $red;
-	border-radius: 5px;
+	border-left: 5px solid $red;
 }
 
 .btn-test, .failure-reason-cancel {
@@ -289,24 +338,19 @@ body {
 }
 
 .errors {
-	position: fixed;
-	top: 45px;
-	z-index: 2;
-	max-width: 1200px;
 
 	.alert-error {
-		display: inline-block;
 		background-color: $red;
 		color: white;
 		border-radius: 5px;
 		padding: 10px;
 		cursor: default;
-		opacity: 0.9;
-		z-index: 1;
+		margin: 10px 0 0 0;
 
 		.close {
 			cursor: pointer;
 			font-weight: bold;
+			float: right;
 		}
 	}
 }
@@ -607,7 +651,16 @@ li.relative-container {
 		padding-bottom: 5px;
 		min-height: 30px;
 
-		select, input {
+		select {
+			float: right;
+			height: 26px;
+			font-size: 14px;
+			border: 0px;
+			margin-right: 10px;
+			outline: none;
+		}
+
+		input {
 			float: right;
 		}
 	}
@@ -647,9 +700,14 @@ li.relative-container {
 	text-align: center;
 	opacity: 0.4;
 	position: absolute;
-	top: 30px;
+	bottom: 0;
 	left: 0;
 	right: 0;
+
+	.ticket.main & {
+		position: relative;
+		margin: -10px;
+	}
 }
 
 .to-do {

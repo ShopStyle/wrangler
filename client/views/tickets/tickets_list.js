@@ -3,27 +3,27 @@ Template.ticketsList.helpers({
 		var allPassed = Tickets.find({ status: 'pass' }).count() === Tickets.find({ noTesting: false }).count();
 		return allPassed;
 	},
+
 	testingUserAssignment: function() {
 		var user = Meteor.user();
 		var currentMilestone = Milestones.findOne({ current: true });
 		if (currentMilestone) {
-			var browserAssignments = BrowserAssignments.findOne({ milestoneId: currentMilestone.id });
+			var testingAssignment = TestingAssignments.findOne({ milestoneId: currentMilestone.id, name: user.username });
 		}
-		if (user && browserAssignments) {
-			var assignment, browser, locale;
-			user = user.username;
-			assignment = browserAssignments.assignments;
-			browser = assignment[0][user];
-			locale = assignment[1][user];
+		if (user && testingAssignment) {
+			var browser = testingAssignment.browser;
+			var locale = testingAssignment.locale;
 			if (browser === undefined || locale === undefined) {
 				return 'nothing, yet...';
 			}
 			return browser + ' - US, ' + locale;
 		}
 	},
+
 	noTickets: function(options) {
 		return Tickets.find(options).count() === 0;
 	},
+
 	userTestedTickets: function() {
 		if (Meteor.user()) {
 			var username = Meteor.user().username;
@@ -90,4 +90,5 @@ Template.ticket.events({
 		$(e.currentTarget).siblings('.results').show();
 	}
 });
+
 

@@ -10,7 +10,7 @@ Assembla = {
 	streamUrl: 'https://api.assembla.com/v1/activity.json',
 	_headers: {
 		'X-Api-Key': Meteor.settings.API_KEY,
-	    'X-Api-Secret': Meteor.settings.API_SECRET
+		'X-Api-Secret': Meteor.settings.API_SECRET
 	}
 };
 
@@ -19,14 +19,14 @@ Assembla.makeGetRequest = function(url, params) {
 		headers: Assembla._headers,
 		params: params
 	});
-}
+};
 
 Assembla.makePutRequest = function(url, data) {
 	return Meteor.http.put(url, {
 		headers: Assembla._headers,
 		data: data
 	});
-}
+};
 
 Assembla.updateMilestoneCollection = function() {
 	if (!Meteor.settings.API_KEY || !Meteor.settings.API_SECRET) {
@@ -41,7 +41,7 @@ Assembla.updateMilestoneCollection = function() {
 					id: milestone.id,
 					title: milestone.title
 				}}, {upsert: true});
-		})
+		});
 	}
 	else {
 		throw new Meteor.Error(500, 'Assembla call failed');
@@ -50,7 +50,7 @@ Assembla.updateMilestoneCollection = function() {
 		["Bug Backlog", "Enhancement Backlog", "Bug Hit List", "Pending Prioritization",
 		 "Reports ", "Ongoing Tasks", "Monday Meeting Discussion", "Android Fixes for Mobile Web", "Testing"]
 	}});
-}
+};
 
 Assembla.extractTicketInfoFromDescription = function(description, ticketNumber) {
 	if (description) {
@@ -61,7 +61,7 @@ Assembla.extractTicketInfoFromDescription = function(description, ticketNumber) 
 		}
 	}
 	return '';
-}
+};
 
 Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ticketNumber) {
 	var testscriptsString = innerDescription.match(Assembla.testscriptsRegex);
@@ -97,7 +97,7 @@ Assembla._extractTestscriptsFromInnerDescription = function(innerDescription, ti
 	Testscripts.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
 	Testscripts.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });
 	Testscripts.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });
-}
+};
 
 Assembla._extractCommentFromInnerDescription = function(innerDescription) {
 	var comment = innerDescription.match(Assembla.commentRegex);
@@ -109,10 +109,10 @@ Assembla._extractCommentFromInnerDescription = function(innerDescription) {
 		return ' ';
 	}
 	return '';
-}
+};
 
 Assembla.updateSingleTicket = function(ticket) {
-	if (ticket == null) {
+	if (ticket === null) {
 		return;
 	}
 	var assemblaUrl = Assembla.assemblaUrl + ticket.number;
@@ -153,7 +153,7 @@ Assembla.updateSingleTicket = function(ticket) {
 			}
 		}, { upsert: true }
 	);
-}
+};
 
 Assembla.populateTicketCollection = function() {
 	// TODO: clean this up. not very nice last minute code!
@@ -199,7 +199,7 @@ Assembla.populateTicketCollection = function() {
 	else {
 		throw new Meteor.Error(500, 'Assembla call failed');
 	}
-}
+};
 
 Assembla.populateAssemblaUsers = function() {
 	var userResponse = Assembla.makeGetRequest(Assembla.usersUrl, {per_page: 500});
@@ -212,7 +212,7 @@ Assembla.populateAssemblaUsers = function() {
 	else {
 		throw new Meteor.Error(500, 'Assembla call failed');
 	}
-}
+};
 
 Assembla.watchTicketStream = function() {
 	console.log("called ticket stream");
@@ -238,8 +238,8 @@ Assembla.watchTicketStream = function() {
 			var ticket = Assembla.makeGetRequest(url, {});
 			Assembla.updateSingleTicket(ticket.data);
 		}
-	})
-}
+	});
+};
 
 Assembla.verifyTicketOnDev = function(assemblaId) {
 	var smokeTestTickets = [4929, 5026, 5154, 6399, 7036];
@@ -248,7 +248,7 @@ Assembla.verifyTicketOnDev = function(assemblaId) {
 	}
 	var url = Assembla.ticketUrl + assemblaId + '.json';
 	Assembla.makePutRequest(url, {"ticket": {"status": "Verified on Dev"}});
-}
+};
 
 if (Meteor.isServer) {
 	Meteor.startup(function() {

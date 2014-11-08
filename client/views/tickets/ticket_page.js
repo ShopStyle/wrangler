@@ -7,11 +7,11 @@ Template.ticketPage.helpers({
 	},
 	ticketTesters: function() {
 		if (this.testers) {
-			var testers = _.filter(this.testers, function(tester) { 
-				return tester !== '' && tester !== null; 
+			var testers = _.filter(this.testers, function(tester) {
+				return tester !== '' && tester !== null;
 			});
 			if (testers.length > 0) {
-				return testers.join(', ');				
+				return testers.join(', ');
 			}
 		}
 		return 'No Testers Assigned';

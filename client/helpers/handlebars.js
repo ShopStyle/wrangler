@@ -1,4 +1,4 @@
-userAdmins = ['kkassir', 'tgaribaldi@popsugar.com', 'laurenhendrickson'];
+userAdmins = ['kkassir', 'tgaribaldi@popsugar.com', 'laurenhendrickson', 'aschrader2'];
 
 Handlebars.registerHelper('numFailers',function(ticket) {
 	var length = ticket.failers ? ticket.failers.length : 0;
@@ -35,7 +35,7 @@ Handlebars.registerHelper('activeRouteClass', function() {
 	args.pop();
 
 	var active = _.any(args, function(name) {
-		return Router.current().route.name === name;
+		return Router.current().route.getName() === name;
 	});
 
 	return active && 'active';
@@ -122,3 +122,4 @@ Handlebars.registerHelper('breakLines', function (text) {
 
     return new Handlebars.SafeString(result);
 });
+
