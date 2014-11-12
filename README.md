@@ -1,6 +1,8 @@
-Learning meteor by doing. This is an app that syncs up with Assembla in order to simplify any group manual testing that should be done for tickets. It started as a little side project. You will see things being done differently throughout the app (just because I wanted to learn different things), and there are many areas asking to be refactored/made more efficient. Please feel free to make a pull request to fix things or add a feature!
+#Wrangler
 
-*Originally the app pushed changes to assembla as well as pulling, but then I figured no one was using the adding/edit features from the app and removed them. You can check out the old implementation on the master-old branch.
+Wrangler helps teams to organize testing. It pulls in and organizes tickets to be verified as being fixed, making it much easier to get through any testing your team needs to do. Testing goes faster, admins have more control over who is doing what, and best part is that each user gets a rad .gif when they complete their testing!
+
+It is currently set up to only work with Assembla, but can easily be modified to work with any other ticket/workspace management software that has an API.
 
 
 ###Setup
