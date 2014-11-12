@@ -16,715 +16,715 @@ $header-grey-alt: #e0e0e0;
 @import '.meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap';
 
 html {
-	background-color: white;
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  background-color: white;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
   font-weight: 300;
-	color: black;
+  color: black;
 }
 
 strong {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 a {
-	text-decoration: none;
-	color: black;
+  text-decoration: none;
+  color: black;
 }
 
 a:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 body {
-	min-width: 800px;
-	max-width: 1200px;
-	margin-left: auto;
-	margin-right: auto;
-	padding: 15px;
-	padding-top: 0;
+  min-width: 800px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 15px;
+  padding-top: 0;
 }
 
 $navbar-height: 50px;
 
 .container {
-	min-height: 700px;
-	margin-top: $navbar-height + 10;
+  min-height: 700px;
+  margin-top: $navbar-height + 10;
 
-	.entry {
-		max-width: 400px;
-	}
+  .entry {
+    max-width: 400px;
+  }
 }
 
 .navbar {
-	height: $navbar-height;
-	background-color: $header-grey;
-	border-bottom: 1px solid $header-grey-alt;
-	font-size: 1.4em;
-	text-decoration: none;
-	position: fixed;
-	top: 0;
-	left: 0;
-	bottom: auto;
-	right: 0;
-	z-index: 100;
-	padding: 0 20px;
-	line-height: $navbar-height;
-	text-transform: uppercase;
-	font-size: 14px;
+  height: $navbar-height;
+  background-color: $header-grey;
+  border-bottom: 1px solid $header-grey-alt;
+  font-size: 1.4em;
+  text-decoration: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: auto;
+  right: 0;
+  z-index: 100;
+  padding: 0 20px;
+  line-height: $navbar-height;
+  text-transform: uppercase;
+  font-size: 14px;
 
-	.notifications {
-		line-height: 20px;
-	}
+  .notifications {
+    line-height: 20px;
+  }
 
-	a {
-		text-decoration: none;
-		color:  black;
-	}
+  a {
+    text-decoration: none;
+    color:  black;
+  }
 
-	li {
-		display: inline-block;
-		padding: 0 5px;
+  li {
+    display: inline-block;
+    padding: 0 5px;
 
-		&:hover {
-			background: $blue-lighter;
+    &:hover {
+      background: $blue-lighter;
 
-			.header-dropdown {
-				display: block;
-			}
-		}
-	}
+      .header-dropdown {
+        display: block;
+      }
+    }
+  }
 
-	// first level nav only
-	> ul li {
-		letter-spacing: 1px;
-		font-weight: 400;
-	}
+  // first level nav only
+  > ul li {
+    letter-spacing: 1px;
+    font-weight: 400;
+  }
 
-	.navbar-left {
-		float: left;
-	}
+  .navbar-left {
+    float: left;
+  }
 
-	.navbar-right {
-		float: right;
-	}
+  .navbar-right {
+    float: right;
+  }
 
-	.header-dropdown {
-		display: none;
-		position: absolute;
-		background: white;
-		width: 200px;
-		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
-		margin-left: -5px;
-		overflow: hidden;
+  .header-dropdown {
+    display: none;
+    position: absolute;
+    background: white;
+    width: 200px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+    margin-left: -5px;
+    overflow: hidden;
 
-		li {
-			width: 100%;
-		}
-	}
+    li {
+      width: 100%;
+    }
+  }
 }
 
 
 .ticket {
-	position: relative;
-	margin: 10px 0;
-	border: 1px solid $grey;
-	min-height: 130px;
-	background-color: white;
-	padding: 10px;
+  position: relative;
+  margin: 10px 0;
+  border: 1px solid $grey;
+  min-height: 130px;
+  background-color: white;
+  padding: 10px;
 
-	h3 {
-		font-size: 1.2em;
-		margin: 5px 0;
-		letter-spacing: 0.7px;
-		margin-right: 170px;
-	}
+  h3 {
+    font-size: 1.2em;
+    margin: 5px 0;
+    letter-spacing: 0.7px;
+    margin-right: 170px;
+  }
 
-	&.main, #main & {
-		.text {
-			margin: 0 30px 0 0;
-		}
-	}
+  &.main, #main & {
+    .text {
+      margin: 0 30px 0 0;
+    }
+  }
 
-	.text {
-		display: inline-block;
-		margin: 7px;
-		max-width: 800px;
-		line-height: 18px;
-		margin-right: 170px;
+  .text {
+    display: inline-block;
+    margin: 7px;
+    max-width: 800px;
+    line-height: 18px;
+    margin-right: 170px;
 
-		h1 {
-			font-size: 1.6em;
-			line-height: 1.2em;
-			margin: 0;
-		}
+    h1 {
+      font-size: 1.6em;
+      line-height: 1.2em;
+      margin: 0;
+    }
 
-		li {
-			margin: 10px 0;
-		}
-	}
+    li {
+      margin: 10px 0;
+    }
+  }
 
-	.btn-holder {
-		position: absolute;
-		right: 0;
-		top: 0;
-	}
+  .btn-holder {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
 
-	.btn-edit {
-		z-index: 1;
-		position: absolute;
-		top: 7px;
-		right: 7px;
-		padding: 5px;
-		cursor: pointer;
-		text-decoration: none;
-		color: $dark-grey;
-	}
+  .btn-edit {
+    z-index: 1;
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    padding: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    color: $dark-grey;
+  }
 
-	.btn-edit:hover {
-		text-decoration: underline;
-	}
+  .btn-edit:hover {
+    text-decoration: underline;
+  }
 
-	.btn-testscript {
-		position: absolute;
-		bottom: 7px;
-		right: 7px;
-		padding: 8px;
-		cursor: pointer;
-		text-decoration: none;
-		background-color: $green;
-		border-radius: 5px;
-		color: white;
-	}
+  .btn-testscript {
+    position: absolute;
+    bottom: 7px;
+    right: 7px;
+    padding: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    background-color: $green;
+    border-radius: 5px;
+    color: white;
+  }
 
-	input {
-		min-width: 400px;
-		margin: 7px;
-		padding: 5px;
-		border: 2px solid $grey;
-		border-radius: 5px;
-		box-sizing: border-box;
-	}
+  input {
+    min-width: 400px;
+    margin: 7px;
+    padding: 5px;
+    border: 2px solid $grey;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
 
-	form {
-		margin: 10px;
+  form {
+    margin: 10px;
 
-		input {
-			display: block;
-		}
+    input {
+      display: block;
+    }
 
-		.btn-edit.submit, .btn-edit.cancel {
-			position: static;
-			display: inline-block;
-			border: none;
-			font-size: 1.2em;
-			background-color: $green;
-			color: white;
-			border-radius: 5px;
-			min-width: 0;
-		}
+    .btn-edit.submit, .btn-edit.cancel {
+      position: static;
+      display: inline-block;
+      border: none;
+      font-size: 1.2em;
+      background-color: $green;
+      color: white;
+      border-radius: 5px;
+      min-width: 0;
+    }
 
-		.btn-edit.submit:hover, .btn-edit.cancel:hover {
-			text-decoration: none;
-		}
+    .btn-edit.submit:hover, .btn-edit.cancel:hover {
+      text-decoration: none;
+    }
 
-		.btn-edit.cancel {
-			background-color: $grey;
-			color: $dark-grey;
-			padding: 7px;
-		}
+    .btn-edit.cancel {
+      background-color: $grey;
+      color: $dark-grey;
+      padding: 7px;
+    }
 
-		div {
-			margin: 8px;
-		}
-	}
+    div {
+      margin: 8px;
+    }
+  }
 
-	textarea {
-		margin: 7px;
-		display: block;
-		border: 2px solid $grey;
-		border-radius: 5px;
-		min-width: 400px;
-		min-height: 75px;
-		box-sizing: border-box;
+  textarea {
+    margin: 7px;
+    display: block;
+    border: 2px solid $grey;
+    border-radius: 5px;
+    min-width: 400px;
+    min-height: 75px;
+    box-sizing: border-box;
 
-		&.invisible {
-			display: none;
-		}
-	}
+    &.invisible {
+      display: none;
+    }
+  }
 }
 
 .ticket.pass {
-	border-left: 5px solid $green;
+  border-left: 5px solid $green;
 }
 
 .ticket.fail {
-	border-left: 5px solid $red;
+  border-left: 5px solid $red;
 }
 
 .btn-test, .failure-reason-cancel {
-	display: inline-block;
-	background-color: $dark-grey;
-	color: white;
-	margin: 10px;
-	padding: 7px;
-	border-radius: 5px;
-	cursor: pointer;
+  display: inline-block;
+  background-color: $dark-grey;
+  color: white;
+  margin: 10px;
+  padding: 7px;
+  border-radius: 5px;
+  cursor: pointer;
 
-	&.default {
-		cursor: default;
-	}
+  &.default {
+    cursor: default;
+  }
 
-	&.pass {
-		background-color: $green;
-	}
+  &.pass {
+    background-color: $green;
+  }
 
-	&.fail {
-		background-color: $red;
-	}
+  &.fail {
+    background-color: $red;
+  }
 
-	&.cancel {
-		background-color: $grey;
-		color: $dark-grey;
-	}
+  &.cancel {
+    background-color: $grey;
+    color: $dark-grey;
+  }
 }
 
 #login-buttons {
-	#login-sign-in-link {
-		position: relative;
-		top: 4px;
-	}
+  #login-sign-in-link {
+    position: relative;
+    top: 4px;
+  }
 
-	a {
-		text-decoration: none;
-		padding: 0;
-		text-decoration: none;
-		border: none;
-	}
+  a {
+    text-decoration: none;
+    padding: 0;
+    text-decoration: none;
+    border: none;
+  }
 
-	#login-dropdown-list {
-		color:  black;
-		background-color: white;
-		border-radius: none;
-		font-weight: normal;
-		text-shadow: none;
-		a {
-			color: black;
-		}
-		a:hover {
-			text-decoration: underline;
-		}
-		.login-button {
-			cursor: pointer;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			-o-user-select: none;
-			user-select: none;
-			padding: 4px 8px;
-			font-size: 80%;
-			font-family: 'Open Sans', Helvetica, Arial, default;
-			line-height: 1.5;
-			text-align: center;
-			color: white;
-			text-shadow: none;
-			background-color: $green;
-			background-image: none;
-			border-radius: 5px;
-			border: none;
-			box-shadow: none;
-			-webkit-box-shadow: none;
-		}
-	}
+  #login-dropdown-list {
+    color:  black;
+    background-color: white;
+    border-radius: none;
+    font-weight: normal;
+    text-shadow: none;
+    a {
+      color: black;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .login-button {
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+      padding: 4px 8px;
+      font-size: 80%;
+      font-family: 'Open Sans', Helvetica, Arial, default;
+      line-height: 1.5;
+      text-align: center;
+      color: white;
+      text-shadow: none;
+      background-color: $green;
+      background-image: none;
+      border-radius: 5px;
+      border: none;
+      box-shadow: none;
+      -webkit-box-shadow: none;
+    }
+  }
 }
 
 .errors {
 
-	.alert-error {
-		background-color: $red;
-		color: white;
-		border-radius: 5px;
-		padding: 10px;
-		cursor: default;
-		margin: 10px 0 0 0;
+  .alert-error {
+    background-color: $red;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: default;
+    margin: 10px 0 0 0;
 
-		.close {
-			cursor: pointer;
-			font-weight: bold;
-			float: right;
-		}
-	}
+    .close {
+      cursor: pointer;
+      font-weight: bold;
+      float: right;
+    }
+  }
 }
 
 #spinner {
-	height: 300px
+  height: 300px
 }
 
 .corgi-success {
-	margin: 20px;
-	text-align: center;
-	div {
-		margin: 10px;
-		font-size: 2em;
-	}
-	img {
-		margin: 10px;
-		border-radius: 5px;
-	}
+  margin: 20px;
+  text-align: center;
+  div {
+    margin: 10px;
+    font-size: 2em;
+  }
+  img {
+    margin: 10px;
+    border-radius: 5px;
+  }
 }
 
 #new-testscript {
-	margin: 7px;
+  margin: 7px;
 
-	textarea {
-		display: block;
-		margin: 5px;
-		margin-top: 10px;
-		margin-left: 0;
-		padding: 5px;
-		border-radius: 5px;
-		min-width: 300px;
-		min-height: 100px;
-		border-color: $grey;
-	}
+  textarea {
+    display: block;
+    margin: 5px;
+    margin-top: 10px;
+    margin-left: 0;
+    padding: 5px;
+    border-radius: 5px;
+    min-width: 300px;
+    min-height: 100px;
+    border-color: $grey;
+  }
 
-	.cancel {
-		background-color: $grey;
-		padding: 4px;
-		margin-left: 150px;
-		color: $dark-grey;
-	}
+  .cancel {
+    background-color: $grey;
+    padding: 4px;
+    margin-left: 150px;
+    color: $dark-grey;
+  }
 }
 
 .btn-delete {
-	background-color: $red;
-	color: white;
-	padding: 5px;
-	border-radius: 5px;
-	position: absolute;
-	top: 10px;
-	right: 10px;
+  background-color: $red;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 
-	&:hover {
-		text-decoration: none;
-	}
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .testscript-steps {
-	max-width: 600px;
-	word-wrap: break-word;
+  max-width: 600px;
+  word-wrap: break-word;
 }
 
 .invisible {
-	display: none;
+  display: none;
 }
 
 .btn-new-testscript {
-	border-radius: 5px;
-	min-width: 100px;
-	background-color: #62bd19;
-	border: none;
-	color: white;
-	font-size: 1em;
-	display: inline;
-	margin-left: 0;
-	cursor: pointer;
-	padding: 5px;
+  border-radius: 5px;
+  min-width: 100px;
+  background-color: #62bd19;
+  border: none;
+  color: white;
+  font-size: 1em;
+  display: inline;
+  margin-left: 0;
+  cursor: pointer;
+  padding: 5px;
 
-	&.delete.edit {
-		background-color: red;
-		margin-left: 130px;
-	}
+  &.delete.edit {
+    background-color: red;
+    margin-left: 130px;
+  }
 
-	&.cancel.edit {
-		background-color: $grey;
-		color: $dark-grey;
-	}
+  &.cancel.edit {
+    background-color: $grey;
+    color: $dark-grey;
+  }
 
-	&.edit {
-		padding: 0 5px;
-		margin-top: 20px;
-		margin-left: 5px;
-	}
+  &.edit {
+    padding: 0 5px;
+    margin-top: 20px;
+    margin-left: 5px;
+  }
 
-	&:hover {
-		text-decoration: none;
-	}
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 footer span {
-	float: right;
+  float: right;
 }
 
 .undo {
-	background-color: $grey;
-	color: $dark-grey;
+  background-color: $grey;
+  color: $dark-grey;
 }
 
 .testing-results {
-	display: inline-block;
-	margin-right: 10px;
-	font-size: 1.2em;
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 1.2em;
 }
 
 .circle {
-	display: inline-block;
-	background-color: rgba(255, 255, 255, .7);
-	margin-left: 2px;
-	padding: 5px;
-	border-radius: 25px;
-	width: 15px;
-	text-align: center;
-	font-weight: bold;
+  display: inline-block;
+  background-color: rgba(255, 255, 255, .7);
+  margin-left: 2px;
+  padding: 5px;
+  border-radius: 25px;
+  width: 15px;
+  text-align: center;
+  font-weight: bold;
 
-	.green {
-		color: $green;
-	}
+  .green {
+    color: $green;
+  }
 
-	.red {
-		color: $red;
-	}
+  .red {
+    color: $red;
+  }
 
-	&.notification {
-		color: $blue;
-		width: 22px;
-		position: relative;
-		top: -1px;
-	}
+  &.notification {
+    color: $blue;
+    width: 22px;
+    position: relative;
+    top: -1px;
+  }
 }
 
 .testscript-results {
-	position: absolute;
-	bottom: 10px;
-	right: 10px;
-	color: $dark-grey;
-	cursor: pointer;
-	float: right;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  color: $dark-grey;
+  cursor: pointer;
+  float: right;
 
-	.results-inner {
-		z-index: 1;
-		display: none;
-		color: white;
-		position: relative;
-		top: 5px;
-		background-color: white;
-		max-height: 300px;
-		overflow-y: auto;
+  .results-inner {
+    z-index: 1;
+    display: none;
+    color: white;
+    position: relative;
+    top: 5px;
+    background-color: white;
+    max-height: 300px;
+    overflow-y: auto;
 
-		div {
-			opacity: 0.8;
-			padding: 10px;
-		}
+    div {
+      opacity: 0.8;
+      padding: 10px;
+    }
 
-		.green {
-			background-color: $green;
-			border-radius: 5px 5px 0 0;
-			border-bottom: 1px solid white;
-		}
+    .green {
+      background-color: $green;
+      border-radius: 5px 5px 0 0;
+      border-bottom: 1px solid white;
+    }
 
-		.red {
-			background-color: $red;
-			border-radius: 0 0px 5px 5px;
-		}
-	}
+    .red {
+      background-color: $red;
+      border-radius: 0 0px 5px 5px;
+    }
+  }
 }
 
 .notification.dropdown-menu {
-	padding: 5px;
-	display: none;
-	position: absolute;
-	top: 30px;
-	right: 0;
-	border-radius: 5px;
-	background-color: white;
-	z-index: 1;
-	font-size: 0.9em;
-	border: 2px solid $grey;
-	width: 350px;
+  padding: 5px;
+  display: none;
+  position: absolute;
+  top: 30px;
+  right: 0;
+  border-radius: 5px;
+  background-color: white;
+  z-index: 1;
+  font-size: 0.9em;
+  border: 2px solid $grey;
+  width: 350px;
 
-	a {
-		padding: 0;
-		text-decoration: none;
-		color: black;
-		border: none;
-		margin: 5px 0;
-		border-radius: 0;
+  a {
+    padding: 0;
+    text-decoration: none;
+    color: black;
+    border: none;
+    margin: 5px 0;
+    border-radius: 0;
 
-		&:hover {
-			color: white;
-			background-color: $red;
-		}
-	}
+    &:hover {
+      color: white;
+      background-color: $red;
+    }
+  }
 
-	li {
-		display: block;
-		margin: 7px 0;
-	}
+  li {
+    display: block;
+    margin: 7px 0;
+  }
 }
 
 li.relative-container {
-	position: relative;
+  position: relative;
 }
 
 .failure-reason {
-	display: none;
-	z-index: 1;
-	position: absolute;
-	top: -8px;
-	right: -8px;
-	form {
-		input {
-			display: inline-block;
-		}
-		.div {
-			display: inline-block;
-		}
-	}
+  display: none;
+  z-index: 1;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  form {
+    input {
+      display: inline-block;
+    }
+    .div {
+      display: inline-block;
+    }
+  }
 }
 
 .admin {
-	margin: 10px auto;
-	width: 800px;
+  margin: 10px auto;
+  width: 800px;
 
-	h1 {
-		margin: 10px 0;
-		font-size: 1.1em;
-	}
+  h1 {
+    margin: 10px 0;
+    font-size: 1.1em;
+  }
 
-	.title {
-		max-width: 500px;
-		vertical-align: middle;
-	}
+  .title {
+    max-width: 500px;
+    vertical-align: middle;
+  }
 
-	.select-milestone {
-		margin-left: 10px;
-	}
+  .select-milestone {
+    margin-left: 10px;
+  }
 
-	.milestones, .stream, .assign, .ticket-updates {
-		margin: 15px 0;
-		height: 60px;
-		background-color: rgba(238, 238, 238, 0.7);
+  .milestones, .stream, .assign, .ticket-updates {
+    margin: 15px 0;
+    height: 60px;
+    background-color: rgba(238, 238, 238, 0.7);
 
-		span, select {
-			margin-left: 10px;
-			position: relative;
-			top: 22px;
-		}
+    span, select {
+      margin-left: 10px;
+      position: relative;
+      top: 22px;
+    }
 
-		select {
-			top: 20px;
-		}
-	}
+    select {
+      top: 20px;
+    }
+  }
 
-	.users {
-		line-height: 18px;
-	}
+  .users {
+    line-height: 18px;
+  }
 
-	#milestone-choice {
-		min-width: 200px;
-	}
+  #milestone-choice {
+    min-width: 200px;
+  }
 
-	.btn-new-testscript, .alert {
-		float: right;
-		position: relative;
-		top: 12px;
-		right: 10px;
-		padding: 10px;
-		width: 130px;
-		text-align: center;
-	}
+  .btn-new-testscript, .alert {
+    float: right;
+    position: relative;
+    top: 12px;
+    right: 10px;
+    padding: 10px;
+    width: 130px;
+    text-align: center;
+  }
 
-	.alert {
-		background-color: $blue;
-		color: white;
-		opacity: 0;
-		border-radius: 5px;
-		width: auto;
-	}
+  .alert {
+    background-color: $blue;
+    color: white;
+    opacity: 0;
+    border-radius: 5px;
+    width: auto;
+  }
 
-	.red.btn-new-testscript {
-		background-color: $red;
-	}
+  .red.btn-new-testscript {
+    background-color: $red;
+  }
 
-	.user {
-		margin: 5px 0;
-		border-bottom: 1px solid $grey;
-		padding-bottom: 5px;
-		min-height: 30px;
+  .user {
+    margin: 5px 0;
+    border-bottom: 1px solid $grey;
+    padding-bottom: 5px;
+    min-height: 30px;
 
-		select {
-			float: right;
-			height: 26px;
-			font-size: 14px;
-			border: 0px;
-			margin-right: 10px;
-			outline: none;
-		}
+    select {
+      float: right;
+      height: 26px;
+      font-size: 14px;
+      border: 0px;
+      margin-right: 10px;
+      outline: none;
+    }
 
-		input {
-			float: right;
-		}
-	}
+    input {
+      float: right;
+    }
+  }
 
-	.randomize {
-		margin: 0 5px;
-		background-color: white;
-		color: black;
-		border: 2px solid $grey;
-		padding: 8px;
-		width: 130px;
-	}
+  .randomize {
+    margin: 0 5px;
+    background-color: white;
+    color: black;
+    border: 2px solid $grey;
+    padding: 8px;
+    width: 130px;
+  }
 
-	.user-tests {
-		height: 50px;
-	}
+  .user-tests {
+    height: 50px;
+  }
 
-	.assign-tickets, .select-update {
-		margin-left: 5px;
-	}
+  .assign-tickets, .select-update {
+    margin-left: 5px;
+  }
 }
 
 .testing-assignment {
-	background-color: rgba(238, 238, 238, 0.8);
-	font-size: 1.2em;
-	margin-top: 10px;
-	padding: 10px;
-	text-align: center;
+  background-color: rgba(238, 238, 238, 0.8);
+  font-size: 1.2em;
+  margin-top: 10px;
+  padding: 10px;
+  text-align: center;
 }
 
 .no-testing-ticket {
-	z-index: 2;
-	color: white;
-	background-color: $green;
-	padding: 10px;
-	font-size: 1.2em;
-	text-align: center;
-	opacity: 0.4;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
+  z-index: 2;
+  color: white;
+  background-color: $green;
+  padding: 10px;
+  font-size: 1.2em;
+  text-align: center;
+  opacity: 0.4;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
-	.ticket.main & {
-		position: relative;
-		margin: -10px;
-	}
+  .ticket.main & {
+    position: relative;
+    margin: -10px;
+  }
 }
 
 .to-do {
-	min-height: 300px;
-	margin: 0 auto;
+  min-height: 300px;
+  margin: 0 auto;
 
-	img {
-		margin: auto;
-		display: block;
-	}
+  img {
+    margin: auto;
+    display: block;
+  }
 }
 
 .completed-text {
-	margin: 10px auto;
-	text-align: center;
+  margin: 10px auto;
+  text-align: center;
 }
 
 .pull-right {
-	float: right;
+  float: right;
 }

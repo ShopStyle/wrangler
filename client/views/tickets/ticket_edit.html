@@ -1,57 +1,57 @@
 <template name="ticketEdit">
-	<div class="ticket {{status}}">
-		<div class="text">
-			<h1><a href="{{assemblaUrl}}">{{summary}}</a></h1>
-			<ul>
-				<li><strong>Ticket: </strong>{{assemblaId}}</li>
-				<li><strong>Assigned to: </strong>{{assignedTo}}</li>
-				<li><strong>Component: </strong>{{component}}</li>
-				<li><strong>Browser: </strong>{{browser}}</li>
-				<li><strong>OS: </strong>{{os}}</li>
-				<li><strong>Prerequisite/comments: </strong></li>
-				<li>{{breakLines comments}}</li>
-				<li class="num-testers">
-					<strong>Number of Testers:</strong>
-					<select>
-						{{#each numTesters}}
-							{{> numTester}}
-						{{/each}}
-					</select>
-				</li>
-				<li class="tester-select">
-					<strong>Testers:</strong>
-					{{#each ticketTesters}}
-						<select name="select-{{index}}">
-							{{>testerUsers}}
-						</select>
-					{{/each}}
-				</li>
-			</ul>
-		</div>
-		<!-- <div class="alert browser-alert">Assigned</div> -->
-		<a href="{{pathFor 'ticketPage'}}" class="btn-edit">back</a>
-	</div>
+  <div class="ticket {{status}}">
+    <div class="text">
+      <h1><a href="{{assemblaUrl}}">{{summary}}</a></h1>
+      <ul>
+        <li><strong>Ticket: </strong>{{assemblaId}}</li>
+        <li><strong>Assigned to: </strong>{{assignedTo}}</li>
+        <li><strong>Component: </strong>{{component}}</li>
+        <li><strong>Browser: </strong>{{browser}}</li>
+        <li><strong>OS: </strong>{{os}}</li>
+        <li><strong>Prerequisite/comments: </strong></li>
+        <li>{{breakLines comments}}</li>
+        <li class="num-testers">
+          <strong>Number of Testers:</strong>
+          <select>
+            {{#each numTesters}}
+              {{> numTester}}
+            {{/each}}
+          </select>
+        </li>
+        <li class="tester-select">
+          <strong>Testers:</strong>
+          {{#each ticketTesters}}
+            <select name="select-{{index}}">
+              {{>testerUsers}}
+            </select>
+          {{/each}}
+        </li>
+      </ul>
+    </div>
+    <!-- <div class="alert browser-alert">Assigned</div> -->
+    <a href="{{pathFor 'ticketPage'}}" class="btn-edit">back</a>
+  </div>
 </template>
 
 <template name="testerUsers">
-	{{#each testers}}
-		{{>testerUser name}}
-	{{/each}}
+  {{#each testers}}
+    {{>testerUser name}}
+  {{/each}}
 </template>
 
 
 <template name="testerUser">
-	{{#if selected}}
-		<option value="{{this}}" selected="selected">{{this}}</option>
-	{{else}}
-		<option value="{{this}}">{{this}}</option>
-	{{/if}}
+  {{#if selected}}
+    <option value="{{this}}" selected="selected">{{this}}</option>
+  {{else}}
+    <option value="{{this}}">{{this}}</option>
+  {{/if}}
 </template>
 
 <template name="numTester">
-	{{#if selected}}
-		<option value="{{number}}" selected="selected">{{number}}</option>
-	{{else}}
-		<option value="{{number}}">{{number}}</option>
-	{{/if}}
+  {{#if selected}}
+    <option value="{{number}}" selected="selected">{{number}}</option>
+  {{else}}
+    <option value="{{number}}">{{number}}</option>
+  {{/if}}
 </template>
