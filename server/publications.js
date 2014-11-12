@@ -21,9 +21,10 @@ Meteor.publish('testscripts', function(assemblaId) {
     {sort: {testscriptNum: 1}});
 });
 
-Meteor.publish('notifications', function() {
-  return Notifications.find({read: false});
-});
+// Commenting out for now, since not entirely sure if want to remove entirely
+// Meteor.publish('notifications', function() {
+//   return Notifications.find({read: false});
+// });
 
 Meteor.publish('milestones', function() {
   return Milestones.find();
