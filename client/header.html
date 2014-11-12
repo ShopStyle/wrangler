@@ -7,33 +7,25 @@
     <li>
       Tickets ▾
       <ul class="header-dropdown">
-        <li>
-          <a class="home {{activeRouteClass 'all'}}" href="{{pathFor 'all'}}">All</a>
-        </li>
-        <li>
-          <a class="{{activeRouteClass 'passed'}}" href="{{pathFor 'passed'}}">
-            Passed
-          </a>
-        </li>
-        <li>
-          <a class="{{activeRouteClass 'failed'}}" href="{{pathFor 'failed'}}">
-            Failed
-          </a>
-        </li>
-        <li>
-          <a class="{{activeRouteClass 'incomplete'}}" href="{{pathFor 'incomplete'}}">
-            Incomplete
-          </a>
-        </li>
+        <a class="home {{activeRouteClass 'all'}}" href="{{pathFor 'all'}}"><li>All</li></a>
+        <a class="{{activeRouteClass 'passed'}}" href="{{pathFor 'passed'}}">
+          <li>Passed</li>
+        </a>
+        <a class="{{activeRouteClass 'failed'}}" href="{{pathFor 'failed'}}">
+          <li>Failed</li>
+        </a>
+        <a class="{{activeRouteClass 'incomplete'}}" href="{{pathFor 'incomplete'}}">
+          <li>Incomplete</li>
+        </a>
       </ul>
     </li>
 
   </ul>
   <ul class="navbar-right">
     {{#if currentUser}}
-      <li class="relative-container notifications">
+      <!-- <li class="relative-container notifications">
         {{> notifications}}
-      </li>
+      </li> -->
       {{#if userAdmin}}
         <li>
           <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">Admin</a>

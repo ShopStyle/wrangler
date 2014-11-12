@@ -1,14 +1,15 @@
 $background-brown: #F2E9CE;
-$green: #62BD19;
+$green: rgba(46, 184, 46, 0.9);
 $blue: #00b4ff;
 $blue-lighter: #4dcbff;
-$red: #FF3737;
+$red: rgba(242, 38, 19, 0.9);
 $pink: #D11B7E;
 $yellow: #F6EF2A;
 $nav-green: #70AB8F;
 $light-blue: #D3E5FB;
 $grey: #EEEEEE;
 $dark-grey: #939393;
+$light-grey: rgba(238, 238, 238, 0.7);
 
 $header-grey: #fafafa;
 $header-grey-alt: #e0e0e0;
@@ -84,9 +85,10 @@ $navbar-height: 50px;
   li {
     display: inline-block;
     padding: 0 5px;
+    cursor: pointer;
 
     &:hover {
-      background: $blue-lighter;
+      background: $light-grey;
 
       .header-dropdown {
         display: block;
@@ -288,6 +290,17 @@ $navbar-height: 50px;
   }
 }
 
+.ticket-list-tickets .btn-test {
+  background-color: white;
+  color: black;
+
+  .circle {
+    font-weight: normal;
+    font-size: 15px;
+    width: 16px;
+  }
+}
+
 #login-buttons {
   #login-sign-in-link {
     position: relative;
@@ -468,13 +481,14 @@ footer span {
 
 .circle {
   display: inline-block;
-  background-color: rgba(255, 255, 255, .7);
+  background-color: rgba(255, 255, 255, 0.8);
   margin-left: 2px;
-  padding: 5px;
   border-radius: 25px;
-  width: 15px;
+  width: 22px;
+  height: 22px;
   text-align: center;
   font-weight: bold;
+  font-size: 16px;
 
   .green {
     color: $green;
