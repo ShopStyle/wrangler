@@ -1,0 +1,12 @@
+<template name="home">
+  <div class="content">
+    {{# if milstoneName}}
+    	<p>Today we're testing {{milstoneName}} with {{totalTickets}} tickets and {{totalTests}} tests</p>
+
+
+    	<div id="chart">
+    		<svg style="height:400px;width:400px"/>
+    	</div>
+    {{/if}}
+  </div>
+</template>

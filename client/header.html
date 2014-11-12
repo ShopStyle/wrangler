@@ -2,42 +2,45 @@
 <header class="navbar">
 	<ul class="navbar-left">
 		<li>
-			<a class="home {{activeRouteClass 'ticketsList'}}" href="{{pathFor 'ticketsList'}}">All</a>
+			<a href="{{pathFor 'home'}}">wrangler</a>
 		</li>
 		<li>
-			<a class="{{activeRouteClass 'passed'}}" href="{{pathFor 'passed'}}">
-				Passed
-			</a>
+			Tickets ▾
+			<ul class="header-dropdown">
+				<li>
+					<a class="home {{activeRouteClass 'all'}}" href="{{pathFor 'all'}}">All</a>
+				</li>
+				<li>
+					<a class="{{activeRouteClass 'passed'}}" href="{{pathFor 'passed'}}">
+						Passed
+					</a>
+				</li>
+				<li>
+					<a class="{{activeRouteClass 'failed'}}" href="{{pathFor 'failed'}}">
+						Failed
+					</a>
+				</li>
+				<li>
+					<a class="{{activeRouteClass 'incomplete'}}" href="{{pathFor 'incomplete'}}">
+						Incomplete
+					</a>
+				</li>
+			</ul>
 		</li>
-		<li>
-			<a class="{{activeRouteClass 'failed'}}" href="{{pathFor 'failed'}}">
-				Failed
-			</a>
-		</li>
-		<li>
-			<a class="{{activeRouteClass 'incomplete'}}" href="{{pathFor 'incomplete'}}">
-				Incomplete
-			</a>
-		</li>
+
 	</ul>
 	<ul class="navbar-right">
 		{{#if currentUser}}
-			<li class="relative-container">
+			<li class="relative-container notifications">
 				{{> notifications}}
 			</li>
-			<li>
-				<a class="{{activeRouteClass 'todo'}}" href="{{pathFor 'todo'}}">
-					To Do
-				</a>
-			</li>
-			<li>
-				<a class="{{activeRouteClass 'yours'}}" href="{{pathFor 'yours'}}">Own</a>
-			</li>
-			<li>
-				<a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">Admin</a>
-			</li>
+			{{#if userAdmin}}
+				<li>
+          <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">Admin</a>
+        </li>
+			{{/if}}
 		{{/if}}
-		{{> loginButtons align="right"}}
+		{{> userMenu}}
 	</ul>
 </header>
 </template>

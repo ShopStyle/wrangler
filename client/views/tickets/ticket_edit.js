@@ -4,10 +4,18 @@ Template.ticketEdit.events({
 		var currentTicketId = template.data._id;
 		var testerValues = $('.tester-select').find('select');
 		var testers = []
-		for (var i = 1; i <= numTesters; i++) {
-			var option = testerValues[i - 1];
-			if (option && option.value.length > 0) {
-				testers.push($(option).val());
+		clearErrors();
+
+		for (var i = 0; i < numTesters; i++) {
+			var option = testerValues[i];
+			var testerName = $(option).val();
+
+			if (testerName && testerName.length > 0) {
+				if (_.contains(testers, testerName)) {
+					throwError("Cannot assign tester: " + testerName + " more than once");
+					return false;
+				}
+				testers.push(testerName);
 			}
 		}
 
@@ -18,6 +26,7 @@ Template.ticketEdit.events({
 				}
 			}
 		);
+		return true;
 	}
 });
 
@@ -67,23 +76,19 @@ Template.testerUsers.helpers({
 	testers: function() {
 		selectedTesterEditPage = this.tester.toString();
 		var currentMilestone = Milestones.findOne({current: true});
-		var browsersObj = BrowserAssignments.findOne({milestoneId: currentMilestone.id})
+		var testers = TestingAssignments.find({milestoneId: currentMilestone.id})
 
-		if (browsersObj) {
-			browsersObj = browsersObj.assignments[0];
-			var testers = [''];
-			_.each(browsersObj, function(browser, username) {
-				testers.push(username);
-			})
-			return testers;
+		if (testers) {
+			return testers.fetch();
 		}
 	}
-})
+});
 
 Template.testerUser.helpers({
 	selected: function() {
 		return selectedTesterEditPage == this.toString();
 	}
-})
+});
+
 
 

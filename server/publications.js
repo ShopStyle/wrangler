@@ -9,7 +9,7 @@ Meteor.publish('tickets', function() {
 	else {
 		currentMilestone = 5194263;
 	}
-	return Tickets.find({ milestoneId: currentMilestone, statusName: {$in: ["Done", "Verified on Dev"]} });	
+	return Tickets.find({ milestoneId: currentMilestone, statusName: {$in: ["Done", "Verified on Dev"]} });
 });
 
 Meteor.publish('users', function() {
@@ -17,7 +17,7 @@ Meteor.publish('users', function() {
 });
 
 Meteor.publish('testscripts', function(assemblaId) {
-	return Testscripts.find({ ticketAssemblaId: assemblaId }, 
+	return Testscripts.find({ ticketAssemblaId: assemblaId },
 		{sort: {testscriptNum: 1}});
 });
 
@@ -35,9 +35,8 @@ Meteor.publish('stream', function() {
 
 Meteor.publish('userData', function() {
 	return Meteor.users.find({}, {fields: {username: 1}});
-})
+});
 
-Meteor.publish('browserAssignments', function() {
-	return BrowserAssignments.find();
-})
-
+Meteor.publish('testingAssignments', function() {
+	return TestingAssignments.find();
+});

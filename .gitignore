@@ -1,2 +1,4 @@
 settings.json
 .build
+.meteor
+packages

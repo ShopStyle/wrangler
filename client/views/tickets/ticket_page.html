@@ -16,7 +16,7 @@
 		{{#if noTesting}}
 			<div class="no-testing-ticket">NO TESTING REQUIRED</div>
 		{{else}}
-			{{#if currentUser}}
+			{{#if userAdmin}}
 				<a href="{{pathFor 'ticketEdit'}}" class="btn-edit">edit</a>
 			{{/if}}
 		{{/if}}

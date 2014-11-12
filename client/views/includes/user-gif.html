@@ -1,0 +1,8 @@
+<template name="userGif">
+  <div class="completed-text">Yay! You did all your tests. Here is a {{getGifType}} gif.</div>
+  {{#if showCats}}
+    <a href="http://thecatapi.com"><img src="http://thecatapi.com/api/images/get?format=src&type=gif"></a>
+  {{else}}
+    <img src="{{gifySrc}}"/>
+  {{/if}}
+</template>

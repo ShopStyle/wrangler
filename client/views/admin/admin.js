@@ -1,17 +1,18 @@
-browserOptions = ["IE8", "IE9", "IE10", "IE11", "Chrome",
+BROWSER_OPTIONS = ["IE8", "IE9", "IE10", "IE11", "Chrome",
 	"Firefox", "iPad", "iPhone", "Android", "Safari"];
-localeOptions = ["UK", "AU", "JP", "DE", "FR", "CA"];
+LOCALE_OPTIONS = ["UK", "AU", "JP", "DE", "FR", "CA"];
 
 Template.admin.helpers({
 	streamOn: function() {
 		var stream = Stream.findOne();
-		if (stream){
+		if (stream) {
 			return Stream.findOne().on;
 		}
 		else {
 			return false;
 		}
 	},
+
 	users: function() {
 		return Meteor.users.find();
 	}
@@ -21,45 +22,57 @@ Template.admin.events({
 	'click .streamer': function() {
 		Meteor.call('handleInterval');
 	},
+
 	'click .randomize': function() {
-		var browsers = _.shuffle(browserOptions);
-		var locales = _.shuffle(localeOptions);
+		var browsers = [], locales = [];
 
 		_.each($('.user'), function(user) {
+			// if we've run through all the locale/browsers, refill the queues
 			if (locales.length === 0) {
-				locales = _.shuffle(localeOptions);
+				locales = _.shuffle(LOCALE_OPTIONS);
 			}
 			if (browsers.length === 0) {
-				browsers = _.shuffle(browserOptions);
+				browsers = _.shuffle(BROWSER_OPTIONS);
 			}
 
+			// set browser and locale
 			$(user).find('.browser').val(browsers.pop());
 			$(user).find('.locale').val(locales.pop());
-		})
+		});
 	},
-	'click .assign-browsers': function() {
-		$('.browser-alert').css("opacity", "0.8");
-		Meteor.setTimeout(function() {
-			$('.browser-alert').fadeTo(500, 0)
-		}, 4000);
 
-		var userBrowsers = [];
+	'click .assign-browsers': function() {
+		// Remove all testers from this milestone
+		Meteor.call('resetTesters');
+
 		var users = $('.user');
-		var browsers = {};
-		var locales = {};
 		for (var i = 0, len = users.length; i < len; i++) {
 			var $user = $(users.get(i));
+			var username = $user.find('span').text();
+
+			// skip users who are not testing
 			if (!$user.find('input').prop('checked')) {
+				Meteor.call('excuseTester', username);
 				continue;
 			}
 
-			var username = $user.find('span').text();
-			browsers[username] = $user.find('.browser').val();
-			locales[username] = $user.find('.locale').val();
+
+			var browser = $user.find('.browser').val();
+			var locale = $user.find('.locale').val();
+			Meteor.call('assignTestUser', username, browser, locale, function(error) {
+				if (error) {
+					throwError(error.reason);
+				}
+			});
 		}
 
-		Meteor.call('assignBrowsers', browsers, locales);
+		// display success to browser
+		$('.browser-alert').css("opacity", "0.8");
+		Meteor.setTimeout(function() {
+			$('.browser-alert').fadeTo(500, 0);
+		}, 4000);
 	},
+
 	'click .assign-tickets': function() {
 		if (confirm("Assigning tickets will reset current testers. Proceed?")) {
 			Meteor.call('assignTickets', function(error) {
@@ -69,40 +82,39 @@ Template.admin.events({
 				else {
 					$('.ticket-alert').css("opacity", "0.8");
 					Meteor.setTimeout(function() {
-						$('.ticket-alert').fadeTo(500, 0)
+						$('.ticket-alert').fadeTo(500, 0);
 					}, 4000);
 				}
-			})
+			});
 		}
-	},
-	'click .select-update': function(e) {
-		Meteor.call('updateTickets');
-		$('.update-alert').css("opacity", "0.8");
-		Meteor.setTimeout(function() {
-			$('.update-alert').fadeTo(500, 0)
-		}, 4000);
 	}
 });
 
 Template.browserLocaleOptions.helpers({
 	browserOptions: function() {
-		return browserOptions;
+		return BROWSER_OPTIONS;
 	},
+
 	localeOptions: function() {
-		return localeOptions;
+		return LOCALE_OPTIONS;
 	},
+
 	isCurrentlyAssigned: function(username, locale) {
-		var browser = this.toString();
-		var current;
-		var choice = locale === true ? 1 : 0;
+		var assignment = this.toString();
 		var currentMilestone = Milestones.findOne({current: true});
+
 		if (currentMilestone) {
-			var current = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
-			if (current) {
-				current = current.assignments[choice];
-				return current[username] === browser;
+			var tester = TestingAssignments.findOne({milestoneId: currentMilestone.id, name: username});
+			if (tester) {
+				if (locale) {
+					return tester.locale === assignment;
+				} else {
+					return tester.browser === assignment;
+				}
 			}
 		}
+
+		return false;
 	}
 });
 
@@ -110,15 +122,15 @@ Template.user.helpers({
 	userAssignedToTest:	function(username) {
 		var currentMilestone = Milestones.findOne({current: true});
 		if (currentMilestone) {
-			var current = BrowserAssignments.findOne({milestoneId: currentMilestone.id});
-			if (current) {
-				current = current.assignments[0];
-				return current[username] != undefined;
-			}
-			else {
+			var tester = TestingAssignments.findOne({milestoneId: currentMilestone.id, name: username});
+			if (!tester) {
 				return true;
+			} else if (tester.notTesting === true) {
+				return false;
 			}
 		}
+
+		return true;
 	}
 });
 
@@ -128,9 +140,11 @@ Template.userStatus.helpers({
 			passers: {$nin: [username]},
 			failers: {$nin: [username]}});
 	},
+
 	userTicketsPassed: function(username) {
 		return Tickets.find({passers: {$in: [username]}});
 	},
+
 	userTicketsFailed: function(username) {
 		return Tickets.find({failers: {$in: [username]}});
 	}

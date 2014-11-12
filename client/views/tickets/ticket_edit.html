@@ -1,5 +1,5 @@
 <template name="ticketEdit">
-	<div class="ticket {{passed this}}">
+	<div class="ticket {{status}}">
 		<div class="text">
 			<h1><a href="{{assemblaUrl}}">{{summary}}</a></h1>
 			<ul>
@@ -35,7 +35,7 @@
 
 <template name="testerUsers">
 	{{#each testers}}
-		{{>testerUser}}
+		{{>testerUser name}}
 	{{/each}}
 </template>
 

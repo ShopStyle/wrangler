@@ -1,13 +1,13 @@
-# Meteor packages used by this project, one per line.
-#
-# 'meteor add' and 'meteor remove' will edit this file for you,
-# but you can also edit it by hand.
-
+reywood:bootstrap3-sass
 standard-app-packages
-scss
-accounts-ui
-accounts-password
-iron-router
-spin
+blaze
+iron:router
+sacha:spin
 http
 assembla
+d3
+pfafman:nvd3
+accounts-ui-unstyled
+accounts-password
+accounts-base
+joshowens:accounts-entry
