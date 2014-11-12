@@ -1,133 +1,134 @@
 Testscripts = new Meteor.Collection('testscripts');
 
 Testscripts.allow({
-	update: function() {
-		return Meteor.user();
-	}
+  update: function() {
+    return Meteor.user();
+  }
 });
 
 Meteor.methods({
-	updateTicketStatus: function(ticket) {
-		var status = '';
-		var passers = [];
-		var failers = [];
-		var testscripts = Testscripts.find({ ticketAssemblaId: ticket.assemblaId });
-		var numTestersReq = ticket.numTesters || 2;
-		var numTestScripts = testscripts.count();
+  updateTicketStatus: function(ticket) {
+    var status = '';
+    var passers = [];
+    var failers = [];
+    var testscripts = Testscripts.find({ ticketAssemblaId: ticket.assemblaId });
+    var numTestersReq = ticket.numTesters || 2;
+    var numTestScripts = testscripts.count();
 
-		testscripts.forEach(function(testscript) {
-			_.each(testscript.failers, function(failerObj) {
-				failers.push(failerObj.username);
-			});
-			passers = passers.concat(testscript.passers);
-		});
+    testscripts.forEach(function(testscript) {
+      _.each(testscript.failers, function(failerObj) {
+        failers.push(failerObj.username);
+      });
+      passers = passers.concat(testscript.passers);
+    });
 
-		var numPassers = 0;
-		var passersCounts = {};
-		var allTestscriptPassers = [];
+    var numPassers = 0;
+    var passersCounts = {};
+    var allTestscriptPassers = [];
 
-		passers.forEach(function(elem) {
-			if (passersCounts[elem] == null) {
-				passersCounts[elem] = 1;
-			}
-			else {
-				passersCounts[elem] += 1;
-			}
-		});
+    passers.forEach(function(elem) {
+      if (passersCounts[elem] == null) {
+        passersCounts[elem] = 1;
+      }
+      else {
+        passersCounts[elem] += 1;
+      }
+    });
 
-		for (var key in passersCounts) {
-			if (passersCounts[key] >= numTestScripts) {
-				numPassers += 1;
-				allTestscriptPassers.push(key);
-			}
-		}
+    for (var key in passersCounts) {
+      if (passersCounts[key] >= numTestScripts) {
+        numPassers += 1;
+        allTestscriptPassers.push(key);
+      }
+    }
 
-		//this is pretty much the same logic as above, but decides who has completed all the testscripts for a ticket
-		var completedCounts = {};
-		var allStepsCompleted = [];
-		var allFailPass = [];
-		allFailPass = allFailPass.concat(passers);
-		allFailPass = allFailPass.concat(failers);
+    //this is pretty much the same logic as above, but decides who has completed all the testscripts for a ticket
+    var completedCounts = {};
+    var allStepsCompleted = [];
+    var allFailPass = [];
+    allFailPass = allFailPass.concat(passers);
+    allFailPass = allFailPass.concat(failers);
 
-		allFailPass.forEach(function(elem) {
-			if (completedCounts[elem] == null) {
-				completedCounts[elem] = 1;
-			}
-			else {
-				completedCounts[elem] += 1;
-			}
-		});
+    allFailPass.forEach(function(elem) {
+      if (completedCounts[elem] == null) {
+        completedCounts[elem] = 1;
+      }
+      else {
+        completedCounts[elem] += 1;
+      }
+    });
 
-		for (var key in completedCounts) {
-			if (completedCounts[key] >= numTestScripts) {
-				allStepsCompleted.push(key);
-			}
-		}
+    for (var key in completedCounts) {
+      if (completedCounts[key] >= numTestScripts) {
+        allStepsCompleted.push(key);
+      }
+    }
 
-		failers = _.uniq(failers);
+    failers = _.uniq(failers);
 
-		if (failers[0] != undefined && failers.length > 0) {
-			status = 'fail';
-		}
-		else if (numPassers >= numTestersReq) {
-			status = 'pass';
-			Tickets.update(ticket._id, {
-				$set: {
-					status: status,
-					statusName: 'Verified on Dev',
-					failers: failers,
-					passers: allTestscriptPassers
-				}
-			});
+    if (failers[0] != undefined && failers.length > 0) {
+      status = 'fail';
+    }
+    else if (numPassers >= numTestersReq) {
+      status = 'pass';
+      Tickets.update(ticket._id, {
+        $set: {
+          status: status,
+          statusName: 'Verified on Dev',
+          failers: failers,
+          passers: allTestscriptPassers
+        }
+      });
 
-			if (Meteor.isServer) {
-				Assembla.verifyTicketOnDev(ticket.assemblaId);
-			}
-		}
+      if (Meteor.isServer) {
+        Assembla.verifyTicketOnDev(ticket.assemblaId);
+      }
+    }
 
-		Tickets.update(ticket._id, {
-			$set: {
-				status: status,
-				failers: failers,
-				passers: allTestscriptPassers,
-				allStepsCompleted: allStepsCompleted
-			}
-		});
-	},
-	updateTestscriptResult: function(id, passTest, failReason) {
-		var user = Meteor.user();
-		if (!user) {
-			throw new Meteor.Error(401, "You need to login to post test results");
-		}
+    Tickets.update(ticket._id, {
+      $set: {
+        status: status,
+        failers: failers,
+        passers: allTestscriptPassers,
+        allStepsCompleted: allStepsCompleted
+      }
+    });
+  },
 
-		var testscript = Testscripts.findOne(id);
-		var ticket = Tickets.findOne({ assemblaId: testscript.ticketAssemblaId });
-		if (passTest === '') {
-			Testscripts.update(testscript._id, {
-				$pull: {
-					failers: { username: user.username },
-					passers: user.username
-				}
-			});
-		}
-		else if (passTest) {
-			Testscripts.update(testscript._id, {
-				$pull: { failers: { username: user.username }},
-				$addToSet: { passers: user.username }
-			});
-		}
-		else {
-			createFailNotification(ticket._id, user.username);
-			Testscripts.update(testscript._id, {
-				$pull: { passers: user.username },
-				$addToSet: {
-					failers:  {
-						username: user.username,
-						failReason: failReason
-					}
-				}
-			});
-		}
-		Meteor.call('updateTicketStatus', ticket);
-	}
+  updateTestscriptResult: function(id, passTest, failReason) {
+    var user = Meteor.user();
+    if (!user) {
+      throw new Meteor.Error(401, "You need to login to post test results");
+    }
+
+    var testscript = Testscripts.findOne(id);
+    var ticket = Tickets.findOne({ assemblaId: testscript.ticketAssemblaId });
+    if (passTest === '') {
+      Testscripts.update(testscript._id, {
+        $pull: {
+          failers: { username: user.username },
+          passers: user.username
+        }
+      });
+    }
+    else if (passTest) {
+      Testscripts.update(testscript._id, {
+        $pull: { failers: { username: user.username }},
+        $addToSet: { passers: user.username }
+      });
+    }
+    else {
+      createFailNotification(ticket._id, user.username);
+      Testscripts.update(testscript._id, {
+        $pull: { passers: user.username },
+        $addToSet: {
+          failers:  {
+            username: user.username,
+            failReason: failReason
+          }
+        }
+      });
+    }
+    Meteor.call('updateTicketStatus', ticket);
+  }
 });

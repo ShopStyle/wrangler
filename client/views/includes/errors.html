@@ -1,14 +1,14 @@
 <template name="errors">
-	<div class="errors">
-		{{#each errors}}
-			{{> error}}
-		{{/each}}
-	</div>
+  <div class="errors">
+    {{#each errors}}
+      {{> error}}
+    {{/each}}
+  </div>
 </template>
 
 <template name="error">
-	<div class="alert-error" data-id={{_id}}>
-		{{message}}
-		<span class="close">&times;</span>
-	</div>
+  <div class="alert-error" data-id={{_id}}>
+    {{message}}
+    <span class="close">&times;</span>
+  </div>
 </template>

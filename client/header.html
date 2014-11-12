@@ -1,46 +1,46 @@
 <template name="header">
 <header class="navbar">
-	<ul class="navbar-left">
-		<li>
-			<a href="{{pathFor 'home'}}">wrangler</a>
-		</li>
-		<li>
-			Tickets ▾
-			<ul class="header-dropdown">
-				<li>
-					<a class="home {{activeRouteClass 'all'}}" href="{{pathFor 'all'}}">All</a>
-				</li>
-				<li>
-					<a class="{{activeRouteClass 'passed'}}" href="{{pathFor 'passed'}}">
-						Passed
-					</a>
-				</li>
-				<li>
-					<a class="{{activeRouteClass 'failed'}}" href="{{pathFor 'failed'}}">
-						Failed
-					</a>
-				</li>
-				<li>
-					<a class="{{activeRouteClass 'incomplete'}}" href="{{pathFor 'incomplete'}}">
-						Incomplete
-					</a>
-				</li>
-			</ul>
-		</li>
+  <ul class="navbar-left">
+    <li>
+      <a href="{{pathFor 'home'}}">wrangler</a>
+    </li>
+    <li>
+      Tickets ▾
+      <ul class="header-dropdown">
+        <li>
+          <a class="home {{activeRouteClass 'all'}}" href="{{pathFor 'all'}}">All</a>
+        </li>
+        <li>
+          <a class="{{activeRouteClass 'passed'}}" href="{{pathFor 'passed'}}">
+            Passed
+          </a>
+        </li>
+        <li>
+          <a class="{{activeRouteClass 'failed'}}" href="{{pathFor 'failed'}}">
+            Failed
+          </a>
+        </li>
+        <li>
+          <a class="{{activeRouteClass 'incomplete'}}" href="{{pathFor 'incomplete'}}">
+            Incomplete
+          </a>
+        </li>
+      </ul>
+    </li>
 
-	</ul>
-	<ul class="navbar-right">
-		{{#if currentUser}}
-			<li class="relative-container notifications">
-				{{> notifications}}
-			</li>
-			{{#if userAdmin}}
-				<li>
+  </ul>
+  <ul class="navbar-right">
+    {{#if currentUser}}
+      <li class="relative-container notifications">
+        {{> notifications}}
+      </li>
+      {{#if userAdmin}}
+        <li>
           <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">Admin</a>
         </li>
-			{{/if}}
-		{{/if}}
-		{{> userMenu}}
-	</ul>
+      {{/if}}
+    {{/if}}
+    {{> userMenu}}
+  </ul>
 </header>
 </template>

@@ -2,41 +2,41 @@
 intervalHandle = null;
 
 Meteor.publish('tickets', function() {
-	var currentMilestone = Milestones.findOne({current: true});
-	if (currentMilestone) {
-		currentMilestone = currentMilestone.id;
-	}
-	else {
-		currentMilestone = 5194263;
-	}
-	return Tickets.find({ milestoneId: currentMilestone, statusName: {$in: ["Done", "Verified on Dev"]} });
+  var currentMilestone = Milestones.findOne({current: true});
+  if (currentMilestone) {
+    currentMilestone = currentMilestone.id;
+  }
+  else {
+    currentMilestone = 5194263;
+  }
+  return Tickets.find({ milestoneId: currentMilestone, statusName: {$in: ["Done", "Verified on Dev"]} });
 });
 
 Meteor.publish('users', function() {
-	return AssemblaUsers.find({}, { fields: { login: 1, id: 1 }});
+  return AssemblaUsers.find({}, { fields: { login: 1, id: 1 }});
 });
 
 Meteor.publish('testscripts', function(assemblaId) {
-	return Testscripts.find({ ticketAssemblaId: assemblaId },
-		{sort: {testscriptNum: 1}});
+  return Testscripts.find({ ticketAssemblaId: assemblaId },
+    {sort: {testscriptNum: 1}});
 });
 
 Meteor.publish('notifications', function() {
-	return Notifications.find({read: false});
+  return Notifications.find({read: false});
 });
 
 Meteor.publish('milestones', function() {
-	return Milestones.find();
+  return Milestones.find();
 });
 
 Meteor.publish('stream', function() {
-	return Stream.find();
+  return Stream.find();
 });
 
 Meteor.publish('userData', function() {
-	return Meteor.users.find({}, {fields: {username: 1}});
+  return Meteor.users.find({}, {fields: {username: 1}});
 });
 
 Meteor.publish('testingAssignments', function() {
-	return TestingAssignments.find();
+  return TestingAssignments.find();
 });

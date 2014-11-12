@@ -1,18 +1,18 @@
 <template name="milestones">
-	<span>Choose a milestone to test.</span>
-	<div class="select-milestone btn-new-testscript">Select Milestone</div>
-	<select id="milestone-choice">
-		{{#each milestones}}
-			{{> milestone}}
-		{{/each}}
-	</select>
-	<div class="alert milestone-alert">Milestone selected</div>
+  <span>Choose a milestone to test.</span>
+  <div class="select-milestone btn-new-testscript">Select Milestone</div>
+  <select id="milestone-choice">
+    {{#each milestones}}
+      {{> milestone}}
+    {{/each}}
+  </select>
+  <div class="alert milestone-alert">Milestone selected</div>
 </template>
 
 <template name="milestone">
-	{{#if currentMilestone}}
-		<option value="{{id}}" selected="selected">{{title}}</option>
-	{{else}}
-		<option value="{{id}}">{{title}}</option>
-	{{/if}}
+  {{#if currentMilestone}}
+    <option value="{{id}}" selected="selected">{{title}}</option>
+  {{else}}
+    <option value="{{id}}">{{title}}</option>
+  {{/if}}
 </template>

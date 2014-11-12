@@ -47,5 +47,4 @@ Template.account.events({
       }
     });
   }
-
 });
