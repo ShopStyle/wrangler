@@ -17,6 +17,11 @@
         <a class="{{activeRouteClass 'incomplete'}}" href="{{pathFor 'incomplete'}}">
           <li>Incomplete</li>
         </a>
+        {{#if userAdmin}}
+        <a class="{{activeRouteClass 'noTesters'}}" href="{{pathFor 'noTesters'}}">
+          <li>Missing Testers</li>
+        </a>
+        {{/if}}
       </ul>
     </li>
 
