@@ -1,5 +1,5 @@
 $background-brown: #F2E9CE;
-$green: rgba(46, 184, 46, 0.9);
+$green: rgba(46, 184, 46, 0.8);
 $blue: #00b4ff;
 $blue-lighter: #4dcbff;
 $red: rgba(242, 38, 19, 0.9);
@@ -13,6 +13,7 @@ $light-grey: rgba(238, 238, 238, 0.7);
 
 $header-grey: #fafafa;
 $header-grey-alt: #e0e0e0;
+$font-fancy: 'Lobster', Helvetica;
 
 @import '.meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap';
 
@@ -80,6 +81,12 @@ $navbar-height: 50px;
   a {
     text-decoration: none;
     color:  black;
+  }
+
+  .wrangler-logo {
+    font-family: $font-fancy;
+    text-transform: none;
+    font-size: 18px;
   }
 
   li {
@@ -257,10 +264,12 @@ $navbar-height: 50px;
 
 .ticket.pass {
   border-left: 5px solid $green;
+  padding-left: 6px;
 }
 
 .ticket.fail {
   border-left: 5px solid $red;
+  padding-left: 6px;
 }
 
 .btn-test, .failure-reason-cancel {

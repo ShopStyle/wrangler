@@ -1,7 +1,7 @@
 <template name="home">
-  <div class="content">
-    {{# if milstoneName}}
-      <p>Today we're testing {{milstoneName}} with {{totalTickets}} tickets and {{totalTests}} tests</p>
+  <div class="content home-page">
+    {{# if milestoneName}}
+      <p>Today we're testing "{{milestoneName}}" with {{totalTickets}} tickets ({{totalTestableTickets}} testable tickets) and {{totalTests}} assigned tests</p>
 
 
       <div id="chart">

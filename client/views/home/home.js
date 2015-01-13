@@ -1,20 +1,37 @@
+var ticketSkipped = false;
+
+var countType = function(tickets, type) {
+  var countType = _.reduce(_.pluck(tickets, type), function(count, testers) {
+    if (testers) {
+      return count + testers.length;
+    }
+    else {
+      ticketSkipped = true;
+      return count;
+    }
+  }, 0);
+
+  return countType;
+}
+
 Template.home.helpers({
   totalTickets: function() {
     var tickets = Tickets.find();
     return tickets.count();
   },
 
-  // total tests are #tickets * #people testing each ticket.
-  totalTests: function() {
-    var tickets = Tickets.find().fetch();
-    var passed = _.reduce(_.pluck(tickets, 'testers'), function(count, testers) {
-      return count + testers.length;
-    }, 0);
-
-    return passed;
+  totalTestableTickets: function() {
+    var tickets = Tickets.find({noTesting: false});
+    return tickets.count();
   },
 
-  milstoneName: function() {
+  totalTests: function() {
+    var tickets = Tickets.find({noTesting: false}).fetch();
+    var totalTests = countType(tickets, 'testers')
+    return totalTests;
+  },
+
+  milestoneName: function() {
     var currentMilestone = Milestones.findOne({current: true});
     if (currentMilestone) {
       return currentMilestone.title;
@@ -24,19 +41,11 @@ Template.home.helpers({
 });
 
 var getTestStatusData = function() {
-    var tickets = Tickets.find().fetch();
+  var tickets = Tickets.find({noTesting: false}).fetch();
 
-  var passed = _.reduce(_.pluck(tickets, 'passers'), function(count, testers) {
-    return count + testers.length;
-  }, 0);
-
-  var failed = _.reduce(_.pluck(tickets, 'failers'), function(count, testers) {
-    return count + testers.length;
-  }, 0);
-
-  var incomplete = _.reduce(_.pluck(tickets, 'testers'), function(count, testers) {
-    return count + testers.length;
-  }, 0) - (passed + failed);
+  var passed = countType(tickets, 'passers');
+  var failed = countType(tickets, 'failers');
+  var incomplete = countType(tickets, 'testers') - passed - failed;
 
   var data = [];
   data.push({
@@ -62,8 +71,10 @@ Template.home.rendered = function() {
     var chart = nv.models.pieChart()
       .x(function(d) { return d.label })
       .y(function(d) { return d.value })
-      .showLabels(true)
-      .color(['#62bd19', '#ff3737', '#e0e0e0']);
+      .showLabels(false)
+      .donut(true)
+      .donutRatio(0.3)
+      .color(['#2eb82e', '#f22613', '#e0e0e0']);
 
     d3.select("#chart svg")
       .datum(data)
