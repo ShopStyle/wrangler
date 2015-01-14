@@ -1,18 +1,18 @@
+<head>
+  <title>Shopstyle - Tester</title>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+</head>
+<body></body>
+
 <template name="layout">
-  <head>
-    <title>Shopstyle - Tester</title>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
-  </head>
-  <body>
-    <div class="container">
-      {{> header}}
-      {{> errors}}
-      <div id="main">
-        {{> yield}}
-      </div>
+  <div class="container">
+    {{> header}}
+    {{> errors}}
+    <div id="main">
+      {{> yield}}
     </div>
-  </body>
+  </div>
   <footer>
     <hr>
     <a href="https://github.com/mrkoreye/testy">Code on GitHub</a>

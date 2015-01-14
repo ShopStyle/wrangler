@@ -3,9 +3,30 @@
 
   p {
     font-size: 18px;
+    margin-top: 20px;
   }
 
   svg {
     margin: 20px auto;
+  }
+
+  .tester-summaries {
+    .tester-summary {
+      &.completed {
+
+      }
+    }
+
+    .tester-name {
+
+    }
+
+    .tester-complete {
+
+    }
+
+    .tester-incomplete {
+
+    }
   }
 }

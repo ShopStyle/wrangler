@@ -16,11 +16,11 @@
         {{#each users}}
           {{> user}}
         {{/each}}
-        <div class="user-tests">
+        <!-- <div class="user-tests">
           <div class="btn-new-testscript assign-browsers">Assign Browsers</div>
           <div class="btn-new-testscript randomize">Randomize</div>
           <div class="alert browser-alert">Assigned</div>
-        </div>
+        </div> -->
       </div>
       <div class="assign">
         <span>Assign users to tickets</span>
@@ -39,7 +39,7 @@
     {{else}}
       <input name="{{username}}" value="username" type="checkbox">
     {{/if}}
-    {{>browserLocaleOptions this}}
+    <!-- {{>browserLocaleOptions this}} -->
     {{#if userAssignedToTest username}}
       {{> userStatus this}}
     {{/if}}

@@ -3,9 +3,18 @@
     {{# if milestoneName}}
       <p>Today we're testing "{{milestoneName}}" with {{totalTickets}} tickets ({{totalTestableTickets}} testable tickets) and {{totalTests}} assigned tests</p>
 
-
       <div id="chart">
         <svg style="height:400px;width:400px"/>
+      </div>
+
+      <div class="tester-summaries">
+        {{#each testers}}
+          <div class="tester-summary {{hasTesterCompletedTests tester}}">
+            <div class="tester-name">{{tester.name}}</div>
+            <div class="tester-complete">{{tester.complete}}</div>
+            <div class="tester-incomplete">{{tester.incomplete}}</div>
+          </div>
+        {{/each}}
       </div>
     {{/if}}
   </div>

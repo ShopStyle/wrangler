@@ -10,7 +10,7 @@ var getCurrentMilestone = function() {
 
 Meteor.methods({
   resetTesters: function() {
-    TestingAssignments.remove({milestoneId: getCurrentMilestone()});
+    TestingAssignments.remove();
   },
 
   assignTestUser: function(user, browser, locale) {

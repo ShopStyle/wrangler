@@ -1,4 +1,4 @@
-BROWSER_OPTIONS = ["IE8", "IE9", "IE10", "IE11", "Chrome",
+BROWSER_OPTIONS = ["IE9", "IE10", "IE11", "Chrome",
   "Firefox", "iPad", "iPhone", "Android", "Safari"];
 LOCALE_OPTIONS = ["UK", "AU", "JP", "DE", "FR", "CA"];
 
@@ -23,55 +23,55 @@ Template.admin.events({
     Meteor.call('handleInterval');
   },
 
-  'click .randomize': function() {
-    var browsers = [], locales = [];
-
-    _.each($('.user'), function(user) {
-      // if we've run through all the locale/browsers, refill the queues
-      if (locales.length === 0) {
-        locales = _.shuffle(LOCALE_OPTIONS);
-      }
-      if (browsers.length === 0) {
-        browsers = _.shuffle(BROWSER_OPTIONS);
-      }
-
-      // set browser and locale
-      $(user).find('.browser').val(browsers.pop());
-      $(user).find('.locale').val(locales.pop());
-    });
-  },
-
-  'click .assign-browsers': function() {
-    // Remove all testers from this milestone
-    Meteor.call('resetTesters');
-
-    var users = $('.user');
-    for (var i = 0, len = users.length; i < len; i++) {
-      var $user = $(users.get(i));
-      var username = $user.find('span').text();
-
-      // skip users who are not testing
-      if (!$user.find('input').prop('checked')) {
-        Meteor.call('excuseTester', username);
-        continue;
-      }
-
-
-      var browser = $user.find('.browser').val();
-      var locale = $user.find('.locale').val();
-      Meteor.call('assignTestUser', username, browser, locale, function(error) {
-        if (error) {
-          throwError(error.reason);
-        }
-      });
-    }
-
-    // display success to browser
-    $('.browser-alert').css("opacity", "0.8");
-    Meteor.setTimeout(function() {
-      $('.browser-alert').fadeTo(500, 0);
-    }, 4000);
-  },
+  // 'click .randomize': function() {
+  //   var browsers = [], locales = [];
+  //
+  //   _.each($('.user'), function(user) {
+  //     // if we've run through all the locale/browsers, refill the queues
+  //     if (locales.length === 0) {
+  //       locales = _.shuffle(LOCALE_OPTIONS);
+  //     }
+  //     if (browsers.length === 0) {
+  //       browsers = _.shuffle(BROWSER_OPTIONS);
+  //     }
+  //
+  //     // set browser and locale
+  //     $(user).find('.browser').val(browsers.pop());
+  //     $(user).find('.locale').val(locales.pop());
+  //   });
+  // },
+  //
+  // 'click .assign-browsers': function() {
+  //   // Remove all testers from this milestone
+  //   Meteor.call('resetTesters');
+  //
+  //   var users = $('.user');
+  //   for (var i = 0, len = users.length; i < len; i++) {
+  //     var $user = $(users.get(i));
+  //     var username = $user.find('span').text();
+  //
+  //     // skip users who are not testing
+  //     if (!$user.find('input').prop('checked')) {
+  //       Meteor.call('excuseTester', username);
+  //       continue;
+  //     }
+  //
+  //
+  //     var browser = $user.find('.browser').val();
+  //     var locale = $user.find('.locale').val();
+  //     Meteor.call('assignTestUser', username, browser, locale, function(error) {
+  //       if (error) {
+  //         throwError(error.reason);
+  //       }
+  //     });
+  //   }
+  //
+  //   // display success to browser
+  //   $('.browser-alert').css("opacity", "0.8");
+  //   Meteor.setTimeout(function() {
+  //     $('.browser-alert').fadeTo(500, 0);
+  //   }, 4000);
+  // },
 
   'click .assign-tickets': function() {
     if (confirm("Assigning tickets will reset current testers. Proceed?")) {
