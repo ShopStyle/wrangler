@@ -12,24 +12,27 @@ Tickets.allow({
 });
 
 Meteor.methods({
-  assignTickets: function() {
-    var smokeTestTickets = [4929, 5026, 5154, 6399, 7036];
-    Tickets.update({assemblaId: {$in: smokeTestTickets}},
-      {$set: {passers: [], failers: [], testers: [], status: '', allStepsCompleted: []}}, {multi: true});
-    Testscripts.update({ticketAssemblaId: {$in: smokeTestTickets}},
-      {$set: {passers: [], failers: [], status: ''}}, {multi: true});
-
+  resetTickets: function() {
     var currentMilestone = Milestones.findOne({current: true});
     if (!currentMilestone) {
       throw new Meteor.Error(401, "Milestone not found");
     }
 
+    Tickets.update({milestoneId: currentMilestone.id},
+      {$set: {passers: [], failers: [], testers: [], status: '', allStepsCompleted: []}}, {multi: true});
+    // set milestone id on testscripts too, so this does not update all
+    Testscripts.update({},
+      {$set: {passers: [], failers: [], status: ''}}, {multi: true});
+  },
+
+  assignTickets: function() {
+    Meteor.call('resetTickets');
+
+    var currentMilestone = Milestones.findOne({current: true});
     var testers = [];
     var testersCollection = TestingAssignments.find({milestoneId: currentMilestone.id});
-    if (!testersCollection) {
-      throw new Meteor.Error(401, "Please assign browsers to assign tickets");
-    }
-    else if (testersCollection.count() < DEFAULT_TESTERS_PER_TICKET) {
+
+    if (testersCollection.count() < DEFAULT_TESTERS_PER_TICKET) {
       throw new Meteor.Error(401, "Please assign at least " + DEFAULT_TESTERS_PER_TICKET + " people to test");
     }
 
@@ -40,8 +43,6 @@ Meteor.methods({
 
     // get all tickets that need testers assigned
     var tickets = Tickets.find({milestoneId: currentMilestone.id, statusName: "Done", noTesting: false});
-
-    var MAX_TICKETS_PER_TESTER = Math.floor((tickets.count() * DEFAULT_TESTERS_PER_TICKET) / testersCollection.count());
 
     tickets.forEach(function(ticket) {
       // some tickets might have a tester num override, check that here.

@@ -13,12 +13,10 @@ Meteor.methods({
     TestingAssignments.remove();
   },
 
-  assignTestUser: function(user, browser, locale) {
+  assignTestUser: function(user) {
     TestingAssignments.insert({
       milestoneId: getCurrentMilestone(),
       name: user,
-      browser: browser,
-      locale: locale,
       tickets: []
     });
   },

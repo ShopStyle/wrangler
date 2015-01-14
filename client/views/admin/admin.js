@@ -75,6 +75,27 @@ Template.admin.events({
 
   'click .assign-tickets': function() {
     if (confirm("Assigning tickets will reset current testers. Proceed?")) {
+      // Remove all testers from this milestone
+      Meteor.call('resetTesters');
+
+      var users = $('.user');
+      for (var i = 0, len = users.length; i < len; i++) {
+        var $user = $(users.get(i));
+        var username = $user.find('span').text();
+
+        // skip users who are not testing
+        if (!$user.find('input').prop('checked')) {
+          Meteor.call('excuseTester', username);
+          continue;
+        }
+
+        Meteor.call('assignTestUser', username, function(error) {
+          if (error) {
+            throwError(error.reason);
+          }
+        });
+      }
+
       Meteor.call('assignTickets', function(error) {
         if (error) {
           throwError(error.reason);

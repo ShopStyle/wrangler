@@ -1,7 +1,7 @@
 <template name="userMenu">
   {{#if isLoggedIn}}
     <li class="view dropdown-top-level" href="/account">{{name}}
-      <ul class="header-dropdown dropdown-menu-right dropdown-menu">
+      <ul class="header-dropdown right-header">
         <a class="{{activeRouteClass 'todo'}}" href="{{pathFor 'todo'}}">
           <li>To Do</li>
         </a>
