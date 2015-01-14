@@ -1,11 +1,19 @@
 Template.userMenu.helpers({
-  isLoggedIn: function () {
+  isLoggedIn: function() {
     return !!Meteor.user();
   },
-  name: function () {
+  name: function() {
     return Meteor.user().username;
   },
-  profileUrl: function () {
+  profileUrl: function() {
     return getProfileUrl(Meteor.user());
+  }
+});
+
+Template.userMenu.events({
+  'click .logout-user': function() {
+    Meteor.logout(function() {
+      Router.go('/');
+    });
   }
 });

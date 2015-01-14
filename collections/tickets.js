@@ -7,11 +7,28 @@ if (Meteor.isServer) {
 
 Tickets.allow({
   update: function() {
-    return Meteor.user();
+    if (Meteor.user()) {
+      return Meteor.user().isAdmin;
+    }
+
+    return false;
   }
 });
 
 Meteor.methods({
+  resetTicketsWithoutResetingTesters: function() {
+    var currentMilestone = Milestones.findOne({current: true});
+    if (!currentMilestone) {
+      throw new Meteor.Error(401, "Milestone not found");
+    }
+
+    Tickets.update({milestoneId: currentMilestone.id},
+    {$set: {passers: [], failers: [], status: '', allStepsCompleted: []}}, {multi: true});
+    // set milestone id on testscripts too, so this does not update all
+    Testscripts.update({},
+    {$set: {passers: [], failers: [], status: ''}}, {multi: true});
+  },
+
   resetTickets: function() {
     var currentMilestone = Milestones.findOne({current: true});
     if (!currentMilestone) {

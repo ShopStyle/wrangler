@@ -32,9 +32,9 @@
         {{> notifications}}
       </li> -->
       {{#if userAdmin}}
-        <li>
-          <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">Admin</a>
-        </li>
+        <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">
+          <li>Admin</li>
+        </a>
       {{/if}}
     {{/if}}
     {{> userMenu}}

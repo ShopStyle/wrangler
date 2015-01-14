@@ -30,7 +30,7 @@ Meteor.publish('stream', function() {
 });
 
 Meteor.publish('userData', function() {
-  return Meteor.users.find({}, {fields: {username: 1}});
+  return Meteor.users.find({}, {fields: {username: 1, isAdmin: 1}});
 });
 
 Meteor.publish('testingAssignments', function() {

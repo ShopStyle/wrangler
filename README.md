@@ -27,8 +27,12 @@ You will need to create a wrangler/setings.json file for the assembla api keys (
 
 ```
 {
-"API_KEY": "",
-"API_SECRET": ""
+  "API_KEY": "",
+  "API_SECRET": ""
+  "userAdmins": [
+    "wonderwoman",
+    "superman"
+  ]
 }
 ```
 

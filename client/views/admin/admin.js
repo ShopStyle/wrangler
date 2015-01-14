@@ -72,6 +72,24 @@ Template.admin.events({
   //     $('.browser-alert').fadeTo(500, 0);
   //   }, 4000);
   // },
+  'click .reset-tickets': function() {
+    Meteor.call('resetTicketsWithoutResetingTesters', function(error) {
+      if (error) {
+        throwError(error.reason);
+      }
+      else {
+        $('.reset-alert').css("opacity", "0.8");
+        Meteor.setTimeout(function() {
+          $('.reset-alert').fadeTo(500, 0);
+        }, 4000);
+      }
+    });
+  },
+
+  'click .delete-user': function(event) {
+    debugger
+    var user = 'cool'
+  },
 
   'click .assign-tickets': function() {
     if (confirm("Assigning tickets will reset current testers. Proceed?")) {

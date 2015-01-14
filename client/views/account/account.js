@@ -1,16 +1,32 @@
-GIF_OPTIONS = ['cat', 'dog', 'beyonce', 'goat', 'ferret'];
+GIF_OPTIONS = ['cat', 'dog', 'beyonce', 'goat', 'ferret', 'sloth'];
 
 Template.account.helpers({
   getAssembla: function() {
-    return Meteor.user().profile.assembaName;
+    if (Meteor.user.profile) {
+      return Meteor.user().profile.assembaName;
+    } else if (Meteor.user()){
+      return Meteor.user().username
+    } else {
+      return ''
+    }
   },
 
   getHipchat: function() {
-    return Meteor.user().profile.hipchatName;
+    if (Meteor.user.profile) {
+      return Meteor.user().profile.hipchatName;
+    } else if (Meteor.user()){
+      return Meteor.user().username
+    } else {
+      return ''
+    }
   },
 
   isCurrentGif: function(option) {
-    return Meteor.user().profile.gif === option;
+    if (Meteor.user().profile) {
+      return Meteor.user().profile.gif === option;
+    } else {
+      return false;
+    }
   },
 
   getGifOptions: function() {
@@ -43,7 +59,10 @@ Template.account.events({
       if (error){
         throwError(error.reason);
       } else {
-        throwError('Profile updated');
+        $('.update-success').css('opacity', '1');
+        Meteor.setTimeout(function() {
+          $('.update-success').fadeTo(500, 0);
+        }, 4000);
       }
     });
   }

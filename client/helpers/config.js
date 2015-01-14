@@ -1,6 +1,3 @@
-AccountsEntry.config({
-  homeRoute: '/',
-  dashboardRoute: '/',
-  passwordSignupFields: 'USERNAME_AND_OPTIONAL_EMAIL',
-  profileRoute: 'profile'
+Accounts.ui.config({
+  passwordSignupFields: 'USERNAME_ONLY'
 });
