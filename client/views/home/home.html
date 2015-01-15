@@ -8,11 +8,14 @@
       </div>
 
       <div class="tester-summaries">
-        {{#each testers}}
-          <div class="tester-summary {{hasTesterCompletedTests tester}}">
-            <div class="tester-name">{{tester.name}}</div>
-            <div class="tester-complete">{{tester.complete}}</div>
-            <div class="tester-incomplete">{{tester.incomplete}}</div>
+        {{#each testingAssignments}}
+          <div class="tester-summary {{hasTesterCompletedTests this.name}}">
+            <div class="tester-name">{{this.name}}</div>
+            <div class="tester-stats">
+              <div class="tester-total-assigned">Total Assigned Tickets: {{userTicketsAssigned this.name}}</div>
+              <div class="tester-complete">Completed: {{userTicketsComplete this.name}}</div>
+              <div class="tester-incomplete">Incomplete: {{userTicketsIncomplete this.name}}</div>
+            </div>
           </div>
         {{/each}}
       </div>

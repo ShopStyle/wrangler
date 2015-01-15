@@ -16,5 +16,13 @@ Template.ticketPage.helpers({
       }
     }
     return 'No Testers Assigned';
+  },
+
+  nextTicketNumber: function() {
+    return Tickets.findOne({assemblaId: {$gt: this.assemblaId}}, {sort: {assemblaId: 1}});
+  },
+
+  previousTicketNumber: function() {
+    return Tickets.findOne({assemblaId: {$lt: this.assemblaId}}, {sort: {assemblaId: -1}});
   }
 });

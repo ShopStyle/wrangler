@@ -1,9 +1,9 @@
 <template name="header">
 <header class="navbar">
   <ul class="navbar-left">
-    <li>
-      <a class="wrangler-logo" href="{{pathFor 'home'}}">Wrangler</a>
-    </li>
+    <a class="wrangler-logo" href="{{pathFor 'home'}}">
+      <li>Wrangler</li>
+    </a>
     <li>
       Tickets ▾
       <ul class="header-dropdown">
@@ -27,15 +27,10 @@
 
   </ul>
   <ul class="navbar-right">
-    {{#if currentUser}}
-      <!-- <li class="relative-container notifications">
-        {{> notifications}}
-      </li> -->
-      {{#if userAdmin}}
-        <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">
-          <li>Admin</li>
-        </a>
-      {{/if}}
+    {{#if userAdmin}}
+      <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">
+        <li>Admin</li>
+      </a>
     {{/if}}
     {{> userMenu}}
   </ul>

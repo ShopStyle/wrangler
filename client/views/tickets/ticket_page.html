@@ -1,4 +1,8 @@
 <template name="ticketPage">
+  {{#if userAdmin}}
+    <a href="{{pathFor 'ticketPage' data=nextTicketNumber}}" class="next-ticket">Next Ticket</a>
+    <a href="{{pathFor 'ticketPage' data=previousTicketNumber}}" class="previous-ticket">Previous Ticket</a>
+  {{/if}}
   <div class="main ticket {{status}}">
     <div class="text">
       <h1><a href="{{assemblaUrl}}">{{summary}}</a></h1>
@@ -27,4 +31,3 @@
     </div>
   {{/unless}}
 </template>
-
