@@ -86,9 +86,11 @@ Template.admin.events({
     });
   },
 
-  'click .delete-user': function(event) {
-    debugger
-    var user = 'cool'
+  'click .delete-user': function(e) {
+    var user = $(e.target).siblings('input').attr('name');
+    if (confirm('Delete ' + user + '? Warning, this action is permanent!')) {
+      Meteor.call('deleteUser', user);
+    }
   },
 
   'click .assign-tickets': function() {

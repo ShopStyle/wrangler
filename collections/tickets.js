@@ -43,11 +43,17 @@ Meteor.methods({
   },
 
   assignTickets: function() {
+    if (Meteor.isClient) {
+      // results will be different on client and server due to shuffling
+      // (random draw), so wait for server to get back with results
+      return;
+    }
+
     Meteor.call('resetTickets');
 
     var currentMilestone = Milestones.findOne({current: true});
-    var testers = [];
     var testersCollection = TestingAssignments.find({milestoneId: currentMilestone.id});
+    var testers = _.shuffle(testersCollection.fetch());
 
     if (testersCollection.count() < DEFAULT_TESTERS_PER_TICKET) {
       throw new Meteor.Error(401, "Please assign at least " + DEFAULT_TESTERS_PER_TICKET + " people to test");
@@ -90,11 +96,15 @@ Meteor.methods({
         var potentialTester = testers.pop();
         // 1. can't test your own ticket
         if (potentialTester.name === assignedToLogin) {
+          // put tester back in so testing is distributed equally
+          testers.unshift(potentialTester);
           continue;
         }
 
         // 2. can't test the same ticket twice
         if (_.contains(ticketTesters, potentialTester.name)) {
+          // put tester back in so testing is distributed equally
+          testers.unshift(potentialTester);
           continue;
         }
 
