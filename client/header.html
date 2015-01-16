@@ -28,9 +28,17 @@
   </ul>
   <ul class="navbar-right">
     {{#if userAdmin}}
-      <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">
-        <li>Admin</li>
-      </a>
+    <li>
+      Admin
+      <ul class="header-dropdown right-header">
+        <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">
+          <li>Testing Setup</li>
+        </a>
+        <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'regressionTests'}}">
+          <li>Regression Tests</li>
+        </a>
+      </ul>
+    </li>
     {{/if}}
     {{> userMenu}}
   </ul>
