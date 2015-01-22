@@ -9,7 +9,11 @@ Meteor.publish('tickets', function() {
   else {
     currentMilestone = 5194263;
   }
-  return Tickets.find({ milestoneId: currentMilestone, statusName: {$in: ["Done", "Verified on Dev"]} });
+
+  return Tickets.find({$or: [
+    { milestoneId: currentMilestone, statusName: {$in: ["Done", "Verified on Dev"]} },
+    {isRegression: true}
+  ]});
 });
 
 Meteor.publish('users', function() {

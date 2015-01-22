@@ -265,6 +265,18 @@ $navbar-height: 50px;
       display: none;
     }
   }
+
+  .delete-ticket {
+    position: absolute;
+    bottom: 5px;
+    font-size: 10px;
+    cursor: pointer;
+    z-index: 5;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .ticket.pass {
@@ -712,7 +724,7 @@ li.relative-container {
     margin: 5px 0;
     border-bottom: 1px solid $grey;
     padding-bottom: 5px;
-    min-height: 30px;
+    min-height: 50px;
     position: relative;
 
     select {
@@ -850,4 +862,15 @@ li.relative-container {
   float: right;
   right: 0;
   text-align: right;
+}
+
+.browsers {
+  label {
+    font-weight: normal;
+  }
+
+  input {
+    margin-right: 15px;
+    margin-left: 0;
+  }
 }

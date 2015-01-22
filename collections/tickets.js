@@ -5,14 +5,18 @@ if (Meteor.isServer) {
   Tickets._ensureIndex({ "assemblaId": 1 }, { unique: true });
 }
 
-Tickets.allow({
-  update: function() {
-    if (Meteor.user()) {
-      return Meteor.user().isAdmin;
-    }
-
-    return false;
+var userIsAdmin = function() {
+  if (Meteor.user()) {
+    return Meteor.user().isAdmin;
   }
+
+  return false;
+}
+
+Tickets.allow({
+  update: userIsAdmin,
+  remove: userIsAdmin,
+  insert: userIsAdmin
 });
 
 Meteor.methods({
@@ -52,7 +56,7 @@ Meteor.methods({
     Meteor.call('resetTickets');
 
     var currentMilestone = Milestones.findOne({current: true});
-    var testersCollection = TestingAssignments.find({milestoneId: currentMilestone.id});
+    var testersCollection = TestingAssignments.find({milestoneId: currentMilestone.id, notTesting: {$nin: [true]}});
 
     if (testersCollection.count() < DEFAULT_TESTERS_PER_TICKET) {
       throw new Meteor.Error(401, "Please assign at least " + DEFAULT_TESTERS_PER_TICKET + " people to test");

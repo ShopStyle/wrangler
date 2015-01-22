@@ -1,5 +1,16 @@
 <template name="ticketsList">
   <div class="ticket-list-tickets">
+    {{#if userAdmin}}
+    <div class="admin">
+      {{#if activeRouteClass 'editRegressionTests'}}
+      <div class="assign">
+        <span>Create a new Regression Test</span>
+        <div class="btn-new-testscript create-test">Create Test</div>
+      </div>
+      {{/if}}
+    </div>
+    {{/if}}
+
     {{#if allPassed}}
       <div class="corgi-success">
         <div>Congratulations! All tests have passed.</div>
@@ -32,7 +43,7 @@
 </template>
 
 <template name="ticket">
-  <div class="ticket {{status}}">
+  <div class="ticket {{status}}" data-id="{{_id}}">
     <h3><a href="{{pathFor 'ticketPage'}}">{{assemblaId}} - {{summary}}</a></h3>
     <div class="text">
       <span>Assigned to: {{assignedTo}}</span><br>
@@ -49,13 +60,17 @@
     {{/if}}
 
     {{#unless noTesting}}
-      <div class="testscript-results">
-        <div class="results">Results</div>
-        <div class="results-inner">
-          <div class="green">Pass: {{passersConcat this}}</div>
-          <div class="red">Fail: {{failersConcat this}}</div>
-        </div>
+    <div class="testscript-results">
+      <div class="results">Results</div>
+      <div class="results-inner">
+        <div class="green">Pass: {{passersConcat this}}</div>
+        <div class="red">Fail: {{failersConcat this}}</div>
       </div>
+    </div>
     {{/unless}}
+
+    {{#if userAdmin}}
+    <div class="delete-ticket">Delete</div>
+    {{/if}}
   </div>
 </template>
