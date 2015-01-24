@@ -67,7 +67,6 @@ Template.ticketsList.events({
       isRegression: true,
       numTesters: 2,
       comments: "Testing is fun!",
-      assemblaId: Date.now(),
       allStepsCompleted: [],
       status: '',
       passers: [],
@@ -86,12 +85,6 @@ Template.ticketsList.events({
 });
 
 Template.ticket.helpers({
-  assignedTo: function() {
-    var user = AssemblaUsers.findOne({ id: this.assignedToId });
-    if (user) {
-      return user.login;
-    }
-  },
   ticketTesters: function() {
     if (this.testers) {
       var testers = _.filter(this.testers, function(tester) {

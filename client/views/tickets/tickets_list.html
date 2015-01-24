@@ -44,9 +44,9 @@
 
 <template name="ticket">
   <div class="ticket {{status}}" data-id="{{_id}}">
-    <h3><a href="{{pathFor 'ticketPage'}}">{{assemblaId}} - {{summary}}</a></h3>
+    <h3><a href="{{pathFor 'ticketPage'}}">{{jiraId}} - {{summary}}</a></h3>
     <div class="text">
-      <span>Assigned to: {{assignedTo}}</span><br>
+      <span>Assigned to: {{assignedTo.name}}</span><br>
       <span>Testers: {{ticketTesters}}</span>
     </div>
 

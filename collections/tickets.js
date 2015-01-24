@@ -2,7 +2,7 @@ var DEFAULT_TESTERS_PER_TICKET = 2;
 
 Tickets = new Meteor.Collection('tickets');
 if (Meteor.isServer) {
-  Tickets._ensureIndex({ "assemblaId": 1 }, { unique: true });
+  // Tickets._dropIndex({ "assemblaId": 1 }, { unique: true });
 }
 
 var userIsAdmin = function() {
@@ -84,7 +84,7 @@ Meteor.methods({
 
       var ticketTesters = [];
       var assemblaUserId = ticket.assignedToId;
-      var assignedToLogin = AssemblaUsers.findOne({id: assemblaUserId});
+      var assignedToLogin = JiraUsers.findOne({id: assemblaUserId});
       if (!assignedToLogin) {
         return;
       }

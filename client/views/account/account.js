@@ -1,11 +1,11 @@
 GIF_OPTIONS = ['cat', 'dog', 'beyonce', 'goat', 'ferret', 'sloth'];
 
 Template.account.helpers({
-  getAssembla: function() {
+  getJira: function() {
     if (Meteor.user.profile) {
-      return Meteor.user().profile.assembaName;
+      return Meteor.user().profile.jiraName;
     } else if (Meteor.user()){
-      return Meteor.user().username
+      return Meteor.user().username;
     } else {
       return ''
     }
@@ -46,7 +46,7 @@ Template.account.events({
     var $e = $(e.target);
 
     var update = {
-      "profile.assembaName": $e.find('[name=assembla]').val(),
+      "profile.jiraName": $e.find('[name=jira]').val(),
       "profile.hipchatName": $e.find('[name=hipchat]').val(),
       "profile.gif": $e.find('[name=gif]').val()
     };

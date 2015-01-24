@@ -7,18 +7,20 @@ Meteor.publish('tickets', function() {
     currentMilestone = currentMilestone.id;
   }
   else {
-    currentMilestone = 5194263;
+    return Tickets.findOne();
   }
 
-  return Tickets.find({$or: [
-    { milestoneId: currentMilestone, statusName: {$in: ["Done", "Verified on Dev"]} },
-    {isRegression: true}
-  ]});
+  // return Tickets.find({$or: [
+  //   { "fixVersions.id": currentMilestone, statusName: {$in: ["Done", "Verified on Dev"]} },
+  //   {isRegression: true}
+  // ]});
+
+  return Tickets.find({jiraId: {$nin: [null, undefined]}});
 });
 
-Meteor.publish('users', function() {
-  return AssemblaUsers.find({}, { fields: { login: 1, id: 1 }});
-});
+// Meteor.publish('users', function() {
+//   return JiraUsers.find({}, { fields: { login: 1, id: 1 }});
+// });
 
 Meteor.publish('testscripts', function(assemblaId) {
   return Testscripts.find({ ticketAssemblaId: assemblaId },
