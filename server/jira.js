@@ -77,7 +77,8 @@ Jira.updateSingleTicket = function(ticket) {
   if (ticket == null) {
     return;
   }
-  // update test scrips()
+
+  Jira.updateTestscripts(ticket);
 
   var jiraUrl = 'https://shopstyle.atlassian.net/browse/' + ticket.key;
   var statusName = ticket.fields.status.name;
@@ -145,25 +146,62 @@ Jira.populateTicketCollection = function() {
   }
 
   var tickets = Jira.makeGetRequest(Jira.ticketUrl, params);
-  // console.log(tickets.data.issues[0].fields.fixVersions[0]);
-  // return;
 
   if (tickets) {
     _.each(tickets.data.issues, function(ticket) {
       Jira.updateSingleTicket(ticket);
     });
 
-    //this is only to make sure tickets have these fields. it might be better to set them when setting
-    //properties on the ticket in updateSingleTicket?
-    Tickets.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
-    Tickets.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });
-    Tickets.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });
-    Tickets.update({ allStepsCompleted: { $exists: false }}, { $set: { allStepsCompleted: [] }}, { multi: true });
-    Tickets.update({ noTesting: true }, { $set: { testers: [] }}, { multi: true });
+    Jira.addPassersAndFailersArrays()
   }
   else {
     throw new Meteor.Error(500, 'Jira ticket call failed');
   }
+};
+//
+Jira.updateTestscripts = function(ticket) {
+  fields = ticket.fields;
+  if (!fields[Jira.testscriptCustomField]) {
+    return;
+  }
+  var ticketJiraId = parseInt(ticket.id);
+  var testscripts = fields[Jira.testscriptCustomField].split("***");
+
+  var testscriptNum = 1;
+  var currentTestscripts = [];
+  _.each(testscripts, function(testscript) {
+    var testscriptSteps = testscript.replace(/^\s+|\s+$/g, '');
+    if (testscriptSteps.length === 0) {
+      return;
+    }
+    currentTestscripts.push(testscriptNum);
+    Testscripts.update({ ticketJiraId: ticketJiraId, testscriptNum: testscriptNum },
+      { $set:
+        {
+          steps: testscriptSteps,
+          ticketJiraId: ticketJiraId,
+          testscriptNum: testscriptNum
+        }
+      },
+      { upsert: true }
+    );
+    testscriptNum += 1;
+  });
+
+  Testscripts.remove({ticketJiraId: ticketJiraId, testscriptNum: {$nin: currentTestscripts}});
+};
+
+Jira.addPassersAndFailersArrays = function() {
+  //this is only to make sure tickets have these fields. it might be better to set them when setting
+  //properties on the ticket in updateSingleTicket?
+  Tickets.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
+  Tickets.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });
+  Tickets.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });
+  Tickets.update({ allStepsCompleted: { $exists: false }}, { $set: { allStepsCompleted: [] }}, { multi: true });
+  Tickets.update({ noTesting: true }, { $set: { testers: [] }}, { multi: true });
+  Testscripts.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
+  Testscripts.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });
+  Testscripts.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });
 };
 
 Jira.populateTicketCollection();

@@ -1,9 +1,6 @@
 Template.testscriptList.helpers({
   testscripts: function() {
-    var assemblaId = parseInt(Router.current().params.assemblaId);
-    return Testscripts.find({ ticketAssemblaId: assemblaId });
+    var ticketJiraId = parseInt(Router.current().params.jiraId);
+    return Testscripts.find({ ticketJiraId: ticketJiraId });
   }
 });
-
-
-

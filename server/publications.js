@@ -22,9 +22,8 @@ Meteor.publish('tickets', function() {
 //   return JiraUsers.find({}, { fields: { login: 1, id: 1 }});
 // });
 
-Meteor.publish('testscripts', function(assemblaId) {
-  return Testscripts.find({ ticketAssemblaId: assemblaId },
-    {sort: {testscriptNum: 1}});
+Meteor.publish('testscripts', function(ticketJiraId) {
+  return Testscripts.find({ ticketJiraId: ticketJiraId }, {sort: {testscriptNum: 1}});
 });
 
 Meteor.publish('milestones', function() {

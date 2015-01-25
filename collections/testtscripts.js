@@ -11,7 +11,7 @@ Meteor.methods({
     var status = '';
     var passers = [];
     var failers = [];
-    var testscripts = Testscripts.find({ ticketAssemblaId: ticket.assemblaId });
+    var testscripts = Testscripts.find({ ticketJiraId: ticket.jiraId });
     var numTestersReq = ticket.numTesters || 2;
     var numTestScripts = testscripts.count();
 
@@ -102,7 +102,7 @@ Meteor.methods({
     }
 
     var testscript = Testscripts.findOne(id);
-    var ticket = Tickets.findOne({ assemblaId: testscript.ticketAssemblaId });
+    var ticket = Tickets.findOne({ jiraId: testscript.ticketJiraId });
     if (passTest === '') {
       Testscripts.update(testscript._id, {
         $pull: {
@@ -118,7 +118,6 @@ Meteor.methods({
       });
     }
     else {
-      createFailNotification(ticket._id, user.username);
       Testscripts.update(testscript._id, {
         $pull: { passers: user.username },
         $addToSet: {
