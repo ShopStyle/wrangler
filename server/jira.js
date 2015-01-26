@@ -1,23 +1,6 @@
 var AUTH_TOKEN = Meteor.call('base64Encode', Config.jira.user + ':' + Meteor.settings.jiraPassword);
 var API_URL = Config.jira.protocol + Config.jira.host + '/rest/api/2/';
 
-var STREAMS = {
-  //  Shopping
-  BE: 146940,
-  WEB: 146940,
-  EMAIL: 146940,
-  SHOPSENSE: 146940,
-
-  //  Mobile
-  FAVEDROID: 149463,
-  FAVEIOS: 149463,
-  SSANDROID: 149463,
-  SSIOS: 149463,
-
-  //  Content
-  CTNT: 148981
-}
-
 Jira = {
   _headers: {
     Method: 'GET',
@@ -32,8 +15,30 @@ Jira = {
   ticketUrl: 'search',
   testscriptCustomField: 'customfield_10111',
   ticketTestingRequiredField: 'customfield_10219',
-  ticketTestingCommentsField: 'customfield_10303'
-}
+  ticketTestingCommentsField: 'customfield_10303',
+};
+
+Jira.ticketFields = [
+  Jira.testscriptCustomField,
+  Jira.ticketTestingRequiredField,
+  Jira.ticketTestingCommentsField,
+  'assignee',
+  'status',
+  'summary',
+  'description',
+  'fixVersions'
+].join(',');
+
+Jira.getStandardJqlQueryString = function() {
+  if (!Milestones.findOne({current: true})) {
+    throw new Meteor.Error(500, 'Please set a current milestone');
+  }
+
+  var versionTitle = Milestones.findOne({ current: true }).title;
+  var jqlQueryString = "fixVersion IN ('" + versionTitle + "') AND status IN (done, 'verified on dev')"
+
+  return jqlQueryString;
+};
 
 Jira.makeGetRequest = function(endpoint, params) {
   var url = API_URL + endpoint;
@@ -87,7 +92,7 @@ Jira.updateSingleTicket = function(ticket) {
   var statusName = ticket.fields.status.name;
   var jiraId = parseInt(ticket.id);
   if (statusName === 'Verified on Dev') {
-    Tickets.update({jiraId: ticket.id}, {$set: {status: 'pass'}});
+    Tickets.update({jiraId: jiraId}, {$set: {status: 'pass'}});
   }
   var description = ticket.fields.description;
   if (!description) {
@@ -118,34 +123,17 @@ Jira.updateSingleTicket = function(ticket) {
     }, { upsert: true }
   );
 };
-//
+
 Jira.populateTicketCollection = function() {
   if (!AUTH_TOKEN) {
     throw new Meteor.Error(500, 'Please provide correct username and password in config.js and settings.json');
   }
 
-  if (!Milestones.findOne({current: true})) {
-    throw new Meteor.Error(500, 'Please set a current milestone');
-  }
-
-  var versionTitle = Milestones.findOne({ current: true }).title;
-  var jqlQueryString = "fixVersion IN ('" + versionTitle + "') AND status IN (done, 'verified on dev')"; //AND component IN ('ShopStyle.it')
-  var encodedJql = encodeURIComponent(jqlQueryString);
-  var fields = [
-    Jira.testscriptCustomField,
-    Jira.ticketTestingRequiredField,
-    Jira.ticketTestingCommentsField,
-    'assignee',
-    'status',
-    'summary',
-    'description',
-    'fixVersions'
-  ].join(',')
-
+  var jqlQueryString = Jira.getStandardJqlQueryString();
   var params = {
     jql: jqlQueryString,
     maxResults: 1000,
-    fields: fields
+    fields: Jira.ticketFields
   }
 
   var tickets = Jira.makeGetRequest(Jira.ticketUrl, params);
@@ -207,34 +195,36 @@ Jira.addPassersAndFailersArrays = function() {
   Testscripts.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });
 };
 
-// Assembla.watchTicketStream = function() {
-//   console.log("called ticket stream");
-//   var stream = Assembla.makeGetRequest(Assembla.streamUrl, {page: 1, per_page: 50}).data;
-//   if (!stream) {
-//     return;
-//   }
-//   var lastTime = LastTime.findOne();
-//   if (!lastTime) {
-//     var date = new Date(stream[stream.length - 1].date);
-//     lastTime = {date: date};
-//     LastTime.insert(lastTime);
-//   }
-//   lastTime = lastTime.date;
-//
-//   _.each(stream, function(item) {
-//     var date = new Date(item.date);
-//     if (date < lastTime) {
-//       return;
-//     }
-//     if (item.ticket && item.author_name !== "shopstylebot") {
-//       var url = Assembla.ticketUrl + item.ticket.number + '.json';
-//       var ticket = Assembla.makeGetRequest(url, {});
-//       Assembla.updateSingleTicket(ticket.data);
-//     }
-//   });
-// };
-//
-Jira.verifyTicketOnDev = function(jiraId) {
+Jira.fetchLatestChanges = function() {
+  if (!Stream.findOne({on: true})) {
+    return;
+  }
+
+  console.log("called ticket stream");
+  var jqlQueryString = Jira.getStandardJqlQueryString() + " AND updated > '-1m'";
+  var params = {
+    jql: jqlQueryString,
+    maxResults: 1000,
+    fields: Jira.ticketFields
+  }
+
+  var request = Jira.makeGetRequest(Jira.ticketUrl, params);
+
+  if (!request.data) {
+    return;
+  }
+
+  _.each(request.data.issues, function(ticket) {
+    Jira.updateSingleTicket(ticket);
+  });
+};
+
+Jira.verifyTicketOnDev = function(ticket) {
+  if (ticket.statusName === 'Verified on Dev') {
+    return;
+  }
+
+  var jiraId = ticket.jiraId
   var url =  "issue/" + jiraId + "/transitions"
   var data = {
     transition: {
@@ -244,12 +234,11 @@ Jira.verifyTicketOnDev = function(jiraId) {
   Jira.makePostRequest(url, data);
 };
 
-Jira.populateTicketCollection();
-
 if (Meteor.isServer) {
   Meteor.startup(function() {
     Jira.updateMilestoneCollection();
     Meteor.call('setDefaultMilestone');
+    Meteor.setInterval(Jira.fetchLatestChanges, 30000);
   });
 }
 

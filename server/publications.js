@@ -1,6 +1,3 @@
-//this is used to turn off and on the stream from assembla
-intervalHandle = null;
-
 Meteor.publish('tickets', function() {
   var currentMilestone = Milestones.findOne({current: true});
   if (currentMilestone) {
