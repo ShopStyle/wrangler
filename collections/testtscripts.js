@@ -81,7 +81,7 @@ Meteor.methods({
       });
 
       if (Meteor.isServer) {
-        Assembla.verifyTicketOnDev(ticket.assemblaId);
+        Jira.verifyTicketOnDev(ticket.jiraId);
       }
     }
 

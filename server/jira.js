@@ -43,9 +43,12 @@ Jira.makeGetRequest = function(endpoint, params) {
   });
 };
 
-Jira.makePutRequest = function(endpoint, params) {
+Jira.makePostRequest = function(endpoint, data) {
   var url = API_URL + endpoint;
-  return Meteor.http.put(url, {
+  if (!data) {
+    var data = {};
+  }
+  return Meteor.http.post(url, {
     headers: Jira._headers,
     data: data
   });
@@ -202,6 +205,43 @@ Jira.addPassersAndFailersArrays = function() {
   Testscripts.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
   Testscripts.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });
   Testscripts.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });
+};
+
+// Assembla.watchTicketStream = function() {
+//   console.log("called ticket stream");
+//   var stream = Assembla.makeGetRequest(Assembla.streamUrl, {page: 1, per_page: 50}).data;
+//   if (!stream) {
+//     return;
+//   }
+//   var lastTime = LastTime.findOne();
+//   if (!lastTime) {
+//     var date = new Date(stream[stream.length - 1].date);
+//     lastTime = {date: date};
+//     LastTime.insert(lastTime);
+//   }
+//   lastTime = lastTime.date;
+//
+//   _.each(stream, function(item) {
+//     var date = new Date(item.date);
+//     if (date < lastTime) {
+//       return;
+//     }
+//     if (item.ticket && item.author_name !== "shopstylebot") {
+//       var url = Assembla.ticketUrl + item.ticket.number + '.json';
+//       var ticket = Assembla.makeGetRequest(url, {});
+//       Assembla.updateSingleTicket(ticket.data);
+//     }
+//   });
+// };
+//
+Jira.verifyTicketOnDev = function(jiraId) {
+  var url =  "issue/" + jiraId + "/transitions"
+  var data = {
+    transition: {
+      id: 131
+    }
+  }
+  Jira.makePostRequest(url, data);
 };
 
 Jira.populateTicketCollection();
