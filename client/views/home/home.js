@@ -54,17 +54,15 @@ Template.home.helpers({
   },
 
   hasTesterCompletedTests: function(username) {
-    var userHasTests = Tickets.find({testers: {$in: [username]}}).count();
+    var assigned = Tickets.find({testers: {$in: [username]}}).count();
 
     if (!userHasTests) {
       return;
     }
 
-    var count = Tickets.find({testers: {$in: [username]},
-      passers: {$nin: [username]},
-      failers: {$nin: [username]}}).count();
+    var completed = Tickets.find({allStepsCompleted: {$in: [username]}}).count();
 
-    if (count === 0) {
+    if (completed === assigned) {
       return 'complete';
     }
   },
