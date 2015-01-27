@@ -72,9 +72,50 @@ Template.admin.events({
   //     $('.browser-alert').fadeTo(500, 0);
   //   }, 4000);
   // },
+  'click .reset-tickets': function() {
+    Meteor.call('resetTicketsWithoutResetingTesters', function(error) {
+      if (error) {
+        throwError(error.reason);
+      }
+      else {
+        $('.reset-alert').css("opacity", "0.8");
+        Meteor.setTimeout(function() {
+          $('.reset-alert').fadeTo(500, 0);
+        }, 4000);
+      }
+    });
+  },
+
+  'click .delete-user': function(e) {
+    var user = $(e.target).siblings('input').attr('name');
+    if (confirm('Delete ' + user + '? Warning, this action is permanent!')) {
+      Meteor.call('deleteUser', user);
+    }
+  },
 
   'click .assign-tickets': function() {
     if (confirm("Assigning tickets will reset current testers. Proceed?")) {
+      // Remove all testers from this milestone
+      Meteor.call('resetTesters');
+
+      var users = $('.user');
+      for (var i = 0, len = users.length; i < len; i++) {
+        var $user = $(users.get(i));
+        var username = $user.find('span').text();
+
+        // skip users who are not testing
+        if (!$user.find('input').prop('checked')) {
+          Meteor.call('excuseTester', username);
+          continue;
+        }
+
+        Meteor.call('assignTestUser', username, function(error) {
+          if (error) {
+            throwError(error.reason);
+          }
+        });
+      }
+
       Meteor.call('assignTickets', function(error) {
         if (error) {
           throwError(error.reason);
@@ -104,7 +145,7 @@ Template.browserLocaleOptions.helpers({
     var currentMilestone = Milestones.findOne({current: true});
 
     if (currentMilestone) {
-      var tester = TestingAssignments.findOne({milestoneId: currentMilestone.id, name: username});
+      var tester = TestingAssignments.findOne({milestoneName: currentMilestone.name, name: username});
       if (tester) {
         if (locale) {
           return tester.locale === assignment;
@@ -122,7 +163,7 @@ Template.user.helpers({
   userAssignedToTest:  function(username) {
     var currentMilestone = Milestones.findOne({current: true});
     if (currentMilestone) {
-      var tester = TestingAssignments.findOne({milestoneId: currentMilestone.id, name: username});
+      var tester = TestingAssignments.findOne({milestoneName: currentMilestone.name, name: username});
       if (!tester) {
         return true;
       } else if (tester.notTesting === true) {

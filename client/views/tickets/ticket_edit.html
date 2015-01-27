@@ -1,36 +1,54 @@
+<template name="genericTicketEdit">
+  {{#if activeRouteClass 'regressions'}}
+    {{> regressionEdit}}
+  {{else}}
+    {{> ticketEdit}}
+  {{/if}}
+</template>
+
 <template name="ticketEdit">
   <div class="ticket {{status}}">
     <div class="text">
-      <h1><a href="{{assemblaUrl}}">{{summary}}</a></h1>
+      <h1><a href="{{jiraUrl}}">{{summary}}</a></h1>
+      <!-- let's remove this and do a main shared outer template, and then take out the non shared stuff -->
       <ul>
-        <li><strong>Ticket: </strong>{{assemblaId}}</li>
-        <li><strong>Assigned to: </strong>{{assignedTo}}</li>
-        <li><strong>Component: </strong>{{component}}</li>
-        <li><strong>Browser: </strong>{{browser}}</li>
-        <li><strong>OS: </strong>{{os}}</li>
+        <li><strong>Ticket: </strong>{{jiraId}}</li>
+        <li><strong>Assigned to: </strong>{{assignedTo.name}}</li>
         <li><strong>Prerequisite/comments: </strong></li>
         <li>{{breakLines comments}}</li>
-        <li class="num-testers">
-          <strong>Number of Testers:</strong>
-          <select>
-            {{#each numTesters}}
-              {{> numTester}}
-            {{/each}}
-          </select>
-        </li>
-        <li class="tester-select">
-          <strong>Testers:</strong>
-          {{#each ticketTesters}}
-            <select name="select-{{index}}">
-              {{>testerUsers}}
-            </select>
-          {{/each}}
-        </li>
+        {{> numTesters}}
+        {{> testerSelect}}
       </ul>
     </div>
     <!-- <div class="alert browser-alert">Assigned</div> -->
     <a href="{{pathFor 'ticketPage'}}" class="btn-edit">back</a>
+    <div class="submit-edit-ticket btn-new-testscript">Save Changes</div>
   </div>
+  <div class="testscripts">
+    {{> testscriptList}}
+  </div>
+</template>
+
+<template name="numTesters">
+  <li class="num-testers">
+    <strong>Number of Testers:</strong>
+    <select>
+      {{#each numTesters}}
+      {{> numTester}}
+      {{/each}}
+    </select>
+  </li>
+</template>
+
+<template name="testerSelect">
+  <li class="tester-select">
+    <strong>Testers:</strong>
+    {{#each ticketTesters}}
+    <select name="select-{{index}}">
+      {{>testerUsers}}
+    </select>
+    {{/each}}
+  </li>
 </template>
 
 <template name="testerUsers">
@@ -38,7 +56,6 @@
     {{>testerUser name}}
   {{/each}}
 </template>
-
 
 <template name="testerUser">
   {{#if selected}}

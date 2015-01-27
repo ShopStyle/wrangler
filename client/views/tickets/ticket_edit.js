@@ -1,5 +1,7 @@
-Template.ticketEdit.events({
-  'change select': function(e, template) {
+Template.genericTicketEdit.events({
+  // change this to 'click .submit-edit-ticket'
+
+  'click .submit-edit-ticket': function(e, template) {
     var numTesters = $('.num-testers').find('select').val();
     var currentTicketId = template.data._id;
     var testerValues = $('.tester-select').find('select');
@@ -30,14 +32,27 @@ Template.ticketEdit.events({
   }
 });
 
-Template.ticketEdit.helpers({
-  assignedTo: function() {
-    if (AssemblaUsers.findOne({ id: this.assignedToId })) {
-      return AssemblaUsers.findOne({ id: this.assignedToId }).login;
-    }
-    return '';
-  },
+Template.numTesters.helpers({
+  numTesters: function() {
+    var numTesters = this.numTesters ? this.numTesters : 2;
+    var numTestersRange = [];
+    for (var i = 1; i <= 10; i++) {
+      var testObj = {};
+      testObj.number = i;
+      testObj.selected = false;
 
+      if (numTesters == i) {
+        testObj.selected = true;
+      }
+
+      numTestersRange.push(testObj);
+    }
+
+    return numTestersRange;
+  }
+});
+
+Template.testerSelect.helpers({
   ticketTesters: function() {
     var testers;
     var numTesters = this.numTesters ? this.numTesters : 2;
@@ -54,23 +69,6 @@ Template.ticketEdit.helpers({
     return _.map(testers, function(tester, index) {
       return {index: index, tester: tester};
     });
-  },
-
-  numTesters: function() {
-    var numTesters = this.numTesters ? this.numTesters : 2;
-    var numTestersRange = [];
-    for (var i = 1; i <= 10; i++) {
-      var testObj = {};
-      testObj.number = i;
-      testObj.selected = false;
-
-      if (numTesters == i) {
-        testObj.selected = true;
-      }
-
-      numTestersRange.push(testObj);
-    }
-    return numTestersRange;
   }
 });
 
@@ -78,7 +76,7 @@ Template.testerUsers.helpers({
   testers: function() {
     selectedTesterEditPage = this.tester.toString();
     var currentMilestone = Milestones.findOne({current: true});
-    var testers = TestingAssignments.find({milestoneId: currentMilestone.id});
+    var testers = TestingAssignments.find({milestoneName: currentMilestone.name, notTesting: {$nin: [true]}});
 
     if (testers) {
       return testers.fetch();
@@ -91,6 +89,3 @@ Template.testerUser.helpers({
     return selectedTesterEditPage == this.toString();
   }
 });
-
-
-

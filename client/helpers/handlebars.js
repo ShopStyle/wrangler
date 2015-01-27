@@ -1,5 +1,3 @@
-userAdmins = ['kkassir', 'tgaribaldi@popsugar.com', 'laurenhendrickson', 'aschrader2'];
-
 Handlebars.registerHelper('numFailers',function(ticket) {
   var length = ticket.failers ? ticket.failers.length : 0;
   return length;
@@ -98,10 +96,10 @@ Handlebars.registerHelper('showUndo', function(testscript) {
 });
 
 Handlebars.registerHelper('userAdmin', function() {
-  if (typeof Meteor.user() !== "undefined" && Meteor.user() !== null) {
-    var username = Meteor.user().username;
-    return _.contains(userAdmins, username);
+  if (Meteor.user()) {
+    return Meteor.user().isAdmin;
   }
+
   return false;
 });
 
@@ -122,4 +120,3 @@ Handlebars.registerHelper('breakLines', function (text) {
 
   return new Handlebars.SafeString(result);
 });
-

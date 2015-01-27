@@ -9,7 +9,7 @@ Template.ticketsList.helpers({
     var currentMilestone = Milestones.findOne({ current: true });
     var testingAssignment;
     if (currentMilestone) {
-      testingAssignment = TestingAssignments.findOne({ milestoneId: currentMilestone.id, name: user.username });
+      testingAssignment = TestingAssignments.findOne({ milestoneName: currentMilestone.name, name: user.username });
     }
     if (user && testingAssignment) {
       var browser = testingAssignment.browser;
@@ -60,13 +60,31 @@ Template.ticketsList.helpers({
   }
 });
 
-Template.ticket.helpers({
-  assignedTo: function() {
-    var user = AssemblaUsers.findOne({ id: this.assignedToId });
-    if (user) {
-      return user.login;
+Template.ticketsList.events({
+  'click .create-test': function(e) {
+    values = {
+      summary: "Regression Test",
+      isRegression: true,
+      numTesters: 2,
+      comments: "Testing is fun!",
+      allStepsCompleted: [],
+      status: '',
+      passers: [],
+      failers: [],
+      testers: [],
+      browsers: []
     }
-  },
+    Tickets.insert(values, function(error, id) {
+      if (id) {
+        Router.go('regressionEditPage', {id: id});
+      } else {
+        throwError(error.reason);
+      }
+    });
+  }
+});
+
+Template.ticket.helpers({
   ticketTesters: function() {
     if (this.testers) {
       var testers = _.filter(this.testers, function(tester) {
@@ -86,12 +104,20 @@ Template.ticket.events({
     $(e.currentTarget).find('.results-inner').show();
     $(e.currentTarget).find('.results').hide();
   },
+
   'click .results-inner': function(e) {
     e.preventDefault();
     e.stopPropagation();
     $(e.currentTarget).hide();
     $(e.currentTarget).siblings('.results').show();
+  },
+
+  'click .delete-ticket': function(e) {
+    var id = $(e.target).parent().attr('data-id');
+    if (id) {
+      if (confirm('Are you sure you want to delete that ticket?')) {
+        Tickets.remove(id);
+      }
+    }
   }
 });
-
-

@@ -2,7 +2,7 @@
   <div class="admin">
     {{#if userAdmin}}
       <div class="stream">
-        <span>Toggle stream from Assembla.</span>
+        <span>Toggle stream from Jira.</span>
         {{#if streamOn}}
           <div class="red btn-new-testscript streamer">Stop Streaming</div>
         {{else}}
@@ -11,6 +11,16 @@
       </div>
       <div class="milestones">
         {{> milestones}}
+      </div>
+      <div class="assign">
+        <span>Reset all ticket testing. This also gets run when you click assign.</span>
+        <div class="btn-new-testscript reset-tickets">Reset Tickets</div>
+        <div class="alert reset-alert">Reset</div>
+      </div>
+      <div class="assign">
+        <span>Assign users to tickets</span>
+        <div class="btn-new-testscript assign-tickets">Assign Tickets</div>
+        <div class="alert ticket-alert">Assigned</div>
       </div>
       <div class="users">
         {{#each users}}
@@ -22,11 +32,6 @@
           <div class="alert browser-alert">Assigned</div>
         </div> -->
       </div>
-      <div class="assign">
-        <span>Assign users to tickets</span>
-        <div class="btn-new-testscript assign-tickets">Assign Tickets</div>
-        <div class="alert ticket-alert">Assigned</div>
-      </div>
     {{/if}}
   </div>
 </template>
@@ -35,14 +40,17 @@
   <div class="user">
     <span><strong>{{username}}</strong></span>
     {{#if userAssignedToTest username}}
-      <input name="{{username}}" value="username" type="checkbox" checked="checked">
+      <input name="{{username}}" value="username" id="username" type="checkbox" checked="checked">
+      <label for="username">Include in testing</label>
     {{else}}
-      <input name="{{username}}" value="username" type="checkbox">
+      <input name="{{username}}" value="username" id="username" type="checkbox">
+      <label for="username">Include in testing</label>
     {{/if}}
     <!-- {{>browserLocaleOptions this}} -->
     {{#if userAssignedToTest username}}
       {{> userStatus this}}
     {{/if}}
+    <div class="delete-user">Delete</div>
   </div>
 </template>
 
@@ -50,19 +58,19 @@
   <div>
     Incomplete:
     {{#each userTicketsIncomplete ../username}}
-      <a href="{{pathFor 'ticketPage'}}">{{this.assemblaId}}</a>
+      <a href="{{pathFor 'ticketPage'}}">{{this.jiraId}}</a>
     {{/each}}
   </div>
   <div>
     Passed:
     {{#each userTicketsPassed ../username}}
-      <a href="{{pathFor 'ticketPage'}}">{{this.assemblaId}}</a>
+      <a href="{{pathFor 'ticketPage'}}">{{this.jiraId}}</a>
     {{/each}}
   </div>
   <div>
     Failed:
     {{#each userTicketsFailed ../username}}
-      <a href="{{pathFor 'ticketPage'}}">{{this.assemblaId}}</a>
+      <a href="{{pathFor 'ticketPage'}}">{{this.jiraId}}</a>
     {{/each}}
   </div>
 </template>

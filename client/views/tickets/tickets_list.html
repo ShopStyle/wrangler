@@ -1,5 +1,16 @@
 <template name="ticketsList">
   <div class="ticket-list-tickets">
+    {{#if userAdmin}}
+    <div class="admin">
+      {{#if activeRouteClass 'editRegressionTests'}}
+      <div class="assign">
+        <span>Create a new Regression Test</span>
+        <div class="btn-new-testscript create-test">Create Test</div>
+      </div>
+      {{/if}}
+    </div>
+    {{/if}}
+
     {{#if allPassed}}
       <div class="corgi-success">
         <div>Congratulations! All tests have passed.</div>
@@ -10,9 +21,6 @@
       <div class="testing-assignment"><strong>No tickets to display.</strong></div>
     {{/if}}
     {{#if activeRouteClass 'todo'}}
-      {{#if testingUserAssignment}}
-        <div class="testing-assignment">You are assigned to: <strong>{{testingUserAssignment}}</strong></div>
-      {{/if}}
       <div class="testing-assignment">To-do</div>
       <div class="to-do">
         {{#if userAllDone}}
@@ -35,10 +43,10 @@
 </template>
 
 <template name="ticket">
-  <div class="ticket {{status}}">
-    <h3><a href="{{pathFor 'ticketPage'}}">{{assemblaId}} - {{summary}}</a></h3>
+  <div class="ticket {{status}}" data-id="{{_id}}">
+    <h3><a href="{{pathFor 'ticketPage'}}">{{jiraId}} - {{summary}}</a></h3>
     <div class="text">
-      <span>Assigned to: {{assignedTo}}</span><br>
+      <span>Assigned to: {{assignedTo.name}}</span><br>
       <span>Testers: {{ticketTesters}}</span>
     </div>
 
@@ -52,13 +60,17 @@
     {{/if}}
 
     {{#unless noTesting}}
-      <div class="testscript-results">
-        <div class="results">Results</div>
-        <div class="results-inner">
-          <div class="green">Pass: {{passersConcat this}}</div>
-          <div class="red">Fail: {{failersConcat this}}</div>
-        </div>
+    <div class="testscript-results">
+      <div class="results">Results</div>
+      <div class="results-inner">
+        <div class="green">Pass: {{passersConcat this}}</div>
+        <div class="red">Fail: {{failersConcat this}}</div>
       </div>
+    </div>
     {{/unless}}
+
+    {{#if userAdmin}}
+    <div class="delete-ticket">Delete</div>
+    {{/if}}
   </div>
 </template>

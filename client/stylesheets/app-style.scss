@@ -14,12 +14,13 @@ $light-grey: rgba(238, 238, 238, 0.7);
 $header-grey: #fafafa;
 $header-grey-alt: #e0e0e0;
 $font-fancy: 'Lobster', Helvetica;
+$font-normal: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 
 @import '.meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap';
 
 html {
   background-color: white;
-  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-family: $font-normal;
   font-weight: 300;
   color: black;
 }
@@ -70,7 +71,7 @@ $navbar-height: 50px;
   right: 0;
   z-index: 100;
   padding: 0 20px;
-  line-height: $navbar-height;
+  line-height: $navbar-height - 3;
   text-transform: uppercase;
   font-size: 14px;
 
@@ -115,6 +116,10 @@ $navbar-height: 50px;
 
   .navbar-right {
     float: right;
+
+    li {
+      position: relative;
+    }
   }
 
   .header-dropdown {
@@ -125,6 +130,10 @@ $navbar-height: 50px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
     margin-left: -5px;
     overflow: hidden;
+
+    &.right-header {
+      right: 0;
+    }
 
     li {
       width: 100%;
@@ -260,6 +269,18 @@ $navbar-height: 50px;
       display: none;
     }
   }
+
+  .delete-ticket {
+    position: absolute;
+    bottom: 5px;
+    font-size: 10px;
+    cursor: pointer;
+    z-index: 5;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .ticket.pass {
@@ -311,9 +332,41 @@ $navbar-height: 50px;
 }
 
 #login-buttons {
-  #login-sign-in-link {
+  font-family: $font-normal;
+  text-align: right;
+
+  input {
+    border: 0;
+    border-bottom: 1px solid $dark-grey;
+    height: 35px;
+    margin-left: 5px;
     position: relative;
-    top: 4px;
+
+    &:focus {
+      border-bottom: 2px solid $green;
+      outline: 0 none;
+    }
+  }
+
+  .login-link-text,
+  .login-close-text,
+  #signup-link,
+  #back-to-login-link {
+    cursor: pointer;
+  }
+
+  .login-close-text {
+    visibility: hidden;
+  }
+
+  .login-close-text:after {
+    content: 'X';
+    visibility: visible;
+    display: block;
+    position: absolute;
+    left: 15px;
+    top: -5px;
+    font-size: 16px;
   }
 
   a {
@@ -324,37 +377,43 @@ $navbar-height: 50px;
   }
 
   #login-dropdown-list {
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: white;
+    min-height: 320px;
+    border-bottom: 1px solid $dark-grey;
+    text-align: center;
     color:  black;
     background-color: white;
     border-radius: none;
     font-weight: normal;
-    text-shadow: none;
+
     a {
       color: black;
     }
+
     a:hover {
       text-decoration: underline;
     }
-    .login-button {
-      cursor: pointer;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      -o-user-select: none;
-      user-select: none;
-      padding: 4px 8px;
-      font-size: 80%;
-      font-family: 'Open Sans', Helvetica, Arial, default;
-      line-height: 1.5;
-      text-align: center;
-      color: white;
-      text-shadow: none;
+  }
+
+  #login-buttons-password {
+    cursor: pointer;
+    text-align: center;
+    line-height: 2.5;
+    background-image: none;
+    border: 1px solid $dark-grey;
+    border-radius: 5px;
+    width: 180px;
+    margin: 10px auto;
+    font-weight: bold;
+
+    &:hover {
       background-color: $green;
-      background-image: none;
-      border-radius: 5px;
-      border: none;
-      box-shadow: none;
-      -webkit-box-shadow: none;
+      color: white;
     }
   }
 }
@@ -526,27 +585,24 @@ footer span {
   .results-inner {
     z-index: 1;
     display: none;
-    color: white;
     position: relative;
-    top: 5px;
+    top: 7px;
     background-color: white;
     max-height: 300px;
     overflow-y: auto;
 
     div {
-      opacity: 0.8;
-      padding: 10px;
+      padding: 8px;
     }
 
     .green {
-      background-color: $green;
-      border-radius: 5px 5px 0 0;
-      border-bottom: 1px solid white;
+      border-left: 2px solid $green;
+      border-bottom: 1px solid $light-grey;
     }
 
     .red {
-      background-color: $red;
-      border-radius: 0 0px 5px 5px;
+      border-left: 2px solid $red;
+      border-top: 0;
     }
   }
 }
@@ -630,7 +686,7 @@ li.relative-container {
     span, select {
       margin-left: 10px;
       position: relative;
-      top: 22px;
+      top: 21px;
     }
 
     select {
@@ -672,7 +728,8 @@ li.relative-container {
     margin: 5px 0;
     border-bottom: 1px solid $grey;
     padding-bottom: 5px;
-    min-height: 30px;
+    min-height: 50px;
+    position: relative;
 
     select {
       float: right;
@@ -685,6 +742,23 @@ li.relative-container {
 
     input {
       float: right;
+    }
+
+    label {
+      float: right;
+      padding-right: 5px;
+      font-size: 12px;
+      font-weight: normal;
+    }
+
+    .delete-user {
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
+      color: $dark-grey;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 10px;
     }
   }
 
@@ -701,13 +775,14 @@ li.relative-container {
     height: 50px;
   }
 
-  .assign-tickets, .select-update {
+  .assign-tickets, .select-update, .reset-tickets {
     margin-left: 5px;
   }
 }
 
 .testing-assignment {
-  background-color: rgba(238, 238, 238, 0.8);
+  background-color: $header-grey;
+  border: 1px solid $light-grey;
   font-size: 1.2em;
   margin-top: 10px;
   padding: 10px;
@@ -774,4 +849,38 @@ li.relative-container {
   0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
   50% {opacity: 1.0;}
   100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
+}
+
+.account-form-container {
+  .update-success {
+    border: 1px solid $green;
+    padding: 8px;
+    border-radius: 5px;
+    margin-top: 15px;
+    text-align: center;
+    opacity: 0;
+  }
+}
+
+.next-ticket {
+  float: right;
+  right: 0;
+  text-align: right;
+}
+
+.browsers {
+  label {
+    font-weight: normal;
+  }
+
+  input {
+    margin-right: 15px;
+    margin-left: 0;
+  }
+}
+
+.submit-edit-ticket {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }

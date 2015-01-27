@@ -34,18 +34,46 @@ Template.home.helpers({
   milestoneName: function() {
     var currentMilestone = Milestones.findOne({current: true});
     if (currentMilestone) {
-      return currentMilestone.title;
+      return currentMilestone.name;
     }
     return null;
+  },
+
+  userTicketsIncomplete: function(username) {
+    return Tickets.find({testers: {$in: [username]},
+      passers: {$nin: [username]},
+      failers: {$nin: [username]}}).count();
+  },
+
+  userTicketsComplete: function(username) {
+    return Tickets.find({allStepsCompleted: {$in: [username]}}).count();
+  },
+
+  userTicketsAssigned: function(username) {
+    return Tickets.find({testers: {$in: [username]}}).count();
+  },
+
+  hasTesterCompletedTests: function(username) {
+    var count = Tickets.find({testers: {$in: [username]},
+      passers: {$nin: [username]},
+      failers: {$nin: [username]}}).count();
+
+    if (count === 0) {
+      return 'complete';
+    }
+  },
+
+  testingAssignments: function() {
+    return TestingAssignments.find();
   }
 });
 
 var getTestStatusData = function() {
   var tickets = Tickets.find({noTesting: false}).fetch();
 
-  var passed = countType(tickets, 'passers');
-  var failed = countType(tickets, 'failers');
-  var incomplete = countType(tickets, 'testers') - passed - failed;
+  var passed = countType(tickets, 'passers') || 0;
+  var failed = countType(tickets, 'failers') || 0;
+  var incomplete = (countType(tickets, 'testers') - passed - failed) || 0;
 
   var data = [];
   data.push({
@@ -67,20 +95,30 @@ var getTestStatusData = function() {
 Template.home.rendered = function() {
   var data = getTestStatusData();
 
-  nv.addGraph(function() {
-    var chart = nv.models.pieChart()
-      .x(function(d) { return d.label })
-      .y(function(d) { return d.value })
-      .showLabels(false)
-      .donut(true)
-      .donutRatio(0.3)
-      .color(['#2eb82e', '#f22613', '#e0e0e0']);
+  var chart = nv.models.pieChart()
+    .x(function(d) { return d.label })
+    .y(function(d) { return d.value })
+    .showLabels(false)
+    .donut(true)
+    .donutRatio(0.3)
+    .color(['#2eb82e', '#f22613', '#e0e0e0']);
 
+  nv.addGraph(function() {
     d3.select("#chart svg")
       .datum(data)
       .transition().duration(1200)
       .call(chart);
 
     return chart;
+  });
+
+  Tracker.autorun(function() {
+    var updatedData = getTestStatusData();
+
+    d3.select('#chart svg')
+      .datum(updatedData)
+      .call(chart);
+
+    chart.update();
   });
 };

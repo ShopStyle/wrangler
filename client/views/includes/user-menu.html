@@ -1,7 +1,7 @@
 <template name="userMenu">
   {{#if isLoggedIn}}
     <li class="view dropdown-top-level" href="/account">{{name}}
-      <ul class="header-dropdown dropdown-menu-right dropdown-menu">
+      <ul class="header-dropdown right-header">
         <a class="{{activeRouteClass 'todo'}}" href="{{pathFor 'todo'}}">
           <li>To Do</li>
         </a>
@@ -9,11 +9,10 @@
           <li>Own</li>
         </a>
         <a href="/account"><li>Edit Account</li></a>
-        <a href="/sign-out"><li>Sign Out</li></a>
+        <a class="logout-user"><li>Sign Out</li></a>
       </ul>
     </li>
   {{else}}
-    <a class="account-link sign-in" href="/sign-in"><li>Sign In</li></a>
-    <a class="account-link sign-up" href="/sign-up"><li>Sign Up</li></a>
+    {{> loginButtons align="right"}}
   {{/if}}
 </template>

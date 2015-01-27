@@ -2,12 +2,12 @@ reywood:bootstrap3-sass
 standard-app-packages
 blaze
 iron:router
-sacha:spin
 http
-assembla
 d3
 pfafman:nvd3
 accounts-ui-unstyled
 accounts-password
 accounts-base
-joshowens:accounts-entry
+
+
+npm-container
