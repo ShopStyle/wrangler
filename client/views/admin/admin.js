@@ -86,6 +86,20 @@ Template.admin.events({
     });
   },
 
+  'click .reset-all-tickets': function() {
+    Meteor.call('resetTickets', function(error) {
+      if (error) {
+        throwError(error.reason);
+      }
+      else {
+        $('.reset-all-alert').css("opacity", "0.8");
+        Meteor.setTimeout(function() {
+          $('.reset-all-alert').fadeTo(500, 0);
+        }, 4000);
+      }
+    });
+  },
+
   'click .delete-user': function(e) {
     var user = $(e.target).siblings('input').attr('name');
     if (confirm('Delete ' + user + '? Warning, this action is permanent!')) {

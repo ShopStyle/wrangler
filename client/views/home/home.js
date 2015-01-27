@@ -54,6 +54,12 @@ Template.home.helpers({
   },
 
   hasTesterCompletedTests: function(username) {
+    var userHasTests = Tickets.find({testers: {$in: [username]}}).count();
+
+    if (!userHasTests) {
+      return;
+    }
+
     var count = Tickets.find({testers: {$in: [username]},
       passers: {$nin: [username]},
       failers: {$nin: [username]}}).count();
@@ -74,6 +80,11 @@ var getTestStatusData = function() {
   var passed = countType(tickets, 'passers') || 0;
   var failed = countType(tickets, 'failers') || 0;
   var incomplete = (countType(tickets, 'testers') - passed - failed) || 0;
+
+  if (passed == 0 && failed == 0 && incomplete == 0) {
+    // testing has not been set up, show a default pretty graph
+    passed = failed = incomplete = 1;
+  }
 
   var data = [];
   data.push({
