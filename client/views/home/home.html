@@ -11,6 +11,9 @@
         {{#each testingAssignments}}
           <div class="tester-summary {{hasTesterCompletedTests this.name}}">
             <div class="tester-name">{{this.name}}</div>
+            {{#if hasTesterCompletedTests this.name}}
+              <img class="gold-star" src="{{getGoldStarSrc}}" />
+            {{/if}}
             <div class="tester-stats">
               <div class="tester-total-assigned">Total Assigned Tickets: {{userTicketsAssigned this.name}}</div>
               <div class="tester-complete">Completed: {{userTicketsComplete this.name}}</div>

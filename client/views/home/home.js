@@ -57,7 +57,7 @@ Template.home.helpers({
     var assigned = Tickets.find({testers: {$in: [username]}}).count();
 
     if (!assigned) {
-      return;
+      return false;
     }
 
     var completed = Tickets.find({allStepsCompleted: {$in: [username]}}).count();
@@ -65,10 +65,16 @@ Template.home.helpers({
     if (completed === assigned) {
       return 'complete';
     }
+
+    return false;
   },
 
   testingAssignments: function() {
     return TestingAssignments.find({notTesting: {$ne: true}});
+  },
+
+  getGoldStarSrc: function() {
+    return "/images/gold-star-" + Math.floor(Math.random() * 8) + ".png";
   }
 });
 
