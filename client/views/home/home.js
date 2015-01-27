@@ -70,7 +70,7 @@ Template.home.helpers({
   },
 
   testingAssignments: function() {
-    return TestingAssignments.find();
+    return TestingAssignments.find({notTesting: {$ne: true}});
   }
 });
 
