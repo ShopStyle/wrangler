@@ -19,3 +19,15 @@ Template.ticketPage.helpers({
     return Tickets.findOne({jiraId: {$lt: this.jiraId}}, {sort: {jiraId: -1}});
   }
 });
+
+Template.ticketPage.events({
+  'click .delete-ticket': function(e) {
+    var id = $(e.target).parent().attr('data-id');
+    if (id) {
+      if (confirm('Are you sure you want to delete that ticket?')) {
+        Tickets.remove(id);
+        Router.go('/');
+      }
+    }
+  }
+})

@@ -280,6 +280,11 @@ $navbar-height: 50px;
     &:hover {
       text-decoration: underline;
     }
+
+    &.ticket-page {
+      right: 10px;
+      color: $dark-grey;
+    }
   }
 }
 

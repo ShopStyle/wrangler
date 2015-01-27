@@ -3,7 +3,7 @@
     <a href="{{pathFor 'ticketPage' data=nextTicketNumber}}" class="next-ticket">Next Ticket</a>
     <a href="{{pathFor 'ticketPage' data=previousTicketNumber}}" class="previous-ticket">Previous Ticket</a>
   {{/if}}
-  <div class="main ticket {{status}}">
+  <div class="main ticket {{status}}" data-id={{_id}}>
     <div class="text">
       <h1><a target="_blank" href="{{jiraUrl}}">{{summary}}</a></h1>
       <ul>
@@ -20,6 +20,7 @@
     {{else}}
       {{#if userAdmin}}
         <a href="{{pathFor 'ticketEdit'}}" class="btn-edit">edit</a>
+        <div class="delete-ticket ticket-page">Delete</div>
       {{/if}}
     {{/if}}
   </div>
