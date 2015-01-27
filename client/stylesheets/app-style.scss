@@ -116,6 +116,10 @@ $navbar-height: 50px;
 
   .navbar-right {
     float: right;
+
+    li {
+      position: relative;
+    }
   }
 
   .header-dropdown {

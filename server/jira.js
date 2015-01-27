@@ -35,7 +35,7 @@ Jira.getStandardJqlQueryString = function() {
     throw new Meteor.Error(500, 'Please set a current milestone');
   }
 
-  var versionTitle = Milestones.findOne({ current: true }).title;
+  var versionTitle = Milestones.findOne({ current: true }).name;
   var jqlQueryString = "fixVersion IN ('" + versionTitle + "') AND status IN (done, 'verified on dev')"
 
   return jqlQueryString;
@@ -188,6 +188,7 @@ Jira.addPassersAndFailersArrays = function() {
   //this is only to make sure tickets have these fields. it might be better to set them when setting
   //properties on the ticket in updateSingleTicket?
   Tickets.update({ passers: { $exists: false }}, { $set: { passers: [] }}, { multi: true });
+  Tickets.update({ testers: { $exists: false }}, { $set: { testers: [] }}, { multi: true });
   Tickets.update({ failers: { $exists: false }}, { $set: { failers: [] }}, { multi: true });
   Tickets.update({ status: { $exists: false }}, { $set: { status: '' } }, { multi: true });
   Tickets.update({ allStepsCompleted: { $exists: false }}, { $set: { allStepsCompleted: [] }}, { multi: true });

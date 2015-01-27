@@ -71,9 +71,9 @@ Template.home.helpers({
 var getTestStatusData = function() {
   var tickets = Tickets.find({noTesting: false}).fetch();
 
-  var passed = countType(tickets, 'passers');
-  var failed = countType(tickets, 'failers');
-  var incomplete = countType(tickets, 'testers') - passed - failed;
+  var passed = countType(tickets, 'passers') || 0;
+  var failed = countType(tickets, 'failers') || 0;
+  var incomplete = (countType(tickets, 'testers') - passed - failed) || 0;
 
   var data = [];
   data.push({
