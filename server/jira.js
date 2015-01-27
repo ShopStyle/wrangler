@@ -8,8 +8,9 @@ Jira = {
   },
   // Jira has versions, but we call them milestones to keep them consistent with
   // the originally named Milestone collection from Assembla. TODO: Change to make more generic.
-  // 'project/BE/versions' is used because I am unsure of the endpoint that
-  // is shopstyle wide. This does return all the versions for shopstyle though.
+  // 'project/BE/versions' is used because versions are specific to projects.
+  // PM's keep all versions on all prjects, so we just hit the BE project endpoint
+  // and get its versions, which should be shopstyle wide
   milestonesUrl: 'project/BE/versions',
   usersUrl: 'group',
   ticketUrl: 'search',
@@ -68,17 +69,18 @@ Jira.updateMilestoneCollection = function() {
 
   if (milestoneResponse.statusCode == 200) {
     _.each(milestoneResponse.data, function(milestone) {
+      var milestoneId = parseInt(milestone.id);
       if (milestone.archived) {
         Milestones.remove({id: milestone.id});
       } else {
-        Milestones.update({id: parseInt(milestone.id)}, {$set: {id: milestone.id, title: milestone.name, isJira: true}}, {upsert: true});
+        Milestones.update({id: milestoneId}, {$set: {id: milestoneId, name: milestone.name, isJira: true}}, {upsert: true});
       }
     });
   } else {
     throw new Meteor.Error(500, 'Jira call failed');
   }
 
-  Milestones.remove({isJira: {$nin: [true]}});
+  Milestones.remove({isJira: {$ne: true}});
 };
 
 Jira.updateSingleTicket = function(ticket) {
@@ -200,7 +202,6 @@ Jira.fetchLatestChanges = function() {
     return;
   }
 
-  console.log("called ticket stream");
   var jqlQueryString = Jira.getStandardJqlQueryString() + " AND updated > '-1m'";
   var params = {
     jql: jqlQueryString,
@@ -231,6 +232,7 @@ Jira.verifyTicketOnDev = function(ticket) {
       id: 131
     }
   }
+
   Jira.makePostRequest(url, data);
 };
 
@@ -241,26 +243,3 @@ if (Meteor.isServer) {
     Meteor.setInterval(Jira.fetchLatestChanges, 30000);
   });
 }
-
-// Jira.populateJiraUsers = function() {
-//   var params = {
-//     'maxResults': 500,
-//     groupname: 'jira-users',
-//     expand: 'users'
-//   }
-//   // /console.log(params.projectKeys)
-//   var userResponse = Jira.makeGetRequest(Jira.usersUrl, params);
-//   if (userResponse.statusCode == 200) {
-//     console.log(userResponse.data.users.items.length);
-//     return;
-//     JiraUsers.remove({});
-//     _.each(userResponse.data.users.items, function(user) {
-//       JiraUsers.insert(user);
-//     });
-//   }
-//   else {
-//     throw new Meteor.Error(500, 'Jira call failed');
-//   }
-// };
-//
-// Jira.populateJiraUsers()

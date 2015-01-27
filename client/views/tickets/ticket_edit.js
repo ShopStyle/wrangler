@@ -2,7 +2,6 @@ Template.genericTicketEdit.events({
   // change this to 'click .submit-edit-ticket'
 
   'click .submit-edit-ticket': function(e, template) {
-    debugger;
     var numTesters = $('.num-testers').find('select').val();
     var currentTicketId = template.data._id;
     var testerValues = $('.tester-select').find('select');
@@ -14,10 +13,10 @@ Template.genericTicketEdit.events({
       var testerName = $(option).val();
 
       if (testerName && testerName.length > 0) {
-        // if (_.contains(testers, testerName)) {
-        //   throwError("Cannot assign tester: " + testerName + " more than once");
-        //   return false;
-        // }
+        if (_.contains(testers, testerName)) {
+          throwError("Cannot assign tester: " + testerName + " more than once");
+          return false;
+        }
         testers.push(testerName);
       }
     }
@@ -30,15 +29,6 @@ Template.genericTicketEdit.events({
       }
     );
     return true;
-  }
-});
-
-Template.ticketEdit.helpers({
-  assignedTo: function() {
-    if (AssemblaUsers.findOne({ id: this.assignedToId })) {
-      return AssemblaUsers.findOne({ id: this.assignedToId }).login;
-    }
-    return '';
   }
 });
 
@@ -86,7 +76,7 @@ Template.testerUsers.helpers({
   testers: function() {
     selectedTesterEditPage = this.tester.toString();
     var currentMilestone = Milestones.findOne({current: true});
-    var testers = TestingAssignments.find({milestoneId: currentMilestone.id, notTesting: {$nin: [true]}});
+    var testers = TestingAssignments.find({milestoneName: currentMilestone.name, notTesting: {$nin: [true]}});
 
     if (testers) {
       return testers.fetch();

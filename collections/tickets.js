@@ -26,11 +26,11 @@ Meteor.methods({
       throw new Meteor.Error(401, "Milestone not found");
     }
 
-    Tickets.update({milestoneId: currentMilestone.id},
-    {$set: {passers: [], failers: [], status: '', allStepsCompleted: []}}, {multi: true});
+    Tickets.update({"fixVersion.name": currentMilestone.name},
+      {$set: {passers: [], failers: [], status: '', allStepsCompleted: []}}, {multi: true});
     // set milestone id on testscripts too, so this does not update all
     Testscripts.update({},
-    {$set: {passers: [], failers: [], status: ''}}, {multi: true});
+      {$set: {passers: [], failers: [], status: ''}}, {multi: true});
   },
 
   resetTickets: function() {
@@ -39,7 +39,7 @@ Meteor.methods({
       throw new Meteor.Error(401, "Milestone not found");
     }
 
-    Tickets.update({milestoneId: currentMilestone.id},
+    Tickets.update({"fixVersion.name": currentMilestone.name},
       {$set: {passers: [], failers: [], testers: [], status: '', allStepsCompleted: []}}, {multi: true});
     // set milestone id on testscripts too, so this does not update all
     Testscripts.update({},
@@ -56,19 +56,19 @@ Meteor.methods({
     Meteor.call('resetTickets');
 
     var currentMilestone = Milestones.findOne({current: true});
-    var testersCollection = TestingAssignments.find({milestoneId: currentMilestone.id, notTesting: {$nin: [true]}});
+    var testersCollection = TestingAssignments.find({milestoneName: currentMilestone.name, notTesting: {$ne: true}});
 
     if (testersCollection.count() < DEFAULT_TESTERS_PER_TICKET) {
       throw new Meteor.Error(401, "Please assign at least " + DEFAULT_TESTERS_PER_TICKET + " people to test");
     }
 
     // remove testers from all tickets with no-testing required
-    Tickets.update({milestoneId: currentMilestone.id, statusName: "Done", noTesting: true},
+    Tickets.update({"fixVersion.name": currentMilestone.name, statusName: "Done", noTesting: true},
       {$set: {testers: []}},
       {multi: true});
 
     // get all tickets that need testers assigned
-    var tickets = Tickets.find({milestoneId: currentMilestone.id, statusName: "Done", noTesting: false});
+    var tickets = Tickets.find({"fixVersion.name": currentMilestone.name, statusName: "Done", noTesting: false});
     var testers = _.shuffle(testersCollection.fetch());
 
     tickets.forEach(function(ticket) {
@@ -77,18 +77,12 @@ Meteor.methods({
       if (numTesters >= testersCollection.count()) {
         var requiredNumTesters = parseInt(numTesters) + 1;
         var errorMessage = "Please assign more people to test. Ticket " +
-          ticket.assemblaId + " requires " + requiredNumTesters +
+          ticket.jiraId + " requires " + requiredNumTesters +
           " testers to ensure it will not be assigned to the person that fixed it.";
         throw new Meteor.Error(401, errorMessage);
       }
 
       var ticketTesters = [];
-      var assemblaUserId = ticket.assignedToId;
-      var assignedToLogin = JiraUsers.findOne({id: assemblaUserId});
-      if (!assignedToLogin) {
-        return;
-      }
-      assignedToLogin = assignedToLogin.login;
 
       while (ticketTesters.length < numTesters) {
         // reset queue of testers when empty
@@ -99,7 +93,7 @@ Meteor.methods({
         // validate potential tester for ticket
         var potentialTester = testers.pop();
         // 1. can't test your own ticket
-        if (potentialTester.name === assignedToLogin) {
+        if (potentialTester.name === ticket.assignedTo.name) {
           // put tester back in so testing is distributed more equally
           testers.unshift(potentialTester);
           continue;
@@ -114,22 +108,19 @@ Meteor.methods({
 
         potentialTester.tickets.push(ticket);
         TestingAssignments.update(
-          {milestoneId: currentMilestone.id, name: potentialTester.name},
+        {milestoneName: currentMilestone.name, name: potentialTester.name},
           {$set: {tickets: potentialTester.tickets}});
 
         ticketTesters.push(potentialTester.name);
       }
 
-      Tickets.update(
-        {assemblaId: ticket.assemblaId},
-        {$set: {testers: ticketTesters}}
-      );
+      Tickets.update({jiraId: ticket.jiraId}, {$set: {testers: ticketTesters}});
     });
   },
 
   updateTickets: function() {
     if (Meteor.isServer) {
-      Assembla.populateTicketCollection();
+      Jira.populateTicketCollection();
     }
   }
 });

@@ -6,14 +6,15 @@ if (Meteor.isServer) {
 Meteor.methods({
   setCurrentMilestone: function(milestoneId) {
     Milestones.update({}, {$set: {current: false}}, {multi: true});
-    Milestones.update({id: milestoneId}, {$set: {current: true}});
+    Milestones.update({id: parseInt(milestoneId)}, {$set: {current: true}});
     if (Meteor.isServer) {
       Jira.populateTicketCollection();
     }
   },
   setDefaultMilestone: function() {
     if (!Milestones.findOne({current: true})) {
-      Milestones.update({}, {$set: {current: true}});
+      var id = Milestones.findOne()._id;
+      Milestones.update({_id: id}, {$set: {current: true}});
     }
     if (Stream.find().count() !== 1) {
       Stream.remove({});

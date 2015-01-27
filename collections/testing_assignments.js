@@ -1,11 +1,11 @@
 TestingAssignments = new Mongo.Collection('testingAssignments');
 
 var getCurrentMilestone = function() {
-  var currentMilestoneId = Milestones.findOne({current: true});
-  if (currentMilestoneId) {
-    currentMilestoneId = currentMilestoneId.id;
+  var currentMilestone = Milestones.findOne({current: true});
+  if (currentMilestone) {
+    currentMilestoneName = currentMilestone.name;
   }
-  return currentMilestoneId;
+  return currentMilestoneName;
 };
 
 Meteor.methods({
@@ -15,16 +15,18 @@ Meteor.methods({
 
   assignTestUser: function(user) {
     TestingAssignments.insert({
-      milestoneId: getCurrentMilestone(),
+      milestoneName: getCurrentMilestone(),
       name: user,
-      tickets: []
+      tickets: [],
+      notTesting: false
     });
   },
 
   excuseTester: function(user) {
     TestingAssignments.insert({
-      milestoneId: getCurrentMilestone(),
+      milestoneName: getCurrentMilestone(),
       name: user,
+      tickets: [],
       notTesting: true
     });
   }

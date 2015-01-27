@@ -34,7 +34,7 @@ Template.home.helpers({
   milestoneName: function() {
     var currentMilestone = Milestones.findOne({current: true});
     if (currentMilestone) {
-      return currentMilestone.title;
+      return currentMilestone.name;
     }
     return null;
   },

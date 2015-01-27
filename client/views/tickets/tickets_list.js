@@ -9,7 +9,7 @@ Template.ticketsList.helpers({
     var currentMilestone = Milestones.findOne({ current: true });
     var testingAssignment;
     if (currentMilestone) {
-      testingAssignment = TestingAssignments.findOne({ milestoneId: currentMilestone.id, name: user.username });
+      testingAssignment = TestingAssignments.findOne({ milestoneName: currentMilestone.name, name: user.username });
     }
     if (user && testingAssignment) {
       var browser = testingAssignment.browser;

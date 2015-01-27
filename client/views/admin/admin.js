@@ -145,7 +145,7 @@ Template.browserLocaleOptions.helpers({
     var currentMilestone = Milestones.findOne({current: true});
 
     if (currentMilestone) {
-      var tester = TestingAssignments.findOne({milestoneId: currentMilestone.id, name: username});
+      var tester = TestingAssignments.findOne({milestoneName: currentMilestone.name, name: username});
       if (tester) {
         if (locale) {
           return tester.locale === assignment;
@@ -163,7 +163,7 @@ Template.user.helpers({
   userAssignedToTest:  function(username) {
     var currentMilestone = Milestones.findOne({current: true});
     if (currentMilestone) {
-      var tester = TestingAssignments.findOne({milestoneId: currentMilestone.id, name: username});
+      var tester = TestingAssignments.findOne({milestoneName: currentMilestone.name, name: username});
       if (!tester) {
         return true;
       } else if (tester.notTesting === true) {

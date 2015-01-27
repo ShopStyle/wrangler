@@ -9,14 +9,11 @@
 <template name="ticketEdit">
   <div class="ticket {{status}}">
     <div class="text">
-      <h1><a href="{{assemblaUrl}}">{{summary}}</a></h1>
+      <h1><a href="{{jiraUrl}}">{{summary}}</a></h1>
       <!-- let's remove this and do a main shared outer template, and then take out the non shared stuff -->
       <ul>
-        <li><strong>Ticket: </strong>{{assemblaId}}</li>
-        <li><strong>Assigned to: </strong>{{assignedTo}}</li>
-        <li><strong>Component: </strong>{{component}}</li>
-        <li><strong>Browser: </strong>{{browser}}</li>
-        <li><strong>OS: </strong>{{os}}</li>
+        <li><strong>Ticket: </strong>{{jiraId}}</li>
+        <li><strong>Assigned to: </strong>{{assignedTo.name}}</li>
         <li><strong>Prerequisite/comments: </strong></li>
         <li>{{breakLines comments}}</li>
         {{> numTesters}}

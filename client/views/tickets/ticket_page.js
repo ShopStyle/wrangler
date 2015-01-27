@@ -12,10 +12,10 @@ Template.ticketPage.helpers({
   },
 
   nextTicketNumber: function() {
-    return Tickets.findOne({jiraId: {$gt: this.jiraId}}, {sort: {assemblaId: 1}});
+    return Tickets.findOne({jiraId: {$gt: this.jiraId}}, {sort: {jiraId: 1}});
   },
 
   previousTicketNumber: function() {
-    return Tickets.findOne({jiraId: {$lt: this.jiraId}}, {sort: {assemblaId: -1}});
+    return Tickets.findOne({jiraId: {$lt: this.jiraId}}, {sort: {jiraId: -1}});
   }
 });
