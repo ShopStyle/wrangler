@@ -30,7 +30,14 @@ Template.userGif.helpers({
 });
 
 Template.userGif.rendered = function() {
-  var gif = Meteor.user().profile.gif || 'cats';
+  var profile = Meteor.user().profile;
+  var gif;
+
+  if (profile) {
+    gif = Meteor.user().profile.gif || 'cats';
+  } else {
+    gif = 'cats';
+  }
 
   var tag = gif.toLowerCase()
   var apiUrl = "http://api.giphy.com/v1/gifs/random?tag="+tag+"&api_key=dc6zaTOxFJmzC&limit=1";
