@@ -2,10 +2,14 @@ Session.setDefault('gifResponse', {msg: 'wait'});
 
 Template.userGif.helpers({
   showCats: function() {
-    var gif = Meteor.user().profile.gif;
-    if (gif) {
-      return gif.toLowerCase() === 'cats';
+    var profile = Meteor.user().profile;
+    if (profile) {
+      var gif = Meteor.user().profile.gif;
+      if (gif) {
+        return gif.toLowerCase() === 'cats';
+      }
     }
+
     //if the user has not specified a perference, show cats
     return true;
   },
@@ -16,7 +20,12 @@ Template.userGif.helpers({
   },
 
   getGifType: function() {
-    return Meteor.user().profile.gif || 'cats';
+    var profile = Meteor.user().profile;
+    if (profile) {
+      return profile.gif || 'cats';
+    } else {
+      return 'cats';
+    }
   }
 });
 
