@@ -5,6 +5,7 @@ if (Meteor.isServer) {
 
 Meteor.methods({
   setCurrentMilestone: function(milestoneId) {
+    console.log("setting current milestone");
     Milestones.update({}, {$set: {current: false}}, {multi: true});
     Milestones.update({id: parseInt(milestoneId)}, {$set: {current: true}});
     if (Meteor.isServer) {

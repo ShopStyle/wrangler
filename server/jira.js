@@ -61,6 +61,7 @@ Jira.makePostRequest = function(endpoint, data) {
 };
 
 Jira.updateMilestoneCollection = function() {
+  console.log("updating milestone collection");
   if (!AUTH_TOKEN) {
     throw new Meteor.Error(500, 'Please provide correct username and password in config.js and settings.json');
   }
@@ -140,8 +141,10 @@ Jira.populateTicketCollection = function() {
 
   var tickets = Jira.makeGetRequest(Jira.ticketUrl, params);
 
-  if (tickets) {
+  if (tickets.statusCode === 200) {
+    console.log("I found tickets, now I am updating them");
     _.each(tickets.data.issues, function(ticket) {
+      console.log("I am updating ticket " + ticket.id);
       Jira.updateSingleTicket(ticket);
     });
 
@@ -151,8 +154,9 @@ Jira.populateTicketCollection = function() {
     throw new Meteor.Error(500, 'Jira ticket call failed');
   }
 };
-//
+
 Jira.updateTestscripts = function(ticket) {
+  console.log("I am updating the testscripts for ticket " + ticket.id);
   fields = ticket.fields;
   if (!fields[Jira.testscriptCustomField]) {
     return;
