@@ -14,15 +14,17 @@ $light-grey: rgba(238, 238, 238, 0.7);
 $header-grey: #fafafa;
 $header-grey-alt: #e0e0e0;
 $font-fancy: 'Lobster', Helvetica;
-$font-normal: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-
-// @import '.meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap';
+$font-normal: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 
 html {
   background-color: white;
   font-family: $font-normal;
   font-weight: 300;
   color: black;
+}
+
+#main {
+  padding: 0 10px;
 }
 
 strong {
@@ -45,6 +47,10 @@ body {
   margin-right: auto;
   padding: 15px;
   padding-top: 0;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #333333;
+  background-color: #fff;
 }
 
 $navbar-height: 50px;
@@ -336,22 +342,80 @@ $navbar-height: 50px;
   }
 }
 
-#login-buttons {
+.edit-account {
+  padding-top: 30px;
+
+  .form-group {
+    margin: 15px 0;
+  }
+
+  select {
+    margin-left: 5px;
+  }
+
+  .account-form-container {
+    margin: 0 auto;
+    width: 300px;
+    text-align: left;
+
+    .update-success {
+      border: 1px solid $green;
+      padding: 8px;
+      border-radius: 5px;
+      margin-top: 15px;
+      text-align: center;
+      opacity: 0;
+    }
+  }
+
+  button {
+    cursor: pointer;
+    text-align: center;
+    line-height: 2.5;
+    background-image: none;
+    border: 1px solid #939393;
+    border-radius: 5px;
+    width: 180px;
+    margin: 10px auto;
+    font-weight: bold;
+    background-color: white;
+    font-size: 12px;
+    width: 100%;
+
+    &:hover {
+      background-color: $green;
+      color: white;
+    }
+  }
+}
+
+#login-buttons, .edit-account {
   font-family: $font-normal;
   text-align: right;
 
   input {
     border: 0;
-    border-bottom: 1px solid $dark-grey;
-    height: 35px;
+    border-bottom: 1px solid #939393;
+    height: 20px;
     margin-left: 5px;
     position: relative;
+    font-size: 14px;
 
     &:focus {
       border-bottom: 2px solid $green;
       outline: 0 none;
     }
   }
+
+  a {
+    text-decoration: none;
+    padding: 0;
+    text-decoration: none;
+    border: none;
+  }
+}
+
+#login-buttons {
 
   .login-link-text,
   .login-close-text,
@@ -372,13 +436,6 @@ $navbar-height: 50px;
     left: 15px;
     top: -5px;
     font-size: 16px;
-  }
-
-  a {
-    text-decoration: none;
-    padding: 0;
-    text-decoration: none;
-    border: none;
   }
 
   #login-dropdown-list {
@@ -856,17 +913,6 @@ li.relative-container {
   100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
 }
 
-.account-form-container {
-  .update-success {
-    border: 1px solid $green;
-    padding: 8px;
-    border-radius: 5px;
-    margin-top: 15px;
-    text-align: center;
-    opacity: 0;
-  }
-}
-
 .next-ticket {
   float: right;
   right: 0;
@@ -894,4 +940,20 @@ li.relative-container {
   float: left;
   max-height: 60px;
   margin: 0 15px;
+}
+
+
+// These styles are the only rules we use from bootstrap
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  color: inherit;
+}
+
+label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
