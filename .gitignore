@@ -1,4 +1,5 @@
 settings.json
 .build
 .meteor
+target
 packages
