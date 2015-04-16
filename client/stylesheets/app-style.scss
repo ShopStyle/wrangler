@@ -156,6 +156,10 @@ $navbar-height: 50px;
   background-color: white;
   padding: 10px;
 
+  select {
+    margin-left: 10px;
+  }
+
   h3 {
     font-size: 1.2em;
     margin: 5px 0;
@@ -564,17 +568,17 @@ $navbar-height: 50px;
 .btn-new-testscript {
   border-radius: 5px;
   min-width: 100px;
-  background-color: #62bd19;
+  background-color: $green;
   border: none;
   color: white;
   font-size: 1em;
   display: inline;
   margin-left: 0;
   cursor: pointer;
-  padding: 5px;
+  padding: 10px;
 
   &.delete.edit {
-    background-color: red;
+    background-color: $red;
     margin-left: 130px;
   }
 
@@ -591,6 +595,14 @@ $navbar-height: 50px;
 
   &:hover {
     text-decoration: none;
+  }
+
+  &.changes-saved {
+    background-color: $blue-lighter;
+    opacity: 0;
+    position: absolute;
+    right: 10px;
+    bottom: 60px;
   }
 }
 
@@ -770,7 +782,7 @@ li.relative-container {
     top: 12px;
     right: 10px;
     padding: 10px;
-    width: 130px;
+    min-width: 130px;
     text-align: center;
   }
 

@@ -1,16 +1,5 @@
 <template name="ticketsList">
   <div class="ticket-list-tickets">
-    {{#if userAdmin}}
-    <div class="admin">
-      {{#if activeRouteClass 'editRegressionTests'}}
-      <div class="assign">
-        <span>Create a new Regression Test</span>
-        <div class="btn-new-testscript create-test">Create Test</div>
-      </div>
-      {{/if}}
-    </div>
-    {{/if}}
-
     {{#if allPassed}}
       <div class="corgi-success">
         <div>Congratulations! All tests have passed.</div>

@@ -1,7 +1,3 @@
-BROWSER_OPTIONS = ["IE9", "IE10", "IE11", "Chrome",
-  "Firefox", "iPad", "iPhone", "Android", "Safari"];
-LOCALE_OPTIONS = ["UK", "AU", "JP", "DE", "FR", "CA"];
-
 Template.admin.helpers({
   streamOn: function() {
     var stream = Stream.findOne();
@@ -17,6 +13,25 @@ Template.admin.helpers({
     return Meteor.users.find();
   }
 });
+
+var updateTestingAssignments = function(users) {
+  for (var i = 0, len = users.length; i < len; i++) {
+    var $user = $(users.get(i));
+    var username = $user.find('span').text();
+
+    // skip users who are not testing
+    if (!$user.find('input').prop('checked')) {
+      Meteor.call('excuseTester', username);
+      continue;
+    }
+
+    Meteor.call('assignTestUser', username, function(error) {
+      if (error) {
+        throwError(error.reason);
+      }
+    });
+  }
+}
 
 Template.admin.events({
   'click .streamer': function() {
@@ -107,28 +122,21 @@ Template.admin.events({
     }
   },
 
+  'click .update-testing-assignments': function(e) {
+    var users = $('.user');
+    updateTestingAssignments(users);
+    $('.update-testing-assignments-alert').css("opacity", "0.8");
+    Meteor.setTimeout(function() {
+      $('.update-testing-assignments-alert').fadeTo(500, 0);
+    }, 4000);
+  },
+
   'click .assign-tickets': function() {
     if (confirm("Assigning tickets will reset current testers. Proceed?")) {
       // Remove all testers from this milestone
       Meteor.call('resetTesters');
-
       var users = $('.user');
-      for (var i = 0, len = users.length; i < len; i++) {
-        var $user = $(users.get(i));
-        var username = $user.find('span').text();
-
-        // skip users who are not testing
-        if (!$user.find('input').prop('checked')) {
-          Meteor.call('excuseTester', username);
-          continue;
-        }
-
-        Meteor.call('assignTestUser', username, function(error) {
-          if (error) {
-            throwError(error.reason);
-          }
-        });
-      }
+      updateTestingAssignments(users);
 
       Meteor.call('assignTickets', function(error) {
         if (error) {
@@ -147,11 +155,11 @@ Template.admin.events({
 
 Template.browserLocaleOptions.helpers({
   browserOptions: function() {
-    return BROWSER_OPTIONS;
+    return Config.browserOptions;
   },
 
   localeOptions: function() {
-    return LOCALE_OPTIONS;
+    return Config.localeOptions;
   },
 
   isCurrentlyAssigned: function(username, locale) {

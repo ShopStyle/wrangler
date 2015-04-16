@@ -17,11 +17,12 @@
         <a class="{{activeRouteClass 'incomplete'}}" href="{{pathFor 'incomplete'}}">
           <li>Incomplete</li>
         </a>
-        {{#if userAdmin}}
+        <a class="{{activeRouteClass 'regressions'}}" href="{{pathFor 'regressions'}}">
+          <li>Regressions</li>
+        </a>
         <a class="{{activeRouteClass 'noTesters'}}" href="{{pathFor 'noTesters'}}">
           <li>Missing Testers</li>
         </a>
-        {{/if}}
       </ul>
     </li>
 
@@ -33,9 +34,6 @@
       <ul class="header-dropdown right-header">
         <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'admin'}}">
           <li>Testing Setup</li>
-        </a>
-        <a class="{{activeRouteClass 'admin'}}" href="{{pathFor 'editRegressionTests'}}">
-          <li>Regression Tests</li>
         </a>
       </ul>
     </li>

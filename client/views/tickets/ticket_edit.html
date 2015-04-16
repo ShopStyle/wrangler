@@ -1,27 +1,28 @@
-<template name="genericTicketEdit">
-  {{#if activeRouteClass 'regressions'}}
-    {{> regressionEdit}}
-  {{else}}
-    {{> ticketEdit}}
-  {{/if}}
-</template>
-
 <template name="ticketEdit">
   <div class="ticket {{status}}">
     <div class="text">
       <h1><a href="{{jiraUrl}}">{{summary}}</a></h1>
-      <!-- let's remove this and do a main shared outer template, and then take out the non shared stuff -->
       <ul>
         <li><strong>Ticket: </strong>{{jiraId}}</li>
         <li><strong>Assigned to: </strong>{{assignedTo.name}}</li>
         <li><strong>Prerequisite/comments: </strong></li>
         <li>{{breakLines comments}}</li>
+        <strong>Check if ticket is a regression test:</strong>
+        {{#if isRegression}}
+        <input type="checkbox" name="isRegression" value="isRegression" class="is-regression" checked/>
+        {{else}}
+        <input type="checkbox" name="isRegression" value="isRegression" class="is-regression" />
+        {{/if}}
         {{> numTesters}}
         {{> testerSelect}}
+        {{#with this}}
+        {{> browsersToTest}}
+        {{> localesToTest}}
+        {{/with}}
       </ul>
     </div>
-    <!-- <div class="alert browser-alert">Assigned</div> -->
     <a href="{{pathFor 'ticketPage'}}" class="btn-edit">back</a>
+    <div class="changes-saved btn-new-testscript">Changes Saved</div>
     <div class="submit-edit-ticket btn-new-testscript">Save Changes</div>
   </div>
   <div class="testscripts">
@@ -32,7 +33,7 @@
 <template name="numTesters">
   <li class="num-testers">
     <strong>Number of Testers:</strong>
-    <select>
+    <select class="num-testers">
       {{#each numTesters}}
       {{> numTester}}
       {{/each}}
@@ -45,7 +46,7 @@
     <strong>Testers:</strong>
     {{#each ticketTesters}}
     <select name="select-{{index}}">
-      {{>testerUsers}}
+      {{> testerUsers 'ticket'}}
     </select>
     {{/each}}
   </li>
@@ -53,15 +54,15 @@
 
 <template name="testerUsers">
   {{#each testers}}
-    {{>testerUser name}}
+    {{> testerUser}}
   {{/each}}
 </template>
 
 <template name="testerUser">
-  {{#if selected}}
-    <option value="{{this}}" selected="selected">{{this}}</option>
+  {{#if selected this}}
+    <option value="{{name}}" selected="selected">{{name}}</option>
   {{else}}
-    <option value="{{this}}">{{this}}</option>
+    <option value="{{name}}">{{name}}</option>
   {{/if}}
 </template>
 
@@ -71,4 +72,46 @@
   {{else}}
     <option value="{{number}}">{{number}}</option>
   {{/if}}
+</template>
+
+<template name="browsersToTest">
+  <li class="browsers-to-test">
+    <strong>Browsers. Leave all unchecked if no need to test specific browsers:</strong>
+    <br/>
+    {{#each browsers}}
+      {{#if selected}}
+        <input type="checkbox" value="{{browser}}" name="{{browser}}" class="browser-checkmark" checked/>
+        {{browser}}
+        <select class="browser-tester" name="{{browser}}">
+          {{> testerUsers 'browser'}}
+        </select>
+        <br/>
+      {{else}}
+        <input type="checkbox" value="{{browser}}" name="{{browser}}" class="browser-checkmark" />
+        {{browser}}
+        <br/>
+      {{/if}}
+    {{/each}}
+  </li>
+</template>
+
+<template name="localesToTest">
+  <li class="locales-to-test">
+    <strong>Locales. Leave all unchecked if no need to test specific locales:</strong>
+    <br/>
+    {{#each locales}}
+      {{#if selected}}
+        <input type="checkbox" value="{{locale}}" name="{{locale}}" class="locale-checkmark" checked/>
+        {{locale}}
+        <select class="locale-tester" name="{{locale}}">
+          {{> testerUsers 'locale'}}
+        </select>
+        <br/>
+      {{else}}
+        <input type="checkbox" value="{{locale}}" name="{{locale}}" class="locale-checkmark"/>
+        {{locale}}
+        <br/>
+      {{/if}}
+    {{/each}}
+  </li>
 </template>

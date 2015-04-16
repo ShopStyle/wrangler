@@ -1,12 +1,8 @@
 Template.ticketPage.helpers({
   ticketTesters: function() {
-    if (this.testers) {
-      var testers = _.filter(this.testers, function(tester) {
-        return tester !== '' && tester !== null;
-      });
-      if (testers.length > 0) {
-        return testers.join(', ');
-      }
+    var ticket = this;
+    if (ticket.testers) {
+      return Helpers.getTicketTesters(this);
     }
     return 'No Testers Assigned';
   },
@@ -17,7 +13,36 @@ Template.ticketPage.helpers({
 
   previousTicketNumber: function() {
     return Tickets.findOne({jiraId: {$lt: this.jiraId}}, {sort: {jiraId: -1}});
-  }
+  },
+
+  personalBrowserAssignment: function() {
+    var assignment = null;
+    var ticket = this;
+    if (!Meteor.user()) {
+      return assignment;
+    }
+
+    var username = Meteor.user().username;
+    var testerHashCode = Helpers.hashCode(username);
+    if (ticket.browserLocaleAssignments && ticket.browserLocaleAssignments[testerHashCode]) {
+      assignment = _.clone(ticket.browserLocaleAssignments[testerHashCode]);
+      if (!assignment.browser) {
+        assignment.browser = "Your choice";
+      }
+      if (assignment.locale) {
+        assignment.locale = assignment.locale + " and US";
+      }
+      else {
+        assignment.locale = "US";
+      }
+    }
+    return assignment;
+  },
+
+  animationClass: _.once(function() {
+    return _.sample(Config.entranceAnimationClasses);
+  })
+
 });
 
 Template.ticketPage.events({

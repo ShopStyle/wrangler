@@ -8,11 +8,9 @@ Meteor.publish('tickets', function() {
   }
 
   return Tickets.find({$or: [
-  { "fixVersion.name": fixVersionName, statusName: {$in: ["Done", "Verified on Dev"]} },
+    { "fixVersion.name": fixVersionName, statusName: {$in: ["Done", "Verified on Dev"]} },
     {isRegression: true}
   ]});
-
-  // return Tickets.find({jiraId: {$nin: [null, undefined]}});
 });
 
 Meteor.publish('testscripts', function(ticketJiraId) {

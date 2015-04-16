@@ -60,42 +60,10 @@ Template.ticketsList.helpers({
   }
 });
 
-Template.ticketsList.events({
-  'click .create-test': function(e) {
-    values = {
-      summary: "Regression Test",
-      isRegression: true,
-      numTesters: 2,
-      comments: "Testing is fun!",
-      allStepsCompleted: [],
-      status: '',
-      passers: [],
-      failers: [],
-      testers: [],
-      browsers: []
-    }
-    Tickets.insert(values, function(error, id) {
-      if (id) {
-        Router.go('regressionEditPage', {id: id});
-      } else {
-        throwError(error.reason);
-      }
-    });
-  }
-});
-
 Template.ticket.helpers({
   ticketTesters: function() {
-    if (this.testers) {
-      var testers = _.filter(this.testers, function(tester) {
-        return tester !== '' && tester !== null;
-      });
-      if (testers.length > 0) {
-        return testers.join(', ');
-      }
-    }
-    return 'No Testers Assigned';
-  }
+    return Helpers.getTicketTesters(this);
+  },
 });
 
 Template.ticket.events({

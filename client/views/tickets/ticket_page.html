@@ -3,6 +3,13 @@
     <a href="{{pathFor 'ticketPage' data=nextTicketNumber}}" class="next-ticket">Next Ticket</a>
     <a href="{{pathFor 'ticketPage' data=previousTicketNumber}}" class="previous-ticket">Previous Ticket</a>
   {{/if}}
+  {{#if personalBrowserAssignment}}
+    {{#with personalBrowserAssignment}}
+    <div class="testing-assignment browser-locale {{animationClass}}">
+      Please test this ticket with <span class="arrow">&#10157;</span> Browser: <strong>{{browser}}</strong> and Locale: <strong>{{locale}}</strong>
+    </div>
+    {{/with}}
+  {{/if}}
   <div class="main ticket {{status}}" data-id={{_id}}>
     <div class="text">
       <h1><a target="_blank" href="{{jiraUrl}}">{{summary}}</a></h1>
