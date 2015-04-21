@@ -112,11 +112,41 @@ Handlebars.registerHelper('breakLines', function (text) {
     result = '', first = true, i;
   for (i = 0; i < lines.length; ++i) {
       if (!first) {
-              result += '<br>';
+              result += ' <br> ';
       }
       result += Handlebars._escape(lines[i]);
       first = false;
   }
+
+  // convert links to clickable links
+  // Regex from http://codegolf.stackexchange.com/questions/464/shortest-url-regex-match-in-javascript
+  var matchUrls = /(^|\s)((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
+  var extractedUrls = result.match(matchUrls);
+  _.each(extractedUrls, function(url) {
+
+    var regex = new RegExp(url, "g");
+    var url = url.trim();
+    var protocol = '';
+
+    if (_.contains(url, "http") === -1) {
+      protocol = "http://";
+    }
+
+    var anchorTag = " <a target=\"_blank\" href=\"" + protocol + url + "\">" + url + "</a>";
+    result = result.replace(regex, anchorTag);
+  });
+
+  // // add images that are attached to ticket
+  // var matchImages = /!!(\S+(?=\|))[^\s!]*!/gi;
+  // var imageUrls = matchImages.exec(result);
+  // if (imageUrls && imageUrls.length) {
+
+  //   var regex = new RegExp(imageUrls[0]);
+  //   var url = imageUrls[1].trim();
+  //   var imageTag = " <br><image src=\"" + url + "\"/><br>";
+  //   result = result.replace(regex, imageTag);
+  // }
+
 
   return new Handlebars.SafeString(result);
 });

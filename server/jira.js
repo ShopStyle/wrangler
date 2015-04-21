@@ -27,8 +27,15 @@ Jira.ticketFields = [
   'status',
   'summary',
   'description',
-  'fixVersions'
+  'fixVersions',
+  'attachment'
 ].join(',');
+
+Jira.fieldsWithImages = [
+  Jira.testscriptCustomField,
+  Jira.ticketTestingCommentsField,
+  'description'
+]
 
 Jira.getStandardJqlQueryString = function() {
   if (!Milestones.findOne({current: true})) {
@@ -61,7 +68,6 @@ Jira.makePostRequest = function(endpoint, data) {
 };
 
 Jira.updateMilestoneCollection = function() {
-  console.log("updating milestone collection");
   if (!AUTH_TOKEN) {
     throw new Meteor.Error(500, 'Please provide correct username and password in config.js and settings.json');
   }
@@ -87,6 +93,19 @@ Jira.updateMilestoneCollection = function() {
 Jira.updateSingleTicket = function(ticket) {
   if (ticket == null) {
     return;
+  }
+
+  if (ticket.fields.attachment && ticket.fields.attachment.length) {
+    _.each(ticket.fields.attachment, function(attachment) {
+      _.each(Jira.fieldsWithImages, function(field) {
+        if (ticket.fields[field]) {
+          var regex = new RegExp(attachment.filename, "gi");
+          console.log(regex)
+          var replacement = "!" + attachment.content;
+          ticket.fields[field] = ticket.fields[field].replace(regex, replacement);
+        }
+      })
+    });
   }
 
   Jira.updateTestscripts(ticket);
@@ -119,6 +138,7 @@ Jira.updateSingleTicket = function(ticket) {
         summary: ticket.fields.summary,
         statusName: statusName,
         jiraUrl: jiraUrl,
+        jiraKey: ticket.key,
         description: description,
         comments: ticket.fields[Jira.ticketTestingCommentsField],
         noTesting: noTesting
@@ -142,9 +162,7 @@ Jira.populateTicketCollection = function() {
   var tickets = Jira.makeGetRequest(Jira.ticketUrl, params);
 
   if (tickets.statusCode === 200) {
-    console.log("I found tickets, now I am updating them");
     _.each(tickets.data.issues, function(ticket) {
-      console.log("I am updating ticket " + ticket.id);
       Jira.updateSingleTicket(ticket);
     });
 
@@ -156,7 +174,6 @@ Jira.populateTicketCollection = function() {
 };
 
 Jira.updateTestscripts = function(ticket) {
-  console.log("I am updating the testscripts for ticket " + ticket.id);
   fields = ticket.fields;
   if (!fields[Jira.testscriptCustomField]) {
     return;
@@ -227,6 +244,10 @@ Jira.fetchLatestChanges = function() {
 
 Jira.verifyTicketOnDev = function(ticket) {
   if (ticket.statusName === 'Verified on Dev') {
+    return;
+  }
+
+  if (ticket.isRegression) {
     return;
   }
 
