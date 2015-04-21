@@ -128,7 +128,7 @@ Handlebars.registerHelper('breakLines', function (text) {
     var url = url.trim();
     var protocol = '';
 
-    if (_.contains(url, "http") === -1) {
+    if (!_.contains(url, "http")) {
       protocol = "http://";
     }
 
