@@ -39,18 +39,19 @@ Template.ticketEdit.events({
       }
     }
 
-    var assignmentError = false;
     var hashedTesters = _.map(testers, function(tester) {
       return Helpers.hashCode(tester);
     });
     var browsersAndLocalesAlreadyAssigned = [];
-    _.forEach(ticket.browserLocaleAssignments, function(assignment, testerHashCode) {
-      var testerAssignedToTicket = _.indexOf(hashedTesters, testerHashCode) > -1;
-      if (!testerAssignedToTicket) {
-        throwError("Cannot edit ticket. Make sure each person assigned to browser or locale is also assigned to test the ticket.");
-        assignmentError = true;
-        return;
+
+    for (var i = 0; i < hashedTesters.length; i++) {
+      var assignment = ticket.browserLocaleAssignments[hashedTesters[i]];
+
+      if (!assignment) {
+        continue;
       }
+
+      var testerHashCode = hashedTesters[i];
 
       var validBrowser = assignment.browser
         && _.indexOf(browsersToTest, assignment.browser) > -1
@@ -69,12 +70,7 @@ Template.ticketEdit.events({
         if (assignment.browser) {
           browsersAndLocalesAlreadyAssigned.push(assignment.browser);
         }
-
       }
-    });
-
-    if (assignmentError) {
-      return false;
     }
 
     Tickets.update({_id: currentTicketId}, {$set: {
@@ -125,8 +121,12 @@ Template.ticketEdit.events({
     }
 
     // remove locale from browserLocaleAssignments
+    var assignmentsToDelete = []
     _.forEach(ticket.browserLocaleAssignments, function(assignment, testerCode) {
-      if (assignment.locale === locale) {
+      if (assignment.locale === locale && assignment.browser == null) {
+        assignmentsToDelete.push(testerCode);
+      }
+      else if (assignment.locale === locale) {
         assignment.locale = null;
       }
     });
@@ -154,7 +154,10 @@ Template.ticketEdit.events({
 
     // remove browser from browserLocaleAssignments
     _.forEach(ticket.browserLocaleAssignments, function(assignment, testerCode) {
-      if (assignment.browser === browser) {
+      if (assignment.browser === browser && assignment.locale == null) {
+        assignmentsToDelete.push(testerCode);
+      }
+      else if (assignment.browser === browser) {
         assignment.browser = null;
       }
     });
