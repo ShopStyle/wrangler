@@ -43,7 +43,7 @@ Jira.getStandardJqlQueryString = function() {
   }
 
   var versionTitle = Milestones.findOne({ current: true }).name;
-  var jqlQueryString = "fixVersion IN ('" + versionTitle + "') AND status IN (done, 'verified on dev')"
+  var jqlQueryString = "fixVersion IN ('" + versionTitle + "') AND status IN (done, '" + Config.jira.verifiedStatusName + "')"
 
   return jqlQueryString;
 };
@@ -113,7 +113,7 @@ Jira.updateSingleTicket = function(ticket) {
   var jiraUrl = 'https://shopstyle.atlassian.net/browse/' + ticket.key;
   var statusName = ticket.fields.status.name;
   var jiraId = parseInt(ticket.id);
-  if (statusName === 'Verified on Dev') {
+  if (statusName === Config.jira.verifiedStatusName) {
     Tickets.update({jiraId: jiraId}, {$set: {status: 'pass'}});
   }
   var description = ticket.fields.description;
@@ -243,7 +243,7 @@ Jira.fetchLatestChanges = function() {
 };
 
 Jira.verifyTicketOnDev = function(ticket) {
-  if (ticket.statusName === 'Verified on Dev') {
+  if (ticket.statusName === Config.jira.verifiedStatusName) {
     return;
   }
 
