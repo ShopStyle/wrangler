@@ -74,7 +74,7 @@ Meteor.methods({
       Tickets.update(ticket._id, {
         $set: {
           status: status,
-          statusName: 'Verified on Dev',
+          statusName: Config.jira.verifiedStatusName,
           failers: failers,
           passers: allTestscriptPassers
         }
