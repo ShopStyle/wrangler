@@ -12,7 +12,11 @@ Template.ticketEdit.events({
     var localesToTest = ticket.localesToTest || [];
     var isRegression = ticket.isRegression;
     var testers = [];
-    var browserLocaleAssignments = {};
+    var newBrowserLocaleAssignments = {};
+
+    if (_.isEmpty(ticket.browserLocaleAssignments)) {
+      ticket.browserLocaleAssignments = {};
+    }
 
     clearErrors();
 
@@ -62,7 +66,7 @@ Template.ticketEdit.events({
         && (_.indexOf(browsersAndLocalesAlreadyAssigned, assignment.locale) === -1);
 
       if (validLocale || validBrowser) {
-        browserLocaleAssignments[testerHashCode] = assignment;
+        newBrowserLocaleAssignments[testerHashCode] = assignment;
 
         if (assignment.locale) {
           browsersAndLocalesAlreadyAssigned.push(assignment.locale);
@@ -78,7 +82,7 @@ Template.ticketEdit.events({
       numTesters: numTesters,
       browsersToTest: browsersToTest,
       localesToTest: localesToTest,
-      browserLocaleAssignments: browserLocaleAssignments,
+      browserLocaleAssignments: newBrowserLocaleAssignments,
       isRegression: isRegression
     }},
       function(error, num) {
