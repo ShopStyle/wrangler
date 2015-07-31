@@ -8,7 +8,7 @@ Meteor.publish('tickets', function() {
   }
 
   return Tickets.find({$or: [
-    { "fixVersion.name": fixVersionName, statusName: {$in: ["Done", Config.jira.verifiedStatusName]} },
+    { "fixVersion.name": fixVersionName, statusName: {$in: [Config.jira.mergedStatusName, Config.jira.verifiedStatusName]} },
     {isRegression: true}
   ]});
 });
