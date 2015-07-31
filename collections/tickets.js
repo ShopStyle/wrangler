@@ -61,12 +61,12 @@ Meteor.methods({
     }
 
     // remove testers from all tickets with no-testing required
-    Tickets.update({"fixVersion.name": currentMilestone.name, statusName: "Done", noTesting: true},
+    Tickets.update({"fixVersion.name": currentMilestone.name, statusName: Config.jira.mergedStatusName, noTesting: true},
       {$set: {testers: []}},
       {multi: true});
 
     // get all tickets that need testers assigned
-    var tickets = Tickets.find({"fixVersion.name": currentMilestone.name, statusName: "Done", noTesting: false}).fetch();
+    var tickets = Tickets.find({"fixVersion.name": currentMilestone.name, statusName: Config.jira.mergedStatusName, noTesting: false}).fetch();
     var testers = _.shuffle(testersCollection.fetch());
 
     _.each(tickets, function(ticket, idx) {
