@@ -2,7 +2,7 @@
 
 Wrangler helps teams to organize testing. It pulls in and organizes tickets to be verified as being fixed, making it much easier to get through any testing your team needs to do. Testing goes faster, admins have more control over who is doing what, and best part is that each user gets a rad .gif when they complete their testing!
 
-It is currently set up to only work with Assembla, but can easily be modified to work with any other ticket/workspace management software that has an API.
+It is currently set up to work with Jira, but can easily be modified to work with any other ticket/workspace management software that has an API.
 
 
 ###Setup
