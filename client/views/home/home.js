@@ -62,7 +62,7 @@ Template.home.helpers({
 
     var completed = Tickets.find({allStepsCompleted: {$in: [username]}}).count();
 
-    if (completed === assigned) {
+    if (completed >= assigned) {
       return 'complete';
     }
 
