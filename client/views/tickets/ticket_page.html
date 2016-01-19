@@ -24,11 +24,10 @@
     </div>
     {{#if noTesting}}
       <div class="no-testing-ticket">NO TESTING REQUIRED</div>
-    {{else}}
-      {{#if userAdmin}}
-        <a href="{{pathFor 'ticketEdit'}}" class="btn-edit">edit</a>
-        <div class="delete-ticket ticket-page">Delete</div>
-      {{/if}}
+    {{/if}}
+    {{#if userAdmin}}
+      <a href="{{pathFor 'ticketEdit'}}" class="btn-edit">edit</a>
+      <div class="delete-ticket ticket-page">Delete</div>
     {{/if}}
   </div>
   {{#unless noTesting}}
