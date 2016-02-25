@@ -49,6 +49,11 @@ Template.testscript.events({
         throwError(error.reason);
       }
     });
+    Meteor.call('reOpenAndCommentTicket', this._id, failReason, function(error) {
+      if (error) {
+        throwError(error.reason);
+      }
+    });
     $(e.currentTarget).hide()
     $(e.currentTarget).siblings('.btn-holder').show()
   },

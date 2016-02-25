@@ -45,10 +45,12 @@ Jira.getStandardJqlQueryString = function() {
   var versionTitle = Milestones.findOne({ current: true }).name;
   var jqlQueryString = "fixVersion IN ('"
     + versionTitle
-    + "') AND status IN ("
+    + "') AND status IN ('"
     + Config.jira.mergedStatusName
-    + ", '"
+    + "', '"
     + Config.jira.verifiedStatusName
+    + "', '"
+    + Config.jira.toDoStatusName
     + "')"
 
   return jqlQueryString;
@@ -257,16 +259,45 @@ Jira.verifyTicketOnDev = function(ticket) {
     return;
   }
 
-  var jiraId = ticket.jiraId
-  var url =  "issue/" + jiraId + "/transitions"
+  var jiraId = ticket.jiraId;
+  var url =  "issue/" + jiraId + "/transitions";
+  // Perform transition id 131, aka "Verify" action
   var data = {
     transition: {
       id: 131
     }
-  }
+  };
 
   Jira.makePostRequest(url, data);
 };
+
+Jira.reOpenTicket = function(ticket) {
+  // Don't re-open ticket if it's already re-opened (in the to do state). 
+  if (ticket.statusName !== Config.jira.toDoStatusName) { 
+
+    var jiraId = ticket.jiraId;
+    var url =  "issue/" + jiraId + "/transitions";
+    // Perform transition id 201, aka "Reopen" action
+    var data = {
+      transition: {
+        id: 201
+      }
+    };
+
+    Jira.makePostRequest(url, data);
+  }
+};
+
+Jira.commentTicket = function(ticket, comment) {
+
+  var jiraId = ticket.jiraId;
+  var url = "issue/" + jiraId + "/comment";
+  var data = {
+    body: comment
+  };
+
+  Jira.makePostRequest(url, data);
+}
 
 if (Meteor.isServer) {
   Meteor.startup(function() {
