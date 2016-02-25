@@ -39,3 +39,7 @@ You will need to create a wrangler/setings.json file for the assembla api keys (
 To test, you may want to add yourself as an admin, add your username to
 
 `wrangler/client/helpers/handlebars.js`
+
+###Extra Notes
+
+Transition ID's in JIRA: Go to Administration > Issues > Workflows > ShopStyle Issue Workflow 07/15 > Edit to see the state changes and transition ID's. You might need to set the view to 'text' mode

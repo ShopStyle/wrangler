@@ -6,6 +6,7 @@ Testscripts.allow({
   }
 });
 
+
 Meteor.methods({
   updateTicketStatus: function(ticket) {
     var status = '';
@@ -54,7 +55,7 @@ Meteor.methods({
         completedCounts[elem] = 1;
       }
       else {
-        completedCounts[elem] += 1;
+        completedCounts[elem] += 1; 
       }
     });
 
@@ -129,5 +130,27 @@ Meteor.methods({
       });
     }
     Meteor.call('updateTicketStatus', ticket);
+  },
+
+  reOpenAndCommentTicket: function(id, failReason) {
+    var user = Meteor.user();
+    if (!user) {
+      throw new Meteor.Error(401, "You need to login to post test results");
+    }
+
+    var testscript = Testscripts.findOne(id);
+    var ticket = Tickets.findOne({ jiraId: testscript.ticketJiraId });
+    var comments = "Failed by wrangler. ";
+
+    if (Meteor.isServer) {
+      Jira.reOpenTicket(ticket);
+
+      if (!failReason) {
+        comments += "Tester did not provide comments.";
+      } else {
+        comments += "Tester's comments: " + failReason;
+      }
+      Jira.commentTicket(ticket, comments)
+    }
   }
 });
