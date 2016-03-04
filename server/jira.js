@@ -272,6 +272,11 @@ Jira.verifyTicketOnDev = function(ticket) {
 };
 
 Jira.reOpenTicket = function(ticket) {
+  // Don't re-open tickets marked as regression
+  if (ticket.isRegression) {
+    return;
+  }
+
   // Don't re-open ticket if it's already re-opened (in the to do state). 
   if (ticket.statusName !== Config.jira.toDoStatusName) { 
 
