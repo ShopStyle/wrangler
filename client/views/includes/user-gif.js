@@ -40,7 +40,7 @@ Template.userGif.rendered = function() {
   }
 
   var tag = gif.toLowerCase()
-  var apiUrl = "http://api.giphy.com/v1/gifs/random?tag="+tag+"&api_key=dc6zaTOxFJmzC&limit=1";
+  var apiUrl = "https://api.giphy.com/v1/gifs/random?tag="+tag+"&api_key=dc6zaTOxFJmzC&limit=1";
   Meteor.http.get(apiUrl, function (error, result) {
     if (!error && result.statusCode === 200) {
         var respJson = JSON.parse(result.content);
