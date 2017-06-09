@@ -12,34 +12,23 @@ Pre-reqs:
 1) `git clone git@github.com:mrkoreye/wrangler.git`
 
 2) Install
- [meteor](https://www.meteor.com/install) this app uses version 1.3.5
+ `curl "https://install.meteor.com/?release=1.3.5.1" | sh` 
 
-3) from within the wrangler repo `meteor run` to get all the dependancies
-
-
-### To run
-```
-meteor --settings settings.json
-```
-#### Using testing-app
-
-You will need to create a wrangler/setings.json file for the assembla api keys (this is git ignored)
+3) Create a file called settings.json in the root directory of the project. This is git ignored and contains sensitive information like your jira password and api key/secret. Here is an example of what it should look like:
 
 ```
 {
   "API_KEY": "",
   "API_SECRET": ""
   "userAdmins": [
-    "wonderwoman",
-    "superman"
+    <your-user-name>
   ]
 }
 ```
-
-To test, you may want to add yourself as an admin, add your username to
-
-`wrangler/client/helpers/handlebars.js`
-
+### Run the project
+```
+meteor --settings settings.json
+```
 ### Extra Notes
 
 Transition ID's in JIRA: Go to Administration > Issues > Workflows > ShopStyle Issue Workflow 07/15 > Edit to see the state changes and transition ID's. You might need to set the view to 'text' mode
