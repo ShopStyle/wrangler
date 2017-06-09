@@ -7,7 +7,7 @@ It is currently set up to work with Jira, but can easily be modified to work wit
 
 ### Setup
 Pre-reqs:
-[npm](https://www.npmjs.org/), [sass](http://sass-lang.com/install)
+I would suggest using [nvm](https://github.com/creationix/nvm) to manage node versions if you have to use different versions of node for different projects. Follow the directions on the **nvm** gihub page for installation. This project relies on **node 6.10.3**, so make sure to install and use that particular version to run this project.
 
 1) `git clone git@github.com:mrkoreye/wrangler.git`
 
