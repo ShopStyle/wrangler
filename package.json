@@ -1,0 +1,20 @@
+{
+  "name": "wrangler",
+  "version": "1.0.0",
+  "description": "Wrangler helps teams to organize testing. It pulls in and organizes tickets to be verified as being fixed, making it much easier to get through any testing your team needs to do. Testing goes faster, admins have more control over who is doing what, and best part is that each user gets a rad .gif when they complete their testing!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShopStyle/wrangler.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ShopStyle/wrangler/issues"
+  },
+  "homepage": "https://github.com/ShopStyle/wrangler#readme"
+}
